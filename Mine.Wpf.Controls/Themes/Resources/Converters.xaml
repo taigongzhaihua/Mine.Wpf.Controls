@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters">
+
+    <!-- Converter singletons referenced from control templates -->
+    <conv:BoolToVisibilityConverter   x:Key="Mine.Internal.BoolToVisConv"/>
+    <conv:BoolToVisibilityConverter   x:Key="Mine.Internal.BoolToVisConvInvert" Invert="True"/>
+    <conv:StringToVisibilityConverter x:Key="Mine.Internal.StringToVisConv"/>
+    <conv:StringToVisibilityConverter x:Key="Mine.Internal.StringToVisConvInvert" Invert="True"/>
+    <conv:StringIsNotNullOrEmptyConverter x:Key="Mine.Internal.StringIsNotNullConv"/>
+    <conv:NullToVisibilityConverter   x:Key="Mine.Internal.NullToVisConv"/>
+    <conv:NullToVisibilityConverter   x:Key="Mine.Internal.NullToVisConvInvert" Invert="True"/>
+    <conv:ColorToBrushConverter       x:Key="Mine.Internal.ColorToBrushConv"/>
+    <conv:BrushToColorConverter       x:Key="Mine.Internal.BrushToColorConv"/>
+    <conv:ElevationToOpacityConverter x:Key="Mine.Internal.ElevToOpacityConv"/>
+
+    <conv:NullToBoolConverter x:Key="Mine.Internal.NullToBoolConv"/>
+
+</ResourceDictionary>
+
+

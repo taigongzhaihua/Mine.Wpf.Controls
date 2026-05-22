@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>Mine.Wpf.Controls</RootNamespace>
+        <AssemblyName>Mine.Wpf.Controls</AssemblyName>
+        <LangVersion>latest</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <PackageId>Mine.Wpf.Controls</PackageId>
+        <Version>0.1.0</Version>
+        <Description>A Material Design 3 WPF control library with theming, animations and glass effects.</Description>
+    </PropertyGroup>
+
+</Project>

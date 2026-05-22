@@ -1,0 +1,23 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Mine.Wpf.Controls — Generic.xaml
+        入口文件：合并所有设计令牌与控件样式字典。
+    -->
+    <ResourceDictionary.MergedDictionaries>
+        <!-- ── 设计令牌 ──────────────────────────────────────────── -->
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Colors.Light.xaml"/>
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Typography.xaml"/>
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Shape.xaml"/>
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Elevation.xaml"/>
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Motion.xaml"/>
+        <!-- ── 共享转换器 ────────────────────────────────────────── -->
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Converters.xaml"/>
+        <!-- ── 控件样式 ──────────────────────────────────────────── -->
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Button.xaml"/>
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Card.xaml"/>
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Window.xaml"/>
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/TextBox.xaml"/>
+        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/CheckBox.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

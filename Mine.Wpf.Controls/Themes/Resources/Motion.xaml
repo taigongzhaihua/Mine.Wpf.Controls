@@ -1,0 +1,25 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Material 3 动效令牌（Duration 资源）。
+        缓动函数由代码中的 MotionTokens 静态类提供。
+    -->
+    <Duration x:Key="Mine.Motion.Short1">0:0:0.05</Duration>
+    <Duration x:Key="Mine.Motion.Short2">0:0:0.1</Duration>
+    <Duration x:Key="Mine.Motion.Short3">0:0:0.15</Duration>
+    <Duration x:Key="Mine.Motion.Short4">0:0:0.2</Duration>
+    <Duration x:Key="Mine.Motion.Medium1">0:0:0.25</Duration>
+    <Duration x:Key="Mine.Motion.Medium2">0:0:0.3</Duration>
+    <Duration x:Key="Mine.Motion.Long1">0:0:0.35</Duration>
+    <Duration x:Key="Mine.Motion.Long2">0:0:0.45</Duration>
+    <Duration x:Key="Mine.Motion.ExtraLong1">0:0:0.55</Duration>
+    <Duration x:Key="Mine.Motion.ExtraLong2">0:0:0.7</Duration>
+    <!-- 标准缓动（CubicEase EaseInOut） -->
+    <CubicEase   x:Key="Mine.Easing.Standard"             EasingMode="EaseInOut"/>
+    <!-- 强调减速（EaseOut - 进入元素） -->
+    <CubicEase   x:Key="Mine.Easing.EmphasizedDecelerate" EasingMode="EaseOut"/>
+    <!-- 标准加速（EaseIn - 退出元素） -->
+    <CubicEase   x:Key="Mine.Easing.StandardAccelerate"   EasingMode="EaseIn"/>
+    <!-- 弹性（适合活泼交互） -->
+    <ElasticEase x:Key="Mine.Easing.Spring" Oscillations="1" Springiness="6" EasingMode="EaseOut"/>
+</ResourceDictionary>

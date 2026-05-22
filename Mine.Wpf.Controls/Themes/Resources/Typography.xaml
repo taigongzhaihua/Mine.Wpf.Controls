@@ -1,0 +1,142 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        <!--
+        Material 3 字体排版规模
+        字体栈：Segoe UI Variable（Win11）→ Segoe UI → Microsoft YaHei UI（中文）
+    -->
+
+    <!-- Font Family -->
+    <FontFamily x:Key="Mine.FontFamily.Default">Segoe UI Variable,Segoe UI,Microsoft YaHei UI,sans-serif</FontFamily>
+    <FontFamily x:Key="Mine.FontFamily.Mono">Cascadia Code,Consolas,Courier New,monospace</FontFamily>
+
+    <!-- Font Sizes -->
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.DisplayLarge">57</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.DisplayMedium">45</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.DisplaySmall">36</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.HeadlineLarge">32</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.HeadlineMedium">28</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.HeadlineSmall">24</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.TitleLarge">22</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.TitleMedium">16</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.TitleSmall">14</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.LabelLarge">14</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.LabelMedium">12</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.LabelSmall">11</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.BodyLarge">16</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.BodyMedium">14</sys:Double>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.FontSize.BodySmall">12</sys:Double>
+
+    <!-- Font Weights -->
+    <FontWeight x:Key="Mine.FontWeight.Regular">Regular</FontWeight>
+    <FontWeight x:Key="Mine.FontWeight.Medium">Medium</FontWeight>
+    <FontWeight x:Key="Mine.FontWeight.Bold">Bold</FontWeight>
+
+    <!-- TextBlock Styles (named typography styles) -->
+    <Style x:Key="Mine.Typography.DisplayLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.DisplayLarge}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="64"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.DisplayMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.DisplayMedium}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="52"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.DisplaySmall" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.DisplaySmall}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="44"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.HeadlineLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.HeadlineLarge}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="40"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.HeadlineMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.HeadlineMedium}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="36"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.HeadlineSmall" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.HeadlineSmall}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="32"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.TitleLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.TitleLarge}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="28"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.TitleMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.TitleMedium}"/>
+        <Setter Property="FontWeight"  Value="Medium"/>
+        <Setter Property="LineHeight"  Value="24"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.TitleSmall" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.TitleSmall}"/>
+        <Setter Property="FontWeight"  Value="Medium"/>
+        <Setter Property="LineHeight"  Value="20"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.BodyLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.BodyLarge}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="24"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.BodyMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.BodyMedium}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="20"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.BodySmall" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.BodySmall}"/>
+        <Setter Property="FontWeight"  Value="Regular"/>
+        <Setter Property="LineHeight"  Value="16"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.LabelLarge" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.LabelLarge}"/>
+        <Setter Property="FontWeight"  Value="Medium"/>
+        <Setter Property="LineHeight"  Value="20"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.LabelMedium" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.LabelMedium}"/>
+        <Setter Property="FontWeight"  Value="Medium"/>
+        <Setter Property="LineHeight"  Value="16"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+    <Style x:Key="Mine.Typography.LabelSmall" TargetType="TextBlock">
+        <Setter Property="FontFamily"  Value="{StaticResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"    Value="{StaticResource Mine.FontSize.LabelSmall}"/>
+        <Setter Property="FontWeight"  Value="Medium"/>
+        <Setter Property="LineHeight"  Value="16"/>
+        <Setter Property="Foreground"  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+    </Style>
+
+</ResourceDictionary>
+

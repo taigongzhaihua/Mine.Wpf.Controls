@@ -1,0 +1,117 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        Material 3 颜色角色 - 亮色主题（默认种子色：#6750A4）
+        ThemeManager 会在运行时根据任意种子色动态覆盖这些值。
+        所有画笔均为可变 SolidColorBrush，以便 BeginAnimation 无需重新布局即可生效。
+    -->
+    <!-- 主色 -->
+    <Color x:Key="Mine.Color.Primary">#FF6750A4</Color>
+    <Color x:Key="Mine.Color.OnPrimary">#FFFFFFFF</Color>
+    <Color x:Key="Mine.Color.PrimaryContainer">#FFEADDFF</Color>
+    <Color x:Key="Mine.Color.OnPrimaryContainer">#FF21005D</Color>
+    <!-- 次要色 -->
+    <Color x:Key="Mine.Color.Secondary">#FF625B71</Color>
+    <Color x:Key="Mine.Color.OnSecondary">#FFFFFFFF</Color>
+    <Color x:Key="Mine.Color.SecondaryContainer">#FFE8DEF8</Color>
+    <Color x:Key="Mine.Color.OnSecondaryContainer">#FF1D192B</Color>
+    <!-- 第三色 -->
+    <Color x:Key="Mine.Color.Tertiary">#FF7D5260</Color>
+    <Color x:Key="Mine.Color.OnTertiary">#FFFFFFFF</Color>
+    <Color x:Key="Mine.Color.TertiaryContainer">#FFFFD8E4</Color>
+    <Color x:Key="Mine.Color.OnTertiaryContainer">#FF31111D</Color>
+    <!-- 错误色 -->
+    <Color x:Key="Mine.Color.Error">#FFB3261E</Color>
+    <Color x:Key="Mine.Color.OnError">#FFFFFFFF</Color>
+    <Color x:Key="Mine.Color.ErrorContainer">#FFF9DEDC</Color>
+    <Color x:Key="Mine.Color.OnErrorContainer">#FF410E0B</Color>
+    <!-- 表面色 -->
+    <Color x:Key="Mine.Color.Surface">#FFFFFBFE</Color>
+    <Color x:Key="Mine.Color.OnSurface">#FF1C1B1F</Color>
+    <Color x:Key="Mine.Color.SurfaceVariant">#FFE7E0EC</Color>
+    <Color x:Key="Mine.Color.OnSurfaceVariant">#FF49454F</Color>
+    <Color x:Key="Mine.Color.SurfaceTint">#FF6750A4</Color>
+    <Color x:Key="Mine.Color.SurfaceContainerLowest">#FFFFFFFF</Color>
+    <Color x:Key="Mine.Color.SurfaceContainerLow">#FFF7F2FA</Color>
+    <Color x:Key="Mine.Color.SurfaceContainer">#FFF3EDF7</Color>
+    <Color x:Key="Mine.Color.SurfaceContainerHigh">#FFECE6F0</Color>
+    <Color x:Key="Mine.Color.SurfaceContainerHighest">#FFE6E0E9</Color>
+    <!-- 背景色 -->
+    <Color x:Key="Mine.Color.Background">#FFFFFBFE</Color>
+    <Color x:Key="Mine.Color.OnBackground">#FF1C1B1F</Color>
+    <!-- 轮廓色 -->
+    <Color x:Key="Mine.Color.Outline">#FF79747E</Color>
+    <Color x:Key="Mine.Color.OutlineVariant">#FFCAC4D0</Color>
+    <!-- 反转色 -->
+    <Color x:Key="Mine.Color.InverseSurface">#FF313033</Color>
+    <Color x:Key="Mine.Color.InverseOnSurface">#FFF4EFF4</Color>
+    <Color x:Key="Mine.Color.InversePrimary">#FFD0BCFF</Color>
+    <!-- 其他 -->
+    <Color x:Key="Mine.Color.Shadow">#FF000000</Color>
+    <Color x:Key="Mine.Color.Scrim">#FF000000</Color>
+    <!-- 语义色：警告 -->
+    <Color x:Key="Mine.Color.Warning">#FF795500</Color>
+    <Color x:Key="Mine.Color.OnWarning">#FFFFFFFF</Color>
+    <Color x:Key="Mine.Color.WarningContainer">#FFFFDF99</Color>
+    <Color x:Key="Mine.Color.OnWarningContainer">#FF261A00</Color>
+    <!-- 语义色：成功 -->
+    <Color x:Key="Mine.Color.Success">#FF186C2B</Color>
+    <Color x:Key="Mine.Color.OnSuccess">#FFFFFFFF</Color>
+    <Color x:Key="Mine.Color.SuccessContainer">#FFB5F2BB</Color>
+    <Color x:Key="Mine.Color.OnSuccessContainer">#FF002109</Color>
+    <!-- 语义色：信息 -->
+    <Color x:Key="Mine.Color.Info">#FF00638A</Color>
+    <Color x:Key="Mine.Color.OnInfo">#FFFFFFFF</Color>
+    <Color x:Key="Mine.Color.InfoContainer">#FFC5E7FF</Color>
+    <Color x:Key="Mine.Color.OnInfoContainer">#FF001E2C</Color>
+    <!-- ═══════════════════════════════════════════════════════
+         SolidColorBrush - 可变画笔，通过 DynamicResource 引用
+         ═══════════════════════════════════════════════════════ -->
+    <SolidColorBrush x:Key="Mine.Brush.Primary"             Color="{DynamicResource Mine.Color.Primary}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnPrimary"           Color="{DynamicResource Mine.Color.OnPrimary}"/>
+    <SolidColorBrush x:Key="Mine.Brush.PrimaryContainer"    Color="{DynamicResource Mine.Color.PrimaryContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnPrimaryContainer"  Color="{DynamicResource Mine.Color.OnPrimaryContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Secondary"            Color="{DynamicResource Mine.Color.Secondary}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnSecondary"          Color="{DynamicResource Mine.Color.OnSecondary}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SecondaryContainer"   Color="{DynamicResource Mine.Color.SecondaryContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnSecondaryContainer" Color="{DynamicResource Mine.Color.OnSecondaryContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Tertiary"            Color="{DynamicResource Mine.Color.Tertiary}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnTertiary"          Color="{DynamicResource Mine.Color.OnTertiary}"/>
+    <SolidColorBrush x:Key="Mine.Brush.TertiaryContainer"   Color="{DynamicResource Mine.Color.TertiaryContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnTertiaryContainer" Color="{DynamicResource Mine.Color.OnTertiaryContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Error"            Color="{DynamicResource Mine.Color.Error}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnError"          Color="{DynamicResource Mine.Color.OnError}"/>
+    <SolidColorBrush x:Key="Mine.Brush.ErrorContainer"   Color="{DynamicResource Mine.Color.ErrorContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnErrorContainer" Color="{DynamicResource Mine.Color.OnErrorContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Surface"                  Color="{DynamicResource Mine.Color.Surface}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnSurface"                Color="{DynamicResource Mine.Color.OnSurface}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SurfaceVariant"           Color="{DynamicResource Mine.Color.SurfaceVariant}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnSurfaceVariant"         Color="{DynamicResource Mine.Color.OnSurfaceVariant}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SurfaceTint"              Color="{DynamicResource Mine.Color.SurfaceTint}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SurfaceContainerLowest"   Color="{DynamicResource Mine.Color.SurfaceContainerLowest}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SurfaceContainerLow"      Color="{DynamicResource Mine.Color.SurfaceContainerLow}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SurfaceContainer"         Color="{DynamicResource Mine.Color.SurfaceContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SurfaceContainerHigh"     Color="{DynamicResource Mine.Color.SurfaceContainerHigh}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SurfaceContainerHighest"  Color="{DynamicResource Mine.Color.SurfaceContainerHighest}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Background"   Color="{DynamicResource Mine.Color.Background}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnBackground" Color="{DynamicResource Mine.Color.OnBackground}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Outline"        Color="{DynamicResource Mine.Color.Outline}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OutlineVariant" Color="{DynamicResource Mine.Color.OutlineVariant}"/>
+    <SolidColorBrush x:Key="Mine.Brush.InverseSurface"   Color="{DynamicResource Mine.Color.InverseSurface}"/>
+    <SolidColorBrush x:Key="Mine.Brush.InverseOnSurface" Color="{DynamicResource Mine.Color.InverseOnSurface}"/>
+    <SolidColorBrush x:Key="Mine.Brush.InversePrimary"   Color="{DynamicResource Mine.Color.InversePrimary}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Shadow" Color="{DynamicResource Mine.Color.Shadow}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Scrim"  Color="{DynamicResource Mine.Color.Scrim}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Warning"            Color="{DynamicResource Mine.Color.Warning}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnWarning"          Color="{DynamicResource Mine.Color.OnWarning}"/>
+    <SolidColorBrush x:Key="Mine.Brush.WarningContainer"   Color="{DynamicResource Mine.Color.WarningContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnWarningContainer" Color="{DynamicResource Mine.Color.OnWarningContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Success"            Color="{DynamicResource Mine.Color.Success}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnSuccess"          Color="{DynamicResource Mine.Color.OnSuccess}"/>
+    <SolidColorBrush x:Key="Mine.Brush.SuccessContainer"   Color="{DynamicResource Mine.Color.SuccessContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnSuccessContainer" Color="{DynamicResource Mine.Color.OnSuccessContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.Info"               Color="{DynamicResource Mine.Color.Info}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnInfo"             Color="{DynamicResource Mine.Color.OnInfo}"/>
+    <SolidColorBrush x:Key="Mine.Brush.InfoContainer"      Color="{DynamicResource Mine.Color.InfoContainer}"/>
+    <SolidColorBrush x:Key="Mine.Brush.OnInfoContainer"    Color="{DynamicResource Mine.Color.OnInfoContainer}"/>
+</ResourceDictionary>
