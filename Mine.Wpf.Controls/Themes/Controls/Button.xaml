@@ -1,0 +1,288 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mine="https://schemas.mine.io/wpf"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:primitives="clr-namespace:Mine.Wpf.Controls.Primitives">
+
+    <!-- RippleDecorator default template -->
+    <Style TargetType="{x:Type primitives:RippleDecorator}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:RippleDecorator}">
+                    <Border CornerRadius="{TemplateBinding CornerRadius}">
+                        <Grid>
+                            <ContentPresenter/>
+                            <Canvas x:Name="PART_RippleCanvas"
+                                    IsHitTestVisible="False"
+                                    ClipToBounds="True"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Shared loading spinner -->
+    <Style x:Key="Mine.Internal.Spinner" TargetType="Ellipse">
+        <Setter Property="Width"  Value="18"/>
+        <Setter Property="Height" Value="18"/>
+        <Setter Property="Stroke" Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+        <Setter Property="StrokeThickness" Value="2.5"/>
+        <Setter Property="StrokeDashArray" Value="10 5"/>
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        <Setter Property="RenderTransform">
+            <Setter.Value><RotateTransform/></Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                <BeginStoryboard>
+                    <Storyboard RepeatBehavior="Forever">
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                            From="0" To="360"
+                            Duration="0:0:0.45"
+                            RepeatBehavior="Forever"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <conv:CornerRadiusFilterConverter x:Key="Mine.Internal.CornerRadiusFilter" xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters"/>
+
+    <!-- Button base template -->
+    <ControlTemplate x:Key="Mine.Template.Button" TargetType="{x:Type controls:Button}">
+        <primitives:RippleDecorator x:Name="PART_Ripple"
+                                    RippleBrush="{TemplateBinding Foreground}">
+            <primitives:RippleDecorator.CornerRadius>
+                <MultiBinding Converter="{StaticResource Mine.Internal.CornerRadiusFilter}">
+                    <Binding Path="CornerRadius"  RelativeSource="{RelativeSource TemplatedParent}"/>
+                    <Binding Path="ActualWidth"   RelativeSource="{RelativeSource TemplatedParent}"/>
+                    <Binding Path="ActualHeight"  RelativeSource="{RelativeSource TemplatedParent}"/>
+                </MultiBinding>
+            </primitives:RippleDecorator.CornerRadius>
+            <Border x:Name="PART_Root"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Effect="{TemplateBinding Effect}"
+                    SnapsToDevicePixels="True">
+                <Border.CornerRadius>
+                    <MultiBinding Converter="{StaticResource Mine.Internal.CornerRadiusFilter}">
+                        <Binding Path="CornerRadius"  RelativeSource="{RelativeSource TemplatedParent}"/>
+                        <Binding Path="ActualWidth"   RelativeSource="{RelativeSource TemplatedParent}"/>
+                        <Binding Path="ActualHeight"  RelativeSource="{RelativeSource TemplatedParent}"/>
+                    </MultiBinding>
+                </Border.CornerRadius>
+                <Border x:Name="StateLayer"
+                        Background="Transparent">
+                    <Border.CornerRadius>
+                        <MultiBinding Converter="{StaticResource Mine.Internal.CornerRadiusFilter}">
+                            <Binding Path="CornerRadius"  RelativeSource="{RelativeSource TemplatedParent}"/>
+                            <Binding Path="ActualWidth"   RelativeSource="{RelativeSource TemplatedParent}"/>
+                            <Binding Path="ActualHeight"  RelativeSource="{RelativeSource TemplatedParent}"/>
+                        </MultiBinding>
+                    </Border.CornerRadius>
+                    <StackPanel x:Name="ContentPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}">
+                        <ContentPresenter x:Name="IconPresenter"
+                                          Content="{TemplateBinding Icon}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          Margin="0,0,8,0"
+                                          Visibility="Visible"/>
+                        <ContentPresenter x:Name="PART_Content"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          RecognizesAccessKey="True"/>
+                        <Ellipse x:Name="Spinner"
+                                 Style="{StaticResource Mine.Internal.Spinner}"
+                                 Stroke="{TemplateBinding Foreground}"
+                                 Margin="8,0,0,0"
+                                 Visibility="Collapsed"/>
+                    </StackPanel>
+                </Border>
+            </Border>
+        </primitives:RippleDecorator>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="Icon" Value="{x:Null}">
+                <Setter TargetName="IconPresenter" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="Content" Value="{x:Null}">
+                <Setter TargetName="PART_Content" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="IconPresenter" Property="Margin" Value="0"/>
+            </Trigger>
+            <!-- Hide icon margin if content is empty string too -->
+            <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                <Setter TargetName="IconPresenter" Property="Margin" Value="0"/>
+                <Setter TargetName="PART_Content" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="StateLayer" Property="Background">
+                    <Setter.Value><SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.08"/></Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="StateLayer" Property="Background">
+                    <Setter.Value><SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.12"/></Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="PART_Root" Property="Opacity" Value="0.38"/>
+            </Trigger>
+            <Trigger Property="IsLoading" Value="True">
+                <Setter TargetName="Spinner" Property="Visibility" Value="Visible"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- FILLED -->
+    <Style x:Key="Mine.Style.Button.Filled" TargetType="{x:Type controls:Button}">
+        <Setter Property="Background"       Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+        <Setter Property="BorderThickness"  Value="0"/>
+        <Setter Property="Padding"          Value="24,10"/>
+        <Setter Property="Height"           Value="40"/>
+        <Setter Property="CornerRadius"     Value="{DynamicResource Mine.Shape.Full}"/>
+        <Setter Property="Cursor"           Value="Hand"/>
+        <Setter Property="FontFamily"       Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"         Value="{DynamicResource Mine.FontSize.LabelLarge}"/>
+        <Setter Property="FontWeight"       Value="Medium"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template"         Value="{StaticResource Mine.Template.Button}"/>
+        <Setter Property="Effect"           Value="{DynamicResource Mine.Elevation.0}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.1}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.0}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- TONAL -->
+    <Style x:Key="Mine.Style.Button.Tonal" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Filled}">
+        <Setter Property="Background" Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+    </Style>
+
+    <!-- OUTLINED -->
+    <Style x:Key="Mine.Style.Button.Outlined" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Filled}">
+        <Setter Property="Background"      Value="Transparent"/>
+        <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="BorderBrush"     Value="{DynamicResource Mine.Brush.Outline}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.0}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- TEXT -->
+    <Style x:Key="Mine.Style.Button.Text" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Filled}">
+        <Setter Property="Background"      Value="Transparent"/>
+        <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="12,10"/>
+    </Style>
+
+    <!-- ELEVATED -->
+    <Style x:Key="Mine.Style.Button.Elevated" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Filled}">
+        <Setter Property="Background" Value="{DynamicResource Mine.Brush.SurfaceContainerLow}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="Effect"     Value="{DynamicResource Mine.Elevation.1}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.2}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.1}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- FAB -->
+    <Style x:Key="Mine.Style.Button.Fab" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Filled}">
+        <Setter Property="Background"   Value="{DynamicResource Mine.Brush.PrimaryContainer}"/>
+        <Setter Property="Foreground"   Value="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+        <Setter Property="Width"        Value="56"/>
+        <Setter Property="Height"       Value="56"/>
+        <Setter Property="Padding"      Value="0"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Mine.Shape.Large}"/>
+        <Setter Property="Effect"       Value="{DynamicResource Mine.Elevation.3}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.4}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- EXTENDED FAB -->
+    <Style x:Key="Mine.Style.Button.ExtendedFab" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Fab}">
+        <Setter Property="Width"        Value="NaN"/>
+        <Setter Property="Height"       Value="56"/>
+        <Setter Property="Padding"      Value="16,0,20,0"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource Mine.Shape.Large}"/>
+    </Style>
+
+    <!-- Default style — Variant dispatcher -->
+    <Style TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Filled}">
+        <Style.Triggers>
+            <Trigger Property="Variant" Value="Tonal">
+                <Setter Property="Background"      Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
+                <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Trigger>
+            <Trigger Property="Variant" Value="Outlined">
+                <Setter Property="Background"      Value="Transparent"/>
+                <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter Property="BorderBrush"     Value="{DynamicResource Mine.Brush.Outline}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Effect"          Value="{DynamicResource Mine.Elevation.0}"/>
+            </Trigger>
+            <Trigger Property="Variant" Value="Text">
+                <Setter Property="Background"      Value="Transparent"/>
+                <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding"         Value="12,10"/>
+                <Setter Property="Effect"          Value="{DynamicResource Mine.Elevation.0}"/>
+            </Trigger>
+            <Trigger Property="Variant" Value="Elevated">
+                <Setter Property="Background" Value="{DynamicResource Mine.Brush.SurfaceContainerLow}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter Property="Effect"     Value="{DynamicResource Mine.Elevation.1}"/>
+            </Trigger>
+            <Trigger Property="Variant" Value="Fab">
+                <Setter Property="Background"   Value="{DynamicResource Mine.Brush.PrimaryContainer}"/>
+                <Setter Property="Foreground"   Value="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+                <Setter Property="Width"        Value="56"/>
+                <Setter Property="Height"       Value="56"/>
+                <Setter Property="Padding"      Value="0"/>
+                <Setter Property="CornerRadius" Value="{DynamicResource Mine.Shape.Large}"/>
+                <Setter Property="Effect"       Value="{DynamicResource Mine.Elevation.3}"/>
+            </Trigger>
+            <Trigger Property="Variant" Value="ExtendedFab">
+                <Setter Property="Background"   Value="{DynamicResource Mine.Brush.PrimaryContainer}"/>
+                <Setter Property="Foreground"   Value="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+                <Setter Property="Height"       Value="56"/>
+                <Setter Property="Width"        Value="NaN"/>
+                <Setter Property="Padding"      Value="16,0,20,0"/>
+                <Setter Property="CornerRadius" Value="{DynamicResource Mine.Shape.Large}"/>
+                <Setter Property="Effect"       Value="{DynamicResource Mine.Elevation.3}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
+

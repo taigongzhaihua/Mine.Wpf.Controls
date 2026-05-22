@@ -1,0 +1,100 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+    <!-- Card 默认样式 -->
+    <Style TargetType="{x:Type controls:Card}">
+        <Setter Property="Background"          Value="{DynamicResource Mine.Brush.SurfaceContainerLow}"/>
+        <Setter Property="Foreground"          Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="BorderThickness"     Value="0"/>
+        <Setter Property="CornerRadius"        Value="{DynamicResource Mine.Shape.Medium}"/>
+        <Setter Property="Padding"             Value="16"/>
+        <Setter Property="Effect"              Value="{DynamicResource Mine.Elevation.1}"/>
+        <Setter Property="Cursor"              Value="Arrow"/>
+        <Setter Property="FocusVisualStyle"    Value="{x:Null}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:Card}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Effect="{TemplateBinding Effect}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                            ClipToBounds="True">
+                        <Grid>
+                            <!-- 海拔着色叠加层 -->
+                            <Border x:Name="TintLayer"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Background="{DynamicResource Mine.Brush.SurfaceTint}"
+                                    Opacity="{DynamicResource Mine.Elevation.TintOpacity.1}"
+                                    IsHitTestVisible="False"/>
+                            <!-- 交互状态叠加层（悬浮/按下） -->
+                            <Border x:Name="StateLayer"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Background="Transparent"
+                                    IsHitTestVisible="False"/>
+                            <!-- 实际内容 -->
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Elevated 变体（默认） -->
+                        <Trigger Property="Variant" Value="Elevated">
+                            <Setter TargetName="Root" Property="Effect" Value="{DynamicResource Mine.Elevation.1}"/>
+                        </Trigger>
+                        <!-- Filled 变体 -->
+                        <Trigger Property="Variant" Value="Filled">
+                            <Setter TargetName="Root" Property="Effect"     Value="{DynamicResource Mine.Elevation.0}"/>
+                            <Setter Property="Background"                    Value="{DynamicResource Mine.Brush.SurfaceContainerHighest}"/>
+                        </Trigger>
+                        <!-- Outlined 变体 -->
+                        <Trigger Property="Variant" Value="Outlined">
+                            <Setter TargetName="Root"      Property="Effect"          Value="{DynamicResource Mine.Elevation.0}"/>
+                            <Setter TargetName="Root"      Property="BorderThickness" Value="1"/>
+                            <Setter TargetName="Root"      Property="BorderBrush"     Value="{DynamicResource Mine.Brush.OutlineVariant}"/>
+                            <Setter TargetName="TintLayer" Property="Opacity"         Value="0"/>
+                            <Setter Property="Background"                              Value="{DynamicResource Mine.Brush.Surface}"/>
+                        </Trigger>
+                        <!-- 可点击卡片的悬浮状态 -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsClickable" Value="True"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="Root" Property="Effect" Value="{DynamicResource Mine.Elevation.2}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- 变体级背景通过 Style 触发器覆盖 -->
+        <Style.Triggers>
+            <Trigger Property="Variant" Value="Elevated">
+                <Setter Property="Background" Value="{DynamicResource Mine.Brush.SurfaceContainerLow}"/>
+                <Setter Property="Effect"     Value="{DynamicResource Mine.Elevation.1}"/>
+            </Trigger>
+            <Trigger Property="Variant" Value="Filled">
+                <Setter Property="Background" Value="{DynamicResource Mine.Brush.SurfaceContainerHighest}"/>
+                <Setter Property="Effect"     Value="{DynamicResource Mine.Elevation.0}"/>
+            </Trigger>
+            <Trigger Property="Variant" Value="Outlined">
+                <Setter Property="Background"      Value="{DynamicResource Mine.Brush.Surface}"/>
+                <Setter Property="BorderBrush"     Value="{DynamicResource Mine.Brush.OutlineVariant}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Effect"          Value="{DynamicResource Mine.Elevation.0}"/>
+            </Trigger>
+            <Trigger Property="IsClickable" Value="True">
+                <Setter Property="Cursor" Value="Hand"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
