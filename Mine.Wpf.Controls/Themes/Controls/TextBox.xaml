@@ -1,0 +1,547 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:primitives="clr-namespace:Mine.Wpf.Controls.Primitives">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TextBox — Filled variant template
+         ═══════════════════════════════════════════════════════════ -->
+    <ControlTemplate x:Key="Mine.Template.TextBox.Filled" TargetType="{x:Type controls:TextBox}">
+        <Grid>
+            <VisualStateManager.VisualStateGroups>
+
+                <!-- 交互状态 -->
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualStateGroup.Transitions>
+                        <!-- Normal → Focused：指示线展开 -->
+                        <VisualTransition From="Normal" To="Focused" GeneratedDuration="0">
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="IndicatorScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 To="1" Duration="0:0:0.2">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </VisualTransition>
+                        <!-- Focused → Normal：指示线收缩 -->
+                        <VisualTransition From="Focused" To="Normal" GeneratedDuration="0">
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="IndicatorScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 To="0" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </VisualTransition>
+                    </VisualStateGroup.Transitions>
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="IndicatorScale"
+                                             Storyboard.TargetProperty="ScaleX" To="0" Duration="0"/>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
+                                                           Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <!-- Normal 状态不锁定 PART_Hint Foreground，
+                                 让它回落到模板 XAML 中设置的 OnSurfaceVariant，
+                                 避免动画层与模板层产生"两个真相源"的竞争 -->
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="IndicatorScale"
+                                             Storyboard.TargetProperty="ScaleX" To="1" Duration="0"/>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
+                                                           Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Hint"
+                                                           Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Container"
+                                             Storyboard.TargetProperty="Opacity" To="0.38" Duration="0"/>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+
+                <!-- 标签浮动状态 -->
+                <VisualStateGroup x:Name="LabelStates">
+                    <VisualStateGroup.Transitions>
+                        <!-- Normal → Floated：缩小上移 -->
+                        <VisualTransition From="LabelNormal" To="LabelFloated" GeneratedDuration="0">
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 To="0.75" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 To="0.75" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                                 Storyboard.TargetProperty="Y"
+                                                 To="-2" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </VisualTransition>
+                        <!-- Floated → Normal：放大下移 -->
+                        <VisualTransition From="LabelFloated" To="LabelNormal" GeneratedDuration="0">
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 To="1" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 To="1" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                                 Storyboard.TargetProperty="Y"
+                                                 To="7" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </VisualTransition>
+                    </VisualStateGroup.Transitions>
+                    <VisualState x:Name="LabelNormal">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                             Storyboard.TargetProperty="ScaleX" To="1" Duration="0"/>
+                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                             Storyboard.TargetProperty="ScaleY" To="1" Duration="0"/>
+                            <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                             Storyboard.TargetProperty="Y" To="7" Duration="0"/>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="LabelFloated">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                             Storyboard.TargetProperty="ScaleX" To="0.75" Duration="0"/>
+                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                             Storyboard.TargetProperty="ScaleY" To="0.75" Duration="0"/>
+                            <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                             Storyboard.TargetProperty="Y" To="-2" Duration="0"/>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+
+                <!-- 验证状态 -->
+                <VisualStateGroup x:Name="ValidationStates">
+                    <VisualState x:Name="Valid"/>
+                    <VisualState x:Name="Error">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
+                                                           Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Error}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FocusIndicator"
+                                                           Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Error}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Hint"
+                                                           Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Error}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_HelperText"
+                                                           Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Error}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+
+            </VisualStateManager.VisualStateGroups>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="Container"
+                    Grid.Row="0"
+                    Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    MinHeight="40"
+                    ClipToBounds="True">
+                <Grid>
+                    <Border x:Name="Indicator"
+                            VerticalAlignment="Bottom"
+                            Background="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                            Height="1"/>
+                    <Border x:Name="FocusIndicator"
+                            VerticalAlignment="Bottom"
+                            Background="{DynamicResource Mine.Brush.Primary}"
+                            Height="2"
+                            RenderTransformOrigin="0.5,1">
+                        <Border.RenderTransform>
+                            <ScaleTransform x:Name="IndicatorScale" ScaleX="0"/>
+                        </Border.RenderTransform>
+                    </Border>
+
+                    <Grid Margin="12,6,12,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ContentPresenter x:Name="LeadingIcon"
+                                          Grid.Column="0"
+                                          Content="{TemplateBinding LeadingIcon}"
+                                          Width="20" Height="20"
+                                          Margin="0,0,8,0"
+                                          VerticalAlignment="Center"
+                                          Visibility="Visible"/>
+
+                        <Grid Grid.Column="1">
+                            <TextBlock x:Name="PART_Hint"
+                                       Text="{TemplateBinding Hint}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       IsHitTestVisible="False"
+                                       VerticalAlignment="Top"
+                                       RenderTransformOrigin="0,0">
+                                <TextBlock.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform x:Name="HintScale" ScaleX="1" ScaleY="1"/>
+                                        <TranslateTransform x:Name="HintTranslate" Y="7"/>
+                                    </TransformGroup>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <!-- 顶部留出 16px 给浮动标签 -->
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="False"
+                                          VerticalAlignment="Bottom"
+                                          Margin="0,16,0,0"/>
+                        </Grid>
+
+                        <TextBlock x:Name="SuffixText"
+                                   Grid.Column="2"
+                                   Text="{TemplateBinding SuffixText}"
+                                   FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                   FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                   VerticalAlignment="Center"
+                                   Margin="4,0,0,0"
+                                   Visibility="Visible"/>
+
+                        <Button x:Name="PART_ClearButton"
+                                Grid.Column="3"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="2"
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                Visibility="Collapsed"
+                                FocusVisualStyle="{x:Null}">
+                            <Path Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                                  Fill="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                  Width="14" Height="14" Stretch="Uniform"/>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <TextBlock x:Name="PART_HelperText"
+                       Grid.Row="1"
+                       Text="{TemplateBinding HelperText}"
+                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                       FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="12,2,12,0"/>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <!-- 以下属性驱动的 Trigger 不适合放入 VSM（值监听而非状态机） -->
+            <Trigger Property="HasError" Value="True">
+                <Setter TargetName="PART_HelperText" Property="Text"
+                        Value="{Binding ErrorMessage, RelativeSource={RelativeSource TemplatedParent}}"/>
+            </Trigger>
+            <Trigger Property="SuffixText" Value="{x:Null}">
+                <Setter TargetName="SuffixText" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="LeadingIcon" Value="{x:Null}">
+                <Setter TargetName="LeadingIcon" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <!-- 聚焦时 hint 上浮，SuffixText 跟随输入内容底部对齐 -->
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter TargetName="SuffixText" Property="VerticalAlignment" Value="Bottom"/>
+                <Setter TargetName="SuffixText" Property="Margin"            Value="4,16,0,0"/>
+            </Trigger>
+            <!-- 有文字时 hint 也浮动，SuffixText 同样底部对齐 -->
+            <Trigger Property="HasText" Value="True">
+                <Setter TargetName="SuffixText" Property="VerticalAlignment" Value="Bottom"/>
+                <Setter TargetName="SuffixText" Property="Margin"            Value="4,16,0,0"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsClearable" Value="True"/>
+                    <Condition Property="HasText"     Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Visible"/>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- ── Outlined variant template ─────────────────────────────── -->
+    <ControlTemplate x:Key="Mine.Template.TextBox.Outlined" TargetType="{x:Type controls:TextBox}">
+        <Grid>
+            <!-- ── 状态机在模板根元素上 ── -->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Focused"/>
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Container"
+                                             Storyboard.TargetProperty="Opacity" To="0.38" Duration="0"/>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+
+                <VisualStateGroup x:Name="LabelStates">
+                    <VisualStateGroup.Transitions>
+                        <VisualTransition From="LabelNormal" To="LabelFloated" GeneratedDuration="0">
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 To="0.75" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 To="0.75" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                                 Storyboard.TargetProperty="Y"
+                                                 To="-20" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </VisualTransition>
+                        <VisualTransition From="LabelFloated" To="LabelNormal" GeneratedDuration="0">
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                 Storyboard.TargetProperty="ScaleX"
+                                                 To="1" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                 Storyboard.TargetProperty="ScaleY"
+                                                 To="1" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                                 Storyboard.TargetProperty="Y"
+                                                 To="-1" Duration="0:0:0.15">
+                                    <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </VisualTransition>
+                    </VisualStateGroup.Transitions>
+                    <VisualState x:Name="LabelNormal">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                             Storyboard.TargetProperty="ScaleX" To="1" Duration="0"/>
+                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                             Storyboard.TargetProperty="ScaleY" To="1" Duration="0"/>
+                            <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                             Storyboard.TargetProperty="Y" To="-1" Duration="0"/>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="LabelFloated">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                             Storyboard.TargetProperty="ScaleX" To="0.75" Duration="0"/>
+                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                             Storyboard.TargetProperty="ScaleY" To="0.75" Duration="0"/>
+                            <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                             Storyboard.TargetProperty="Y" To="-20" Duration="0"/>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+
+                <VisualStateGroup x:Name="ValidationStates">
+                    <VisualState x:Name="Valid"/>
+                    <VisualState x:Name="Error">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Container"
+                                                           Storyboard.TargetProperty="BorderBrush">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Error}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Hint"
+                                                           Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Error}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_HelperText"
+                                                           Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Error}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 外层 Grid：NotchedOutlineBorder + PART_Hint 同层叠放 -->
+            <Grid Grid.Row="0">
+                <primitives:NotchedOutlineBorder x:Name="Container"
+                        CornerRadius="4"
+                        BorderBrush="{DynamicResource Mine.Brush.Outline}"
+                        BorderThickness="1"
+                        NotchStart="12"
+                        NotchWidth="0"
+                        MinHeight="40">
+                    <Grid Margin="12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ContentPresenter x:Name="LeadingIcon"
+                                          Grid.Column="0"
+                                          Content="{TemplateBinding LeadingIcon}"
+                                          Width="20" Height="20"
+                                          Margin="0,0,8,0"
+                                          VerticalAlignment="Center"
+                                          Visibility="Visible"/>
+
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Grid.Column="1"
+                                      Focusable="False"
+                                      VerticalAlignment="Center"/>
+
+                        <TextBlock x:Name="SuffixText"
+                                   Grid.Column="2"
+                                   Text="{TemplateBinding SuffixText}"
+                                   FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                   FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                   VerticalAlignment="Center"
+                                   Margin="4,0,0,0"
+                                   Visibility="Visible"/>
+
+                        <Button x:Name="PART_ClearButton"
+                                Grid.Column="3"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="2"
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                Visibility="Collapsed"
+                                FocusVisualStyle="{x:Null}">
+                            <Path Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                                  Fill="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                  Width="14" Height="14" Stretch="Uniform"/>
+                        </Button>
+                    </Grid>
+                </primitives:NotchedOutlineBorder>
+
+                <!-- 标签与边框同层，VerticalAlignment=Center 对齐输入区，浮动时向上移动至边框顶线 -->
+                <TextBlock x:Name="PART_Hint"
+                           Text="{TemplateBinding Hint}"
+                           FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                           FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           IsHitTestVisible="False"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="16,0,0,0"
+                           Padding="0"
+                           RenderTransformOrigin="0,0.5">
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="HintScale" ScaleX="1" ScaleY="1"/>
+                            <TranslateTransform x:Name="HintTranslate" Y="-1"/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+
+            <TextBlock x:Name="PART_HelperText"
+                       Grid.Row="1"
+                       Text="{TemplateBinding HelperText}"
+                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                       FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="12,2,12,0"/>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <!-- 聚焦时：蓝色粗边框 + 标签变色 -->
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter TargetName="Container" Property="BorderBrush"     Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter TargetName="Container" Property="BorderThickness" Value="2"/>
+                <Setter TargetName="PART_Hint" Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter TargetName="PART_Hint" Property="Margin"          Value="16,2,0,0"/>
+            </Trigger>
+            <!-- 错误状态覆盖 -->
+            <Trigger Property="HasError" Value="True">
+                <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="PART_Hint" Property="Foreground"  Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="PART_HelperText" Property="Text"
+                        Value="{Binding ErrorMessage, RelativeSource={RelativeSource TemplatedParent}}"/>
+                <Setter TargetName="PART_HelperText" Property="Foreground" Value="{DynamicResource Mine.Brush.Error}"/>
+            </Trigger>
+            <Trigger Property="SuffixText" Value="{x:Null}">
+                <Setter TargetName="SuffixText" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="LeadingIcon" Value="{x:Null}">
+                <Setter TargetName="LeadingIcon" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsClearable" Value="True"/>
+                    <Condition Property="HasText"     Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Visible"/>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- ── Default style ─────────────────────────────────────────── -->
+    <Style TargetType="{x:Type controls:TextBox}">
+        <Setter Property="Background"        Value="Transparent"/>
+        <Setter Property="Foreground"        Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="CaretBrush"        Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="SelectionBrush"    Value="{DynamicResource Mine.Brush.PrimaryContainer}"/>
+        <Setter Property="BorderThickness"   Value="0"/>
+        <Setter Property="FontFamily"        Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"          Value="{DynamicResource Mine.FontSize.BodyMedium}"/>
+        <Setter Property="CornerRadius"      Value="{DynamicResource Mine.Shape.ExtraSmall.Top}"/>
+        <Setter Property="FocusVisualStyle"  Value="{x:Null}"/>
+        <Setter Property="Padding"           Value="0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template"          Value="{StaticResource Mine.Template.TextBox.Filled}"/>
+
+        <Style.Triggers>
+            <Trigger Property="Variant" Value="Outlined">
+                <Setter Property="CornerRadius" Value="{DynamicResource Mine.Shape.ExtraSmall}"/>
+                <Setter Property="Template"     Value="{StaticResource Mine.Template.TextBox.Outlined}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
+
