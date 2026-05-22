@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="Mine.Wpf.Controls.Gallery.Pages.ButtonPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mine="https://schemas.mine.io/wpf">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Button Variants ─────────────────────────────────────── -->
+        <TextBlock Text="Button Variants"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <TextBlock Text="标准变体" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                <WrapPanel>
+                    <mine:Button Content="Filled"    Variant="Filled"   Margin="0,0,8,8"/>
+                    <mine:Button Content="Tonal"     Variant="Tonal"    Margin="0,0,8,8"/>
+                    <mine:Button Content="Outlined"  Variant="Outlined" Margin="0,0,8,8"/>
+                    <mine:Button Content="Text"      Variant="Text"     Margin="0,0,8,8"/>
+                    <mine:Button Content="Elevated"  Variant="Elevated" Margin="0,0,8,8"/>
+                </WrapPanel>
+
+                <Separator Margin="0,16" Background="{DynamicResource Mine.Brush.OutlineVariant}"/>
+
+                <TextBlock Text="状态" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                <WrapPanel>
+                    <mine:Button Content="正在加载…" Variant="Filled"   IsLoading="True"    Margin="0,0,8,8"/>
+                    <mine:Button Content="已禁用"    Variant="Filled"   IsEnabled="False"   Margin="0,0,8,8"/>
+                    <mine:Button Content="已禁用"    Variant="Outlined" IsEnabled="False"   Margin="0,0,8,8"/>
+                    <mine:Button Content="已禁用"    Variant="Text"     IsEnabled="False"   Margin="0,0,8,8"/>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── Icon Button ────────────────────────────────────────── -->
+        <TextBlock Text="带图标的按钮"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <TextBlock Text="Filled + Icon" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                <WrapPanel>
+                    <mine:Button Content="新建文档" Variant="Filled" Margin="0,0,8,8">
+                        <mine:Button.Icon>
+                            <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                                  Fill="{DynamicResource Mine.Brush.OnPrimary}"
+                                  Width="18" Height="18" Stretch="Uniform"/>
+                        </mine:Button.Icon>
+                    </mine:Button>
+                    <mine:Button Content="上传" Variant="Tonal" Margin="0,0,8,8">
+                        <mine:Button.Icon>
+                            <Path Data="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"
+                                  Fill="{DynamicResource Mine.Brush.OnSecondaryContainer}"
+                                  Width="18" Height="18" Stretch="Uniform"/>
+                        </mine:Button.Icon>
+                    </mine:Button>
+                    <mine:Button Content="删除" Variant="Outlined" Margin="0,0,8,8">
+                        <mine:Button.Icon>
+                            <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+                                  Fill="{DynamicResource Mine.Brush.Primary}"
+                                  Width="18" Height="18" Stretch="Uniform"/>
+                        </mine:Button.Icon>
+                    </mine:Button>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── FAB ────────────────────────────────────────────────── -->
+        <TextBlock Text="Floating Action Button"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <TextBlock Text="FAB 变体" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,16"/>
+                <WrapPanel VerticalAlignment="Center">
+                    <mine:Button Variant="Fab" Margin="0,0,16,0" ToolTip="FAB">
+                        <mine:Button.Icon>
+                            <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                                  Fill="{DynamicResource Mine.Brush.OnPrimaryContainer}"
+                                  Width="24" Height="24" Stretch="Uniform"/>
+                        </mine:Button.Icon>
+                    </mine:Button>
+                    <mine:Button Variant="ExtendedFab" Content="新建文档" Margin="0,0,16,0">
+                        <mine:Button.Icon>
+                            <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                                  Fill="{DynamicResource Mine.Brush.OnPrimaryContainer}"
+                                  Width="20" Height="20" Stretch="Uniform"/>
+                        </mine:Button.Icon>
+                    </mine:Button>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</UserControl>
+

@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="Mine.Wpf.Controls.Gallery.Pages.TextFieldPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mine="https://schemas.mine.io/wpf">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Filled ─────────────────────────────────────────────── -->
+        <TextBlock Text="Filled Text Field"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Labels -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="基础 / 带辅助文字"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,12"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="错误 / 禁用"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="16,0,0,12"/>
+
+                <mine:TextBox Grid.Row="1" Grid.Column="0" Hint="用户名"
+                              Margin="0,0,16,12"/>
+                <mine:TextBox Grid.Row="1" Grid.Column="1" Hint="错误状态"
+                              HasError="True" ErrorMessage="此字段为必填项"
+                              Margin="0,0,0,12"/>
+
+                <mine:TextBox Grid.Row="2" Grid.Column="0" Hint="邮箱地址"
+                              HelperText="格式：user@example.com"
+                              Margin="0,0,16,12"/>
+                <mine:TextBox Grid.Row="2" Grid.Column="1" Hint="已禁用"
+                              IsEnabled="False"
+                              Margin="0,0,0,12"/>
+
+                <mine:TextBox Grid.Row="3" Grid.Column="0" Hint="搜索内容"
+                              IsClearable="True"
+                              Margin="0,0,16,0"/>
+                <mine:TextBox Grid.Row="3" Grid.Column="1" Hint="带后缀文字"
+                              SuffixText="元"
+                              Margin="0,0,0,0"/>
+            </Grid>
+        </mine:Card>
+
+        <!-- ── Outlined ───────────────────────────────────────────── -->
+        <TextBlock Text="Outlined Text Field"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="基础 / 带辅助文字"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,12"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="错误 / 禁用"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="16,0,0,12"/>
+
+                <mine:TextBox Grid.Row="1" Grid.Column="0" Hint="用户名"
+                              Variant="Outlined" Margin="0,0,16,12"/>
+                <mine:TextBox Grid.Row="1" Grid.Column="1" Hint="错误状态"
+                              Variant="Outlined" HasError="True" ErrorMessage="此字段为必填项"
+                              Margin="0,0,0,12"/>
+
+                <mine:TextBox Grid.Row="2" Grid.Column="0" Hint="邮箱地址"
+                              Variant="Outlined" HelperText="格式：user@example.com"
+                              Margin="0,0,16,12"/>
+                <mine:TextBox Grid.Row="2" Grid.Column="1" Hint="已禁用"
+                              Variant="Outlined" IsEnabled="False"
+                              Margin="0,0,0,12"/>
+
+                <mine:TextBox Grid.Row="3" Grid.Column="0" Hint="搜索（可清空）"
+                              Variant="Outlined" IsClearable="True"
+                              Margin="0,0,16,0"/>
+                <mine:TextBox Grid.Row="3" Grid.Column="1" Hint="带后缀"
+                              Variant="Outlined" SuffixText="px"
+                              Margin="0,0,0,0"/>
+            </Grid>
+        </mine:Card>
+
+    </StackPanel>
+</UserControl>
+

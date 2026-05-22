@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Mine.Wpf.Controls.Gallery.Pages.CardPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mine="https://schemas.mine.io/wpf">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Card Variants ──────────────────────────────────────── -->
+        <TextBlock Text="Card Variants"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <WrapPanel Margin="0,0,0,24">
+            <mine:Card Variant="Elevated" Width="260" Margin="0,0,16,16" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="Elevated Card"
+                               Style="{DynamicResource Mine.Typography.TitleMedium}"/>
+                    <TextBlock Text="使用阴影表达高度层级，适合需要视觉突出的内容区域。"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               TextWrapping="Wrap" Margin="0,8,0,16"/>
+                    <mine:Button Content="了解更多" Variant="Text" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </mine:Card>
+
+            <mine:Card Variant="Filled" Width="260" Margin="0,0,16,16" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="Filled Card"
+                               Style="{DynamicResource Mine.Typography.TitleMedium}"/>
+                    <TextBlock Text="使用 SurfaceContainerHighest 背景色，无阴影，适合列表项。"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               TextWrapping="Wrap" Margin="0,8,0,16"/>
+                    <mine:Button Content="了解更多" Variant="Text" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </mine:Card>
+
+            <mine:Card Variant="Outlined" Width="260" Margin="0,0,16,16" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="Outlined Card"
+                               Style="{DynamicResource Mine.Typography.TitleMedium}"/>
+                    <TextBlock Text="使用 OutlineVariant 边框，背景透明，适合需要区分但不抢眼的内容。"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               TextWrapping="Wrap" Margin="0,8,0,16"/>
+                    <mine:Button Content="了解更多" Variant="Text" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </mine:Card>
+        </WrapPanel>
+
+        <!-- ── Card with complex content ──────────────────────────── -->
+        <TextBlock Text="复合内容示例"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Variant="Elevated" Padding="0" Margin="0,0,0,24">
+            <StackPanel>
+                <Border Background="{DynamicResource Mine.Brush.PrimaryContainer}"
+                        Height="120" CornerRadius="12,12,0,0">
+                    <TextBlock Text="封面图区域"
+                               Style="{DynamicResource Mine.Typography.LabelMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel Margin="20,16,20,20">
+                    <TextBlock Text="标题文字" Style="{DynamicResource Mine.Typography.TitleLarge}"/>
+                    <TextBlock Text="副标题说明" Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                               Margin="0,4,0,12"/>
+                    <TextBlock Text="这是卡片的正文内容，可以放置较长的描述性文字，支持多行换行显示。"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               TextWrapping="Wrap" Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <mine:Button Content="取消" Variant="Text" Margin="0,0,8,0"/>
+                        <mine:Button Content="确认" Variant="Filled"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</UserControl>
+

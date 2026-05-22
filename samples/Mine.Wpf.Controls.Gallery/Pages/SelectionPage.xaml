@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="Mine.Wpf.Controls.Gallery.Pages.SelectionPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mine="https://schemas.mine.io/wpf">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── CheckBox ───────────────────────────────────────────── -->
+        <TextBlock Text="CheckBox"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="交互状态" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                    <mine:CheckBox Content="已选中" IsChecked="True" Margin="0,4"/>
+                    <mine:CheckBox Content="未选中" IsChecked="False" Margin="0,4"/>
+                    <mine:CheckBox Content="不确定状态" IsChecked="{x:Null}" Margin="0,4"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="禁用状态" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                    <mine:CheckBox Content="禁用已选中" IsChecked="True"  IsEnabled="False" Margin="0,4"/>
+                    <mine:CheckBox Content="禁用未选中" IsChecked="False" IsEnabled="False" Margin="0,4"/>
+                </StackPanel>
+            </Grid>
+        </mine:Card>
+
+        <!-- ── RadioButton ────────────────────────────────────────── -->
+        <TextBlock Text="RadioButton"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="选项组 A" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                    <mine:RadioButton Content="选项一" GroupName="GroupA" IsChecked="True" Margin="0,4"/>
+                    <mine:RadioButton Content="选项二" GroupName="GroupA" Margin="0,4"/>
+                    <mine:RadioButton Content="选项三" GroupName="GroupA" Margin="0,4"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="禁用状态" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                    <mine:RadioButton Content="禁用已选" GroupName="GroupB" IsChecked="True"
+                                      IsEnabled="False" Margin="0,4"/>
+                    <mine:RadioButton Content="禁用未选" GroupName="GroupB"
+                                      IsEnabled="False" Margin="0,4"/>
+                </StackPanel>
+            </Grid>
+        </mine:Card>
+
+    </StackPanel>
+</UserControl>
+

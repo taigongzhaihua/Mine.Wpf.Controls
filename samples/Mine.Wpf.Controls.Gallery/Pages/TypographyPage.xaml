@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="Mine.Wpf.Controls.Gallery.Pages.TypographyPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mine="https://schemas.mine.io/wpf">
+    <StackPanel MaxWidth="860">
+
+        <mine:Card Padding="28" Margin="0,0,0,24">
+            <StackPanel>
+                <!-- Display -->
+                <TextBlock Text="Display" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,8"/>
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Display Large"
+                               Style="{DynamicResource Mine.Typography.LabelSmall}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Display Large"
+                               Style="{DynamicResource Mine.Typography.DisplayLarge}" FontSize="36"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Display Medium"
+                               Style="{DynamicResource Mine.Typography.LabelSmall}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                               VerticalAlignment="Center" Margin="0,8,0,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Display Medium"
+                               Style="{DynamicResource Mine.Typography.DisplayLarge}" FontSize="28" Margin="0,8,0,0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Display Small"
+                               Style="{DynamicResource Mine.Typography.LabelSmall}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                               VerticalAlignment="Center" Margin="0,8,0,0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="Display Small"
+                               Style="{DynamicResource Mine.Typography.DisplayLarge}" FontSize="22" Margin="0,8,0,0"/>
+                </Grid>
+
+                <Separator Background="{DynamicResource Mine.Brush.OutlineVariant}" Margin="0,0,0,16"/>
+
+                <!-- Headline -->
+                <TextBlock Text="Headline" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,8"/>
+                <TextBlock Text="Headline Large"  Style="{DynamicResource Mine.Typography.HeadlineLarge}"  Margin="0,4"/>
+                <TextBlock Text="Headline Medium" Style="{DynamicResource Mine.Typography.HeadlineMedium}" Margin="0,4"/>
+                <TextBlock Text="Headline Small"  Style="{DynamicResource Mine.Typography.HeadlineSmall}"  Margin="0,4,0,16"/>
+
+                <Separator Background="{DynamicResource Mine.Brush.OutlineVariant}" Margin="0,0,0,16"/>
+
+                <!-- Title -->
+                <TextBlock Text="Title" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,8"/>
+                <TextBlock Text="Title Large"  Style="{DynamicResource Mine.Typography.TitleLarge}"  Margin="0,4"/>
+                <TextBlock Text="Title Medium" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,4"/>
+                <TextBlock Text="Title Small"  Style="{DynamicResource Mine.Typography.TitleSmall}"  Margin="0,4,0,16"/>
+
+                <Separator Background="{DynamicResource Mine.Brush.OutlineVariant}" Margin="0,0,0,16"/>
+
+                <!-- Body -->
+                <TextBlock Text="Body" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,8"/>
+                <TextBlock Text="Body Large — 这是正文大号字体，适合段落内容的主要文字。"
+                           Style="{DynamicResource Mine.Typography.BodyLarge}" Margin="0,4"/>
+                <TextBlock Text="Body Medium — 这是正文中号字体，用于常规说明性文字。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}" Margin="0,4"/>
+                <TextBlock Text="Body Small — 这是正文小号字体，用于辅助信息。"
+                           Style="{DynamicResource Mine.Typography.BodySmall}" Margin="0,4,0,16"/>
+
+                <Separator Background="{DynamicResource Mine.Brush.OutlineVariant}" Margin="0,0,0,16"/>
+
+                <!-- Label -->
+                <TextBlock Text="Label" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,8"/>
+                <TextBlock Text="Label Large"  Style="{DynamicResource Mine.Typography.LabelLarge}"  Margin="0,4"/>
+                <TextBlock Text="Label Medium" Style="{DynamicResource Mine.Typography.LabelMedium}" Margin="0,4"/>
+                <TextBlock Text="Label Small"  Style="{DynamicResource Mine.Typography.LabelSmall}"  Margin="0,4"/>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</UserControl>
+
