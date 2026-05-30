@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Mine.Wpf.Controls/0.1.0": {
+        "runtime": {
+          "Mine.Wpf.Controls.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Mine.Wpf.Controls/0.1.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
