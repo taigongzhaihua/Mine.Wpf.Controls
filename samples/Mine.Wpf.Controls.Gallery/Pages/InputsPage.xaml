@@ -1,0 +1,105 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.InputsPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Inputs"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="760">
+
+        <!-- ── NumericUpDown ───────────────────────────────────────── -->
+        <TextBlock Text="NumericUpDown"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="数字输入框，支持键盘 ↑↓ / 滚轮 / 按钮步进，带浮动标签。"
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   TextWrapping="Wrap" Margin="0,0,0,20"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,28">
+            <WrapPanel>
+                <mine:NumericUpDown Hint="数量" Width="160" Margin="0,0,16,8"
+                                    Minimum="0" Maximum="100" SmallChange="1" Value="5"/>
+                <mine:NumericUpDown Hint="价格（F2）" Width="170" Margin="0,0,16,8"
+                                    Minimum="0" Maximum="9999" SmallChange="0.5"
+                                    StringFormat="F2" Value="19.99"/>
+                <mine:NumericUpDown Hint="Outlined" Width="170" Margin="0,0,16,8"
+                                    Variant="Outlined"
+                                    Minimum="0" Maximum="9999" SmallChange="1" Value="128"/>
+                <mine:NumericUpDown Hint="负数范围" Width="160" Margin="0,0,16,8"
+                                    Minimum="-100" Maximum="100" Value="0"/>
+                <mine:NumericUpDown Hint="禁用" Width="120" Margin="0,0,0,8"
+                                    IsEnabled="False" Value="42"/>
+            </WrapPanel>
+        </mine:Card>
+
+        <!-- ── Rating ─────────────────────────────────────────────── -->
+        <TextBlock Text="Rating"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="星级评分，点击设置评分，再次点击同一颗星则清零。"
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   TextWrapping="Wrap" Margin="0,0,0,20"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,28">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                    <mine:Rating x:Name="RatingDemo" Value="3" Maximum="5" Margin="0,0,16,0"/>
+                    <TextBlock VerticalAlignment="Center"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}">
+                        <Run Text="已选："/>
+                        <Run Text="{Binding ElementName=RatingDemo, Path=Value, StringFormat='{}{0:0}'}"/>
+                        <Run Text="/ 5"/>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                    <mine:Rating Value="4" Maximum="5" IsReadOnly="True" Margin="0,0,16,0"/>
+                    <TextBlock Text="只读 IsReadOnly=True" VerticalAlignment="Center"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <mine:Rating Value="6" Maximum="10" Margin="0,0,16,0"/>
+                    <TextBlock Text="Maximum=10" VerticalAlignment="Center"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                </StackPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── RangeSlider ─────────────────────────────────────────── -->
+        <TextBlock Text="RangeSlider"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="双端滑块，支持就近 thumb 点击跳转、独立 hover/drag 值标签，以及离散刻度点。"
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   TextWrapping="Wrap" Margin="0,0,0,20"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,28">
+            <StackPanel>
+                <TextBlock Text="价格区间（hover / drag 标签）"
+                           Style="{DynamicResource Mine.Typography.LabelMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,0,0,8"/>
+                <mine:RangeSlider x:Name="HoverDragRangeSlider"
+                                  Minimum="0" Maximum="1000"
+                                  RangeStart="200" RangeEnd="800"
+                                  SmallChange="10" ValueFormat="0"
+                                  Margin="0,0,0,24"/>
+
+                <TextBlock Text="离散模式（TickFrequency=10，点击轨道会移动最近的 thumb）"
+                           Style="{DynamicResource Mine.Typography.LabelMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,0,0,8"/>
+                <mine:RangeSlider x:Name="DiscreteRangeSlider"
+                                  Minimum="0" Maximum="100"
+                                  RangeStart="20" RangeEnd="70"
+                                  SmallChange="10"/>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>
+

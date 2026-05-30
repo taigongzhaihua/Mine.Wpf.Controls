@@ -1,0 +1,125 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.TooltipPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="ToolTip"
+           Padding="28,24,28,32">
+
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Plain ToolTip ──────────────────────────────────────── -->
+        <TextBlock Text="Plain ToolTip"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="悬停在元素上显示简短说明。使用 InverseSurface 背景色，搭配 InverseOnSurface 文字。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+                <WrapPanel>
+                    <mine:Button Content="Filled 按钮"
+                                 Style="{DynamicResource Mine.Style.Button.Filled}"
+                                 Margin="0,0,12,8"
+                                 ToolTip="这是一个 Filled 按钮"/>
+                    <mine:Button Content="Tonal 按钮"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 ToolTip="FilledTonal 变体，使用 SecondaryContainer"/>
+                    <mine:Button Content="Outlined 按钮"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,12,8"
+                                 ToolTip="Outlined 变体，带边框"/>
+                    <mine:Button Content="Text 按钮"
+                                 Style="{DynamicResource Mine.Style.Button.Text}"
+                                 Margin="0,0,0,8"
+                                 ToolTip="最轻量的按钮变体"/>
+                </WrapPanel>
+
+                <!-- 多行文本 tooltip -->
+                <mine:Button Content="多行 ToolTip"
+                             Style="{DynamicResource Mine.Style.Button.Outlined}"
+                             HorizontalAlignment="Left"
+                             Margin="0,8,0,0"
+                             ToolTip="这是一段较长的提示文字，可以自动换行显示。ToolTip 最大宽度为 280px，超出后将自动折行。"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── Rich ToolTip ───────────────────────────────────────── -->
+        <TextBlock Text="Rich ToolTip"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,24,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="Rich ToolTip 用于需要更多上下文的场景，支持可选标题和正文。使用 SurfaceContainer 背景，圆角 Medium（12dp），带淡入+上滑动画。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+                <WrapPanel>
+                    <!-- 仅正文 -->
+                    <mine:Button Content="仅正文"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8">
+                        <mine:Button.ToolTip>
+                            <mine:RichToolTip Content="这是 Rich ToolTip 的正文内容，无标题。"/>
+                        </mine:Button.ToolTip>
+                    </mine:Button>
+
+                    <!-- 有标题 -->
+                    <mine:Button Content="带标题"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8">
+                        <mine:Button.ToolTip>
+                            <mine:RichToolTip mine:ToolTipAssist.Title="标题文本"
+                                              Content="这里是正文说明，可以包含多行内容，最大宽度 312dp。"/>
+                        </mine:Button.ToolTip>
+                    </mine:Button>
+
+                    <!-- 有标题 + 操作按钮 -->
+                    <mine:Button Content="带标题和操作"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8">
+                        <mine:Button.ToolTip>
+                            <mine:RichToolTip mine:ToolTipAssist.Title="键盘快捷键"
+                                              Content="使用 Ctrl+S 快速保存当前文件，Ctrl+Z 撤销上一步操作，Ctrl+Y 重做，Ctrl+A 全选。"/>
+                        </mine:Button.ToolTip>
+                    </mine:Button>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── 延迟 / 持续时长 ──────────────────────────────────────── -->
+        <TextBlock Text="延迟与持续时长"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,24,0,12"/>
+        <mine:Card Padding="24">
+            <StackPanel>
+                <TextBlock Text="通过 ToolTipService 控制显示延迟（InitialShowDelay）和持续时长（ShowDuration）。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+                <WrapPanel>
+                    <mine:Button Content="无延迟 (0ms)"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,12,8"
+                                 ToolTipService.InitialShowDelay="0"
+                                 ToolTip="立即显示，无任何延迟"/>
+                    <mine:Button Content="默认延迟 (400ms)"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,12,8"
+                                 ToolTip="默认 400ms 后显示"/>
+                    <mine:Button Content="长持续时间"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,0,8"
+                                 ToolTipService.ShowDuration="8000"
+                                 ToolTip="此 ToolTip 将显示 8 秒后才消失"/>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>
+

@@ -1,0 +1,238 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.DrawerPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Drawer"
+           Padding="0"
+           IsScrollable="False">
+    <!--
+        DrawerPage 本身就是一个 Drawer 容器演示：
+        左侧导航抽屉 + 右侧演示区，抽屉内容是一个模拟导航菜单。
+    -->
+    <mine:Drawer x:Name="DemoDrawer"
+                 DrawerWidth="280"
+                 DrawerPlacement="Left"
+                 CloseOnScrimClick="True">
+
+        <!-- 抽屉内容：模拟导航菜单 -->
+        <mine:Drawer.DrawerContent>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- 抽屉头部 -->
+                <Border Grid.Row="0"
+                        Background="{DynamicResource Mine.Brush.SurfaceContainerHigh}"
+                        Padding="16,24,16,16">
+                    <StackPanel>
+                        <mine:Avatar Initials="JD" Size="48" Margin="0,0,0,12"/>
+                        <TextBlock Text="John Doe"
+                                   Style="{DynamicResource Mine.Typography.TitleMedium}"/>
+                        <TextBlock Text="john@example.com"
+                                   Style="{DynamicResource Mine.Typography.BodySmall}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 导航项列表 -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="12,8">
+                        <TextBlock Text="主菜单"
+                                   Style="{DynamicResource Mine.Typography.LabelSmall}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                   Margin="16,8,0,4"/>
+
+                        <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}" IsChecked="True">
+                            <StackPanel Orientation="Horizontal">
+                                <mine:MaterialIcon Kind="&#xE88A;" Margin="0,0,12,0"/>
+                                <TextBlock Text="首页" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </mine:RadioButton>
+                        <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <mine:MaterialIcon Kind="&#xE8B6;" Margin="0,0,12,0"/>
+                                <TextBlock Text="搜索" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </mine:RadioButton>
+                        <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <mine:MaterialIcon Kind="&#xE7F4;" Margin="0,0,12,0"/>
+                                <TextBlock Text="通知" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </mine:RadioButton>
+                        <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <mine:MaterialIcon Kind="&#xE8E9;" Margin="0,0,12,0"/>
+                                <TextBlock Text="收藏" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </mine:RadioButton>
+
+                        <Separator Margin="0,8" Background="{DynamicResource Mine.Brush.OutlineVariant}"/>
+
+                        <TextBlock Text="其他"
+                                   Style="{DynamicResource Mine.Typography.LabelSmall}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                   Margin="16,0,0,4"/>
+
+                        <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <mine:MaterialIcon Kind="&#xE8B8;" Margin="0,0,12,0"/>
+                                <TextBlock Text="设置" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </mine:RadioButton>
+                        <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <mine:MaterialIcon Kind="&#xE8FD;" Margin="0,0,12,0"/>
+                                <TextBlock Text="帮助与反馈" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </mine:RadioButton>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </mine:Drawer.DrawerContent>
+
+        <!-- 主体内容 -->
+        <Grid Background="{DynamicResource Mine.Brush.Background}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="28,24,28,32" MaxWidth="760">
+                    <TextBlock Text="Drawer"
+                               Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                               Margin="0,0,0,8"/>
+                    <TextBlock Text="A side panel that slides in from the edge, typically used for navigation menus."
+                               Style="{DynamicResource Mine.Typography.BodyLarge}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,28"/>
+
+                    <!-- 左侧抽屉演示 -->
+                    <TextBlock Text="Left Drawer（左侧导航）"
+                               Style="{DynamicResource Mine.Typography.TitleMedium}"
+                               Margin="0,0,0,12"/>
+                    <mine:Card Padding="24" Margin="0,0,0,24">
+                        <StackPanel>
+                            <TextBlock Text="点击按钮打开左侧导航抽屉，可通过点击遮罩或关闭按钮关闭。"
+                                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       Margin="0,0,0,16" TextWrapping="Wrap"/>
+                            <WrapPanel>
+                                <mine:Button Content="打开左侧 Drawer"
+                                             Icon="&#xE5D2;"
+                                             Margin="0,0,8,0"
+                                             Click="OnOpenLeft"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </mine:Card>
+
+                    <!-- 右侧抽屉 -->
+                    <TextBlock Text="Right Drawer（右侧面板）"
+                               Style="{DynamicResource Mine.Typography.TitleMedium}"
+                               Margin="0,0,0,12"/>
+                    <mine:Card Padding="24" Margin="0,0,0,24">
+                        <StackPanel>
+                            <TextBlock Text="从右侧滑入，常用于详情面板、筛选器等。"
+                                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       Margin="0,0,0,16" TextWrapping="Wrap"/>
+                            <WrapPanel>
+                                <mine:Button Content="打开右侧 Drawer"
+                                             Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                             Click="OnOpenRight"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </mine:Card>
+
+                    <!-- 底部抽屉（Modal Bottom Sheet） -->
+                    <TextBlock Text="Bottom Drawer（底部面板）"
+                               Style="{DynamicResource Mine.Typography.TitleMedium}"
+                               Margin="0,0,0,12"/>
+                    <mine:Card Padding="24" Margin="0,0,0,24">
+                        <StackPanel>
+                            <TextBlock Text="从底部滑入，适合快捷操作菜单（类 Bottom Sheet）。"
+                                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       Margin="0,0,0,16" TextWrapping="Wrap"/>
+                            <WrapPanel>
+                                <mine:Button Content="打开底部 Drawer"
+                                             Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                             Click="OnOpenBottom"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </mine:Card>
+
+                    <!-- 属性说明 -->
+                    <TextBlock Text="主要属性"
+                               Style="{DynamicResource Mine.Typography.TitleMedium}"
+                               Margin="0,0,0,12"/>
+                    <mine:Card Padding="24" Margin="0,0,0,24">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="IsOpen"
+                                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                                           Foreground="{DynamicResource Mine.Brush.Primary}"/>
+                                <TextBlock Grid.Column="1" Text="bool — 控制抽屉开关状态"
+                                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="DrawerPlacement"
+                                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                                           Foreground="{DynamicResource Mine.Brush.Primary}"/>
+                                <TextBlock Grid.Column="1" Text="Left / Right / Top / Bottom"
+                                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="DrawerWidth"
+                                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                                           Foreground="{DynamicResource Mine.Brush.Primary}"/>
+                                <TextBlock Grid.Column="1" Text="double — 抽屉宽度（Left/Right 有效）"
+                                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="CloseOnScrimClick"
+                                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                                           Foreground="{DynamicResource Mine.Brush.Primary}"/>
+                                <TextBlock Grid.Column="1" Text="bool — 点击遮罩是否自动关闭"
+                                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="DrawerContent"
+                                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                                           Foreground="{DynamicResource Mine.Brush.Primary}"/>
+                                <TextBlock Grid.Column="1" Text="object — 抽屉面板内的内容"
+                                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            </Grid>
+                        </StackPanel>
+                    </mine:Card>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </mine:Drawer>
+</mine:Page>
+
+

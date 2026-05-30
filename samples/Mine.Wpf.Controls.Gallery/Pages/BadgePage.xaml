@@ -1,0 +1,126 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.BadgePage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Badge"
+           Padding="28,24,28,32">
+        <StackPanel MaxWidth="760">
+            <TextBlock Text="Badge"
+                       Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                       Margin="0,0,0,8"/>
+            <TextBlock Text="A small status descriptor for UI elements. Supports dot (small) and label (large) variants."
+                       Style="{DynamicResource Mine.Typography.BodyLarge}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,28"/>
+
+            <!-- Small Badge（圆点） -->
+            <TextBlock Text="Small Badge（圆点）"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <WrapPanel>
+                    <!-- 图标 + 小圆点 -->
+                    <mine:Badge BadgeText="" Margin="16">
+                        <mine:MaterialIcon Kind="&#xE88A;" Size="28"/>
+                    </mine:Badge>
+                    <mine:Badge BadgeText="" BadgePlacement="TopLeft" Margin="16">
+                        <mine:MaterialIcon Kind="&#xE8F4;" Size="28"/>
+                    </mine:Badge>
+                    <mine:Badge BadgeText="" BadgePlacement="BottomRight" Margin="16">
+                        <mine:MaterialIcon Kind="&#xE8B8;" Size="28"/>
+                    </mine:Badge>
+                </WrapPanel>
+            </mine:Card>
+
+            <!-- Large Badge（数字） -->
+            <TextBlock Text="Large Badge（数字）"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <WrapPanel>
+                    <mine:Badge BadgeText="3" Margin="16">
+                        <mine:MaterialIcon Kind="&#xE88A;" Size="28"/>
+                    </mine:Badge>
+                    <mine:Badge BadgeText="12" Margin="16">
+                        <mine:MaterialIcon Kind="&#xE8F4;" Size="28"/>
+                    </mine:Badge>
+                    <mine:Badge BadgeText="99+" Margin="16">
+                        <mine:MaterialIcon Kind="&#xE7F4;" Size="28"/>
+                    </mine:Badge>
+                    <mine:Badge BadgeText="New" Margin="16">
+                        <mine:MaterialIcon Kind="&#xE8B8;" Size="28"/>
+                    </mine:Badge>
+                </WrapPanel>
+            </mine:Card>
+
+            <!-- Hidden Badge -->
+            <TextBlock Text="Hidden Badge（隐藏）"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <WrapPanel>
+                    <mine:Badge BadgeText="{x:Null}" Margin="16">
+                        <mine:MaterialIcon Kind="&#xE88A;" Size="28"/>
+                    </mine:Badge>
+                    <TextBlock Text="BadgeText=null → 无徽标"
+                               VerticalAlignment="Center"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                </WrapPanel>
+            </mine:Card>
+
+            <!-- 动态控制 -->
+            <TextBlock Text="动态控制"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <StackPanel>
+                    <WrapPanel Margin="0,0,0,16">
+                        <mine:Badge x:Name="DemoBadge" BadgeText="5" Margin="16">
+                            <mine:MaterialIcon Kind="&#xE7F4;" Size="28"/>
+                        </mine:Badge>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <mine:Button Content="圆点"
+                                     Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                     Margin="0,0,8,0"
+                                     Click="OnSetDot"/>
+                        <mine:Button Content="数字 5"
+                                     Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                     Margin="0,0,8,0"
+                                     Click="OnSetNumber"/>
+                        <mine:Button Content="99+"
+                                     Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                     Margin="0,0,8,0"
+                                     Click="OnSetLarge"/>
+                        <mine:Button Content="隐藏"
+                                     Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                     Click="OnHide"/>
+                    </WrapPanel>
+                </StackPanel>
+            </mine:Card>
+
+            <!-- Badge on Button -->
+            <TextBlock Text="Badge on Button"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <WrapPanel>
+                    <mine:Badge BadgeText="2" Margin="16">
+                        <mine:Button Variant="Tonal"
+                                     Padding="16,10">
+                            <StackPanel Orientation="Horizontal">
+                                <mine:MaterialIcon Kind="&#xE879;" Size="20" Margin="0,0,8,0"/>
+                                <TextBlock Text="Notifications" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </mine:Button>
+                    </mine:Badge>
+                    <mine:Badge BadgeText="" Margin="16">
+                        <mine:Button Variant="Outlined" Padding="16,10" Content="Messages"/>
+                    </mine:Badge>
+                </WrapPanel>
+            </mine:Card>
+        </StackPanel>
+</mine:Page>
+

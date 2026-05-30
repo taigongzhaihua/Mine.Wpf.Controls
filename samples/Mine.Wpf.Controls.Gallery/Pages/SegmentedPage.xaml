@@ -1,0 +1,122 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.SegmentedPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Segmented Button"
+           Padding="28,24,28,32">
+        <StackPanel MaxWidth="760">
+            <TextBlock Text="Segmented Button"
+                       Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                       Margin="0,0,0,8"/>
+            <TextBlock Text="Segmented buttons help people select options, switch views, or sort elements. Supports single and multi-select."
+                       Style="{DynamicResource Mine.Typography.BodyLarge}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       TextWrapping="Wrap"
+                       Margin="0,0,0,28"/>
+
+            <!-- 单选（默认） -->
+            <TextBlock Text="Single Select（单选）"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <StackPanel>
+                    <mine:SegmentedControl SelectionMode="Single"
+                                           Margin="0,0,0,16"
+                                           HorizontalAlignment="Left">
+                        <mine:SegmentedItem Content="Day"/>
+                        <mine:SegmentedItem Content="Week" IsSelected="True"/>
+                        <mine:SegmentedItem Content="Month"/>
+                        <mine:SegmentedItem Content="Year"/>
+                    </mine:SegmentedControl>
+                    <mine:SegmentedControl SelectionMode="Single"
+                                           HorizontalAlignment="Left">
+                        <mine:SegmentedItem Content="List"/>
+                        <mine:SegmentedItem Content="Grid" IsSelected="True"/>
+                    </mine:SegmentedControl>
+                </StackPanel>
+            </mine:Card>
+
+            <!-- 带图标 -->
+            <TextBlock Text="带图标"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <StackPanel>
+                    <mine:SegmentedControl SelectionMode="Single"
+                                           Margin="0,0,0,16"
+                                           HorizontalAlignment="Left">
+                        <mine:SegmentedItem Icon="&#xE8A0;" Content="Recent" IsSelected="True"/>
+                        <mine:SegmentedItem Icon="&#xE145;" Content="Saved"/>
+                        <mine:SegmentedItem Icon="&#xE8B6;" Content="Search"/>
+                    </mine:SegmentedControl>
+                    <!-- 纯图标（无文字） -->
+                    <mine:SegmentedControl SelectionMode="Single"
+                                           HorizontalAlignment="Left">
+                        <mine:SegmentedItem Icon="&#xE25D;" IsSelected="True"/>
+                        <mine:SegmentedItem Icon="&#xE234;"/>
+                        <mine:SegmentedItem Icon="&#xE238;"/>
+                        <mine:SegmentedItem Icon="&#xE241;"/>
+                    </mine:SegmentedControl>
+                </StackPanel>
+            </mine:Card>
+
+            <!-- 多选 -->
+            <TextBlock Text="Multi Select（多选）"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <mine:SegmentedControl SelectionMode="Multiple"
+                                       HorizontalAlignment="Left">
+                    <mine:SegmentedItem Icon="&#xE234;" Content="Bold" IsSelected="True"/>
+                    <mine:SegmentedItem Icon="&#xE23F;" Content="Italic"/>
+                    <mine:SegmentedItem Icon="&#xE249;" Content="Underline" IsSelected="True"/>
+                    <mine:SegmentedItem Icon="&#xE246;" Content="Strike"/>
+                </mine:SegmentedControl>
+            </mine:Card>
+
+            <!-- 单项 -->
+            <TextBlock Text="单项 / 禁用"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <WrapPanel>
+                    <mine:SegmentedControl SelectionMode="Single"
+                                           HorizontalAlignment="Left"
+                                           Margin="0,0,16,0">
+                        <mine:SegmentedItem Content="Only One" IsSelected="True"/>
+                    </mine:SegmentedControl>
+                    <mine:SegmentedControl SelectionMode="Single"
+                                           HorizontalAlignment="Left"
+                                           IsEnabled="False">
+                        <mine:SegmentedItem Content="Disabled"/>
+                        <mine:SegmentedItem Content="Options"/>
+                        <mine:SegmentedItem Content="Here"/>
+                    </mine:SegmentedControl>
+                </WrapPanel>
+            </mine:Card>
+
+            <!-- 动态选中状态显示 -->
+            <TextBlock Text="动态选中"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <StackPanel>
+                    <mine:SegmentedControl x:Name="DemoSegmented"
+                                           SelectionMode="Single"
+                                           HorizontalAlignment="Left"
+                                           Margin="0,0,0,16"
+                                           SelectionChanged="OnSegmentedChanged">
+                        <mine:SegmentedItem Content="Photos"/>
+                        <mine:SegmentedItem Content="Videos"/>
+                        <mine:SegmentedItem Content="Documents"/>
+                        <mine:SegmentedItem Content="Music"/>
+                    </mine:SegmentedControl>
+                    <TextBlock x:Name="SegmentedLabel"
+                               Text="(none selected)"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                </StackPanel>
+            </mine:Card>
+        </StackPanel>
+</mine:Page>
+

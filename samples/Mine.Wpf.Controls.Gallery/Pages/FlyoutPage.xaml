@@ -1,0 +1,204 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.FlyoutPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Flyout"
+           Padding="28,24,28,32">
+
+    <StackPanel MaxWidth="860">
+
+        <!-- ── 基础 Flyout ────────────────────────────────────────── -->
+        <TextBlock Text="基础 Flyout"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="点击按钮打开 Flyout，点击 Flyout 外部自动关闭（light-dismiss）。Flyout 支持任意内容，默认出现在触发元素正下方（Placement=Bottom）。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+                <WrapPanel>
+
+                    <!-- 简单文本内容 -->
+                    <mine:Button x:Name="BtnSimple"
+                                 Content="简单内容"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8">
+                        <mine:FlyoutService.Flyout>
+                            <mine:Flyout PlacementTarget="{Binding ElementName=BtnSimple}"
+                                         Padding="16">
+                                <StackPanel Width="200">
+                                    <TextBlock Text="这是 Flyout 的内容"
+                                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="可以放任意元素，包括文本、图标、按钮等。"
+                                               Style="{DynamicResource Mine.Typography.BodySmall}"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                               TextWrapping="Wrap"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </mine:Flyout>
+                        </mine:FlyoutService.Flyout>
+                    </mine:Button>
+
+                    <!-- 菜单风格 -->
+                    <mine:Button x:Name="BtnMenu"
+                                 Content="菜单"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,12,8">
+                        <mine:FlyoutService.Flyout>
+                            <mine:Flyout PlacementTarget="{Binding ElementName=BtnMenu}"
+                                         Padding="8,4">
+                                <StackPanel Width="180">
+                                    <TextBlock Text="编辑" Padding="12,10"
+                                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                               Cursor="Hand"/>
+                                    <TextBlock Text="复制" Padding="12,10"
+                                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                               Cursor="Hand"/>
+                                    <TextBlock Text="粘贴" Padding="12,10"
+                                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                               Cursor="Hand"/>
+                                    <Separator Margin="0,4"
+                                               Background="{DynamicResource Mine.Brush.OutlineVariant}"/>
+                                    <TextBlock Text="删除" Padding="12,10"
+                                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                               Foreground="{DynamicResource Mine.Brush.Error}"
+                                               Cursor="Hand"/>
+                                </StackPanel>
+                            </mine:Flyout>
+                        </mine:FlyoutService.Flyout>
+                    </mine:Button>
+
+                    <!-- 表单内容 -->
+                    <mine:Button x:Name="BtnForm"
+                                 Content="表单"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,0,8">
+                        <mine:FlyoutService.Flyout>
+                            <mine:Flyout PlacementTarget="{Binding ElementName=BtnForm}"
+                                         Padding="16">
+                                <StackPanel Width="240" Margin="0,0,0,0">
+                                    <TextBlock Text="快速备注"
+                                               Style="{DynamicResource Mine.Typography.TitleSmall}"
+                                               Margin="0,0,0,12"/>
+                                    <mine:TextBox Hint="标题" Margin="0,0,0,8"/>
+                                    <mine:TextBox Hint="内容" MinHeight="64"
+                                                  AcceptsReturn="True" TextWrapping="Wrap"
+                                                  Margin="0,0,0,12"/>
+                                    <mine:Button Content="保存"
+                                                 Style="{DynamicResource Mine.Style.Button.Filled}"
+                                                 HorizontalAlignment="Right"/>
+                                </StackPanel>
+                            </mine:Flyout>
+                        </mine:FlyoutService.Flyout>
+                    </mine:Button>
+
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── 放置位置 ────────────────────────────────────────────── -->
+        <TextBlock Text="放置位置"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,24,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="通过 Placement 属性控制 Flyout 出现的位置，支持 WPF 所有 PlacementMode 枚举值。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+                <WrapPanel>
+                    <mine:Button x:Name="BtnTop"
+                                 Content="上方 (Top)"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,12,8">
+                        <mine:FlyoutService.Flyout>
+                            <mine:Flyout PlacementTarget="{Binding ElementName=BtnTop}"
+                                         Placement="Top" Padding="12,8"
+                                         VerticalOffset="-4">
+                                <TextBlock Text="出现在上方" Padding="4"/>
+                            </mine:Flyout>
+                        </mine:FlyoutService.Flyout>
+                    </mine:Button>
+
+                    <mine:Button x:Name="BtnBottom"
+                                 Content="下方 (Bottom)"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,12,8">
+                        <mine:FlyoutService.Flyout>
+                            <mine:Flyout PlacementTarget="{Binding ElementName=BtnBottom}"
+                                         Placement="Bottom" Padding="12,8">
+                                <TextBlock Text="出现在下方" Padding="4"/>
+                            </mine:Flyout>
+                        </mine:FlyoutService.Flyout>
+                    </mine:Button>
+
+                    <mine:Button x:Name="BtnRight"
+                                 Content="右侧 (Right)"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,12,8">
+                        <mine:FlyoutService.Flyout>
+                            <mine:Flyout PlacementTarget="{Binding ElementName=BtnRight}"
+                                         Placement="Right" Padding="12,8"
+                                         HorizontalOffset="4" VerticalOffset="0">
+                                <TextBlock Text="出现在右侧" Padding="4"/>
+                            </mine:Flyout>
+                        </mine:FlyoutService.Flyout>
+                    </mine:Button>
+
+                    <mine:Button x:Name="BtnLeft"
+                                 Content="左侧 (Left)"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,0,8">
+                        <mine:FlyoutService.Flyout>
+                            <mine:Flyout PlacementTarget="{Binding ElementName=BtnLeft}"
+                                         Placement="Left" Padding="12,8"
+                                         HorizontalOffset="-4" VerticalOffset="0">
+                                <TextBlock Text="出现在左侧" Padding="4"/>
+                            </mine:Flyout>
+                        </mine:FlyoutService.Flyout>
+                    </mine:Button>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── 代码绑定 IsOpen ─────────────────────────────────────── -->
+        <TextBlock Text="代码控制"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,24,0,12"/>
+        <mine:Card Padding="24">
+            <StackPanel>
+                <TextBlock Text="也可以通过 x:Name 引用 Flyout 并在代码中调用 Show() / Hide() / Toggle()，或绑定 IsOpen 属性。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+                <WrapPanel>
+                    <mine:Button x:Name="BtnCode"
+                                 Content="代码打开"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,0"
+                                 Click="OnCodeOpen"/>
+                    <mine:Button Content="代码关闭"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Click="OnCodeClose"/>
+                </WrapPanel>
+                <mine:Flyout x:Name="CodeFlyout"
+                             PlacementTarget="{Binding ElementName=BtnCode}"
+                             Padding="16">
+                    <StackPanel Width="200">
+                        <TextBlock Text="由代码控制打开的 Flyout"
+                                   Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </mine:Flyout>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>
+
+

@@ -1,0 +1,58 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.NavigationViewPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="NavigationView"
+           Padding="0">
+    <mine:NavigationView x:Name="DemoNav"
+                         DisplayMode="LeftCompact" IsPaneOpen="False"
+                         PaneTitle="Mine App"
+                         Header="Home"
+                         IsSearchBoxVisible="True"
+                         AutoSuggestBoxPlaceholder="搜索导航项…">
+        <!-- 页面主内容 -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="ContentArea" Margin="28,24,28,32" MaxWidth="760">
+                <TextBlock Text="NavigationView"
+                           Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                           Margin="0,0,0,8"/>
+                <TextBlock Text="Based on SplitView. Supports Auto / Left / LeftCompact / LeftMinimal display modes."
+                           Style="{DynamicResource Mine.Typography.BodyLarge}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,28"/>
+                <TextBlock Text="DisplayMode"
+                           Style="{DynamicResource Mine.Typography.TitleMedium}"
+                           Margin="0,0,0,12"/>
+                <mine:Card Padding="24" Margin="0,0,0,24">
+                    <WrapPanel>
+                        <mine:Button Content="Left"
+                                     Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                     Margin="0,0,8,8" Click="OnModeLeft"/>
+                        <mine:Button Content="LeftCompact"
+                                     Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                     Margin="0,0,8,8" Click="OnModeLeftCompact"/>
+                        <mine:Button Content="LeftCompactInline"
+                                     Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                     Margin="0,0,8,8" Click="OnModeLeftCompactInline"/>
+                        <mine:Button Content="LeftMinimal"
+                                     Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                     Margin="0,0,8,8" Click="OnModeLeftMinimal"/>
+                        <mine:Button Content="Auto"
+                                     Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                     Margin="0,0,8,8" Click="OnModeAuto"/>
+                    </WrapPanel>
+                </mine:Card>
+                <TextBlock Text="Selected Item"
+                           Style="{DynamicResource Mine.Typography.TitleMedium}"
+                           Margin="0,0,0,12"/>
+                <mine:Card Padding="24">
+                    <TextBlock x:Name="SelectedLabel"
+                               Text="(none)"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                </mine:Card>
+            </StackPanel>
+        </ScrollViewer>
+    </mine:NavigationView>
+</mine:Page>

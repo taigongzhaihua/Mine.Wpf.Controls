@@ -1,0 +1,127 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.SplitViewPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="SplitView"
+           Padding="0">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+    
+    <mine:SplitView Grid.Column="0" Grid.ColumnSpan="2"
+                    Grid.Row="0" Grid.RowSpan="2" x:Name="Demo"
+                    DisplayMode="CompactInline"
+                    OpenPaneLength="260"
+                    CompactPaneLength="64"
+                    IsPaneOpen="True">
+        <mine:SplitView.Pane>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Padding="12,8" BorderThickness="0,0,0,1"
+                        BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}">
+                    
+                </Border>
+                <StackPanel Grid.Row="1" Margin="0,8,0,8">
+                    <Border Padding="12,0" Cursor="Hand" Background="Transparent" MouseLeftButtonDown="OnNavClick">
+                        <Grid Height="56">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <mine:MaterialIcon Grid.Column="0" Kind="&#xE88A;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <TextBlock Grid.Column="1" Text="Home" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
+                        </Grid>
+                    </Border>
+                    <Border Padding="12,0" Cursor="Hand" Background="Transparent" MouseLeftButtonDown="OnNavClick">
+                        <Grid Height="56">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <mine:MaterialIcon Grid.Column="0" Kind="&#xE8F4;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <TextBlock Grid.Column="1" Text="Favorites" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
+                        </Grid>
+                    </Border>
+                    <Border Padding="12,0" Cursor="Hand" Background="Transparent" MouseLeftButtonDown="OnNavClick">
+                        <Grid Height="56">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <mine:MaterialIcon Grid.Column="0" Kind="&#xE8B8;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <TextBlock Grid.Column="1" Text="History" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
+                        </Grid>
+                    </Border>
+                    <Border Padding="12,0" Cursor="Hand" Background="Transparent" MouseLeftButtonDown="OnNavClick">
+                        <Grid Height="56">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <mine:MaterialIcon Grid.Column="0" Kind="&#xE8B6;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <TextBlock Grid.Column="1" Text="Search" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <Border Grid.Row="2" Padding="12,0" Cursor="Hand"
+                        BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}" Background="Transparent">
+                    <Grid Height="56">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <mine:MaterialIcon Grid.Column="0" Kind="&#xE8B8;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                        <TextBlock Grid.Column="1" Text="Settings" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </mine:SplitView.Pane>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="28,24,28,32" MaxWidth="760">
+                <TextBlock Text="SplitView" Style="{DynamicResource Mine.Typography.HeadlineMedium}" Margin="0,0,0,8"/>
+                <TextBlock Text="Divides the UI into a collapsible Pane and a Content area. Four display modes supported."
+                           Style="{DynamicResource Mine.Typography.BodyLarge}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap" Margin="0,0,0,28"/>
+                <TextBlock Text="DisplayMode" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
+                <mine:Card Padding="24" Margin="0,0,0,24">
+                    <WrapPanel>
+                        <mine:Button Content="Overlay"        Style="{DynamicResource Mine.Style.Button.FilledTonal}" Margin="0,0,8,8" Click="OnModeOverlay"/>
+                        <mine:Button Content="CompactOverlay" Style="{DynamicResource Mine.Style.Button.Outlined}"    Margin="0,0,8,8" Click="OnModeCompactOverlay"/>
+                        <mine:Button Content="Inline"         Style="{DynamicResource Mine.Style.Button.Outlined}"    Margin="0,0,8,8" Click="OnModeInline"/>
+                        <mine:Button Content="CompactInline"  Style="{DynamicResource Mine.Style.Button.Outlined}"    Margin="0,0,8,8" Click="OnModeCompactInline"/>
+                    </WrapPanel>
+                </mine:Card>
+                <TextBlock Text="Mode descriptions" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
+                <mine:Card Padding="24">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="140"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Text="Overlay" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
+                            <TextBlock Grid.Column="1" Text="Pane overlays content. Fully hidden when closed; shows scrim when open." Style="{DynamicResource Mine.Typography.BodyMedium}" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" TextWrapping="Wrap"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="140"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Text="CompactOverlay" Style="{DynamicResource Mine.Typography.LabelLarge}" TextWrapping="Wrap"/>
+                            <TextBlock Grid.Column="1" Text="Shows a compact icon strip when closed; slides over content when opened." Style="{DynamicResource Mine.Typography.BodyMedium}" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" TextWrapping="Wrap"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="140"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Text="Inline" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
+                            <TextBlock Grid.Column="1" Text="Pane sits beside content. Width becomes 0 when closed; content expands to fill." Style="{DynamicResource Mine.Typography.BodyMedium}" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" TextWrapping="Wrap"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="140"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <TextBlock Text="CompactInline" Style="{DynamicResource Mine.Typography.LabelLarge}" TextWrapping="Wrap"/>
+                            <TextBlock Grid.Column="1" Text="Like Inline, but shows a compact strip when closed instead of hiding completely." Style="{DynamicResource Mine.Typography.BodyMedium}" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" TextWrapping="Wrap"/>
+                        </Grid>
+                    </StackPanel>
+                </mine:Card>
+            </StackPanel>
+        </ScrollViewer>
+    </mine:SplitView>
+        <mine:Button Grid.Column="0" Grid.Row="0" Style="{DynamicResource Mine.Style.Button.Text}"
+                     Padding="8"
+                     HorizontalAlignment="Left"
+                     Click="OnTogglePane" >
+            <mine:MaterialIcon Kind="&#xE5D2;"
+                               Size="24" />
+        </mine:Button>
+    </Grid>
+</mine:Page>

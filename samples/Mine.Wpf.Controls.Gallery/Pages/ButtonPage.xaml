@@ -1,7 +1,9 @@
-﻿<UserControl x:Class="Mine.Wpf.Controls.Gallery.Pages.ButtonPage"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mine="https://schemas.mine.io/wpf">
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.ButtonPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Button"
+           Padding="28,24,28,32">
     <StackPanel MaxWidth="860">
 
         <!-- ── Button Variants ─────────────────────────────────────── -->
@@ -44,23 +46,20 @@
                 <WrapPanel>
                     <mine:Button Content="新建文档" Variant="Filled" Margin="0,0,8,8">
                         <mine:Button.Icon>
-                            <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-                                  Fill="{DynamicResource Mine.Brush.OnPrimary}"
-                                  Width="18" Height="18" Stretch="Uniform"/>
+                            <mine:MaterialIcon Kind="&#xE145;" Size="18"
+                                              Foreground="{DynamicResource Mine.Brush.OnPrimary}"/>
                         </mine:Button.Icon>
                     </mine:Button>
                     <mine:Button Content="上传" Variant="Tonal" Margin="0,0,8,8">
                         <mine:Button.Icon>
-                            <Path Data="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z"
-                                  Fill="{DynamicResource Mine.Brush.OnSecondaryContainer}"
-                                  Width="18" Height="18" Stretch="Uniform"/>
+                            <mine:MaterialIcon Kind="&#xF09B;" Size="18"
+                                              Foreground="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
                         </mine:Button.Icon>
                     </mine:Button>
                     <mine:Button Content="删除" Variant="Outlined" Margin="0,0,8,8">
                         <mine:Button.Icon>
-                            <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
-                                  Fill="{DynamicResource Mine.Brush.Primary}"
-                                  Width="18" Height="18" Stretch="Uniform"/>
+                            <mine:MaterialIcon Kind="&#xE872;" Size="18"
+                                              Foreground="{DynamicResource Mine.Brush.Primary}"/>
                         </mine:Button.Icon>
                     </mine:Button>
                 </WrapPanel>
@@ -78,16 +77,14 @@
                 <WrapPanel VerticalAlignment="Center">
                     <mine:Button Variant="Fab" Margin="0,0,16,0" ToolTip="FAB">
                         <mine:Button.Icon>
-                            <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-                                  Fill="{DynamicResource Mine.Brush.OnPrimaryContainer}"
-                                  Width="24" Height="24" Stretch="Uniform"/>
+                            <mine:MaterialIcon Kind="&#xE145;" Size="24"
+                                              Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
                         </mine:Button.Icon>
                     </mine:Button>
                     <mine:Button Variant="ExtendedFab" Content="新建文档" Margin="0,0,16,0">
                         <mine:Button.Icon>
-                            <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
-                                  Fill="{DynamicResource Mine.Brush.OnPrimaryContainer}"
-                                  Width="20" Height="20" Stretch="Uniform"/>
+                            <mine:MaterialIcon Kind="&#xE145;" Size="20"
+                                              Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
                         </mine:Button.Icon>
                     </mine:Button>
                 </WrapPanel>
@@ -95,5 +92,4 @@
         </mine:Card>
 
     </StackPanel>
-</UserControl>
-
+</mine:Page>

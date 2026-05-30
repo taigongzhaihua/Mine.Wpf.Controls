@@ -1,0 +1,79 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.ComboBoxPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="ComboBox"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="640">
+
+        <!-- ── Outlined（默认）──────────────────────────────────── -->
+        <TextBlock Text="ComboBox — Outlined"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,16"/>
+
+        <mine:ComboBox Hint="选择城市" Margin="0,0,0,24" Width="280" HorizontalAlignment="Left">
+            <ComboBoxItem Content="北京"/>
+            <ComboBoxItem Content="上海"/>
+            <ComboBoxItem Content="广州"/>
+            <ComboBoxItem Content="深圳"/>
+            <ComboBoxItem Content="杭州"/>
+            <ComboBoxItem Content="成都"/>
+        </mine:ComboBox>
+
+        <mine:ComboBox Hint="带辅助文本" HelperText="请从列表中选择一项"
+                       Margin="0,0,0,24" Width="280" HorizontalAlignment="Left">
+            <ComboBoxItem Content="选项 A"/>
+            <ComboBoxItem Content="选项 B"/>
+            <ComboBoxItem Content="选项 C"/>
+        </mine:ComboBox>
+
+        <mine:ComboBox Hint="禁用状态" IsEnabled="False"
+                       Margin="0,0,0,24" Width="280" HorizontalAlignment="Left">
+            <ComboBoxItem Content="选项 1"/>
+            <ComboBoxItem Content="选项 2"/>
+        </mine:ComboBox>
+
+        <!-- ── Filled ────────────────────────────────────────────── -->
+        <TextBlock Text="ComboBox — Filled"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,16"/>
+
+        <mine:ComboBox Hint="选择语言" Variant="Filled"
+                       Margin="0,0,0,24" Width="280" HorizontalAlignment="Left">
+            <ComboBoxItem Content="中文（简体）"/>
+            <ComboBoxItem Content="English"/>
+            <ComboBoxItem Content="日本語"/>
+            <ComboBoxItem Content="한국어"/>
+            <ComboBoxItem Content="Français"/>
+        </mine:ComboBox>
+
+        <mine:ComboBox Hint="带辅助文本" Variant="Filled" HelperText="选择后将立即生效"
+                       Margin="0,0,0,24" Width="280" HorizontalAlignment="Left">
+            <ComboBoxItem Content="自动"/>
+            <ComboBoxItem Content="手动"/>
+            <ComboBoxItem Content="关闭"/>
+        </mine:ComboBox>
+
+        <!-- ── WinUI3 选中项跟随 ──────────────────────────────────── -->
+        <TextBlock Text="多项月份（含预选）"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,16"/>
+
+        <mine:ComboBox Hint="选择月份" SelectedIndex="5"
+                       Margin="0,0,0,24" Width="280" HorizontalAlignment="Left">
+            <ComboBoxItem Content="一月"/>
+            <ComboBoxItem Content="二月"/>
+            <ComboBoxItem Content="三月"/>
+            <ComboBoxItem Content="四月"/>
+            <ComboBoxItem Content="五月"/>
+            <ComboBoxItem Content="六月"/>
+            <ComboBoxItem Content="七月"/>
+            <ComboBoxItem Content="八月"/>
+            <ComboBoxItem Content="九月"/>
+            <ComboBoxItem Content="十月"/>
+            <ComboBoxItem Content="十一月"/>
+            <ComboBoxItem Content="十二月"/>
+        </mine:ComboBox>
+
+    </StackPanel>
+</mine:Page>

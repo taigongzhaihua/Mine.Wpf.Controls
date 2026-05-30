@@ -1,7 +1,10 @@
-﻿<UserControl x:Class="Mine.Wpf.Controls.Gallery.Pages.SelectionPage"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mine="https://schemas.mine.io/wpf">
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.SelectionPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Selection Controls"
+           Padding="28,24,28,32">
+
     <StackPanel MaxWidth="860">
 
         <!-- ── CheckBox ───────────────────────────────────────────── -->
@@ -62,6 +65,40 @@
             </Grid>
         </mine:Card>
 
-    </StackPanel>
-</UserControl>
+        <!-- ── Switch ────────────────────────────────────────────── -->
+        <TextBlock Text="Switch"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
+                <!-- 基础用法 -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="基础用法" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                    <mine:Switch Content="已开启" IsChecked="True"  Margin="0,6"/>
+                    <mine:Switch Content="已关闭" IsChecked="False" Margin="0,6"/>
+                    <mine:Switch Content="无标签" Margin="0,6"/>
+                </StackPanel>
+
+                <!-- 带图标 & 禁用 -->
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="带图标 / 禁用" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                    <!-- OnIcon: check ✓ (E5CA) -->
+                    <mine:Switch Content="带图标已开启" IsChecked="True"
+                                 OnIcon="&#xE5CA;" Margin="0,6"/>
+                    <mine:Switch Content="带图标已关闭" IsChecked="False"
+                                 OnIcon="&#xE5CA;" Margin="0,6"/>
+                    <mine:Switch Content="禁用已开启"  IsChecked="True"  IsEnabled="False" Margin="0,6"/>
+                    <mine:Switch Content="禁用已关闭"  IsChecked="False" IsEnabled="False" Margin="0,6"/>
+                </StackPanel>
+            </Grid>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>

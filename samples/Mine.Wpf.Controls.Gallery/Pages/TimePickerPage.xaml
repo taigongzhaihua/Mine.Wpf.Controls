@@ -1,0 +1,114 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.TimePickerPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="TimePicker"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="760">
+        <TextBlock Text="TimePicker"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="Material Design 3 风格时间选择器，支持按精度裁剪 flyout、环形时钟选择以及 12/24 小时制。"
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,20"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,28">
+            <StackPanel>
+                <TextBlock Text="外观变体"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,12"/>
+                <WrapPanel>
+                    <mine:TimePicker x:Name="BasicTimePicker"
+                                     Hint="Outlined（默认）"
+                                     DisplayFormat="HH:mm:ss.fff"
+                                     HelperText="请选择一个时间"
+                                     Width="240"
+                                     Margin="0,0,16,16"/>
+                    <mine:TimePicker Hint="Filled"
+                                     Variant="Filled"
+                                     DisplayFormat="HH:mm:ss.fff"
+                                     SelectedTime="14:30:15.250"
+                                     Width="260"
+                                     Margin="0,0,16,16"/>
+                    <mine:TimePicker Hint="禁用"
+                                     DisplayFormat="HH:mm:ss.fff"
+                                     SelectedTime="09:15:45.125"
+                                     Width="260"
+                                     IsEnabled="False"
+                                     Margin="0,0,16,16"/>
+                </WrapPanel>
+                <TextBlock Margin="0,4,0,0"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}">
+                    <Run Text="当前选择："/>
+                    <Run Text="{Binding ElementName=BasicTimePicker, Path=DisplayText, Mode=OneWay, TargetNullValue='未选择'}"/>
+                </TextBlock>
+            </StackPanel>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,28">
+            <StackPanel>
+                <TextBlock Text="时间制与精度"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,12"/>
+                <WrapPanel>
+                    <mine:TimePicker x:Name="MeridiemTimePicker"
+                                     Hint="12 小时制到分"
+                                     Precision="Minute"
+                                     DisplayFormat="hh:mm tt"
+                                     Is24Hours="False"
+                                     SelectedTime="16:45:12.640"
+                                     Width="260"
+                                     Margin="0,0,16,16"/>
+                    <mine:TimePicker Hint="秒选择"
+                                     Precision="Second"
+                                     DisplayFormat="HH:mm:ss"
+                                     SecondInterval="1"
+                                     SelectedTime="10:30:48"
+                                     Width="240"
+                                     Margin="0,0,16,16"/>
+                    <mine:TimePicker Hint="毫秒步进 25"
+                                     Precision="Millisecond"
+                                     DisplayFormat="HH:mm:ss.fff"
+                                     MillisecondInterval="25"
+                                     SelectedTime="18:00:05.375"
+                                     Width="260"
+                                     Margin="0,0,16,16"/>
+                </WrapPanel>
+                <TextBlock Margin="0,4,0,0"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}">
+                    <Run Text="12 小时制："/>
+                    <Run Text="{Binding ElementName=MeridiemTimePicker, Path=DisplayText, Mode=OneWay, TargetNullValue='未选择'}"/>
+                </TextBlock>
+            </StackPanel>
+        </mine:Card>
+
+        <mine:Card Padding="24">
+            <StackPanel>
+                <TextBlock Text="格式与手动输入"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,12"/>
+                <WrapPanel>
+                    <mine:TimePicker Hint="紧凑格式"
+                                     DisplayFormat="HH:mm:ss"
+                                     SelectedTime="08:05:30"
+                                     Width="220"
+                                     Margin="0,0,16,16"/>
+                    <mine:TimePicker Hint="完整精度"
+                                     DisplayFormat="hh:mm:ss.fff tt"
+                                     Is24Hours="False"
+                                     SelectedTime="23:59:59.999"
+                                     Width="300"
+                                     Margin="0,0,16,16"/>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+    </StackPanel>
+</mine:Page>
+

@@ -1,0 +1,84 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.FeedbackPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Snackbar / Dialog"
+           Padding="28,24,28,32">
+
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Snackbar ─────────────────────────────────────── -->
+        <TextBlock Text="Snackbar"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="Snackbar 显示在窗口底部中央，4 秒后自动消失。通过 SnackbarService 静态 API 从任意页面弹出。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,16"/>
+                <WrapPanel>
+                    <mine:Button Content="基础 Snackbar"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnSnackbarBasic"/>
+                    <mine:Button Content="带操作按钮"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnSnackbarAction"/>
+                    <mine:Button Content="长文本"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnSnackbarLong"/>
+                    <mine:Button Content="不自动关闭"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,0,8"
+                                 Click="OnSnackbarPersist"/>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── Dialog ───────────────────────────────────────── -->
+        <TextBlock Text="Dialog"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,24,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="DialogHost 覆盖整个窗口并显示遮罩，通过 DialogService 静态 API 调用。await ShowAsync() 返回用户是否点击确认。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,16"/>
+                <WrapPanel>
+                    <mine:Button Content="确认对话框"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnDialogConfirm"/>
+                    <mine:Button Content="仅确认按钮"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnDialogAlert"/>
+                    <mine:Button Content="自定义内容"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnDialogCustom"/>
+                </WrapPanel>
+
+                <!-- 结果显示 -->
+                <Border x:Name="ResultBorder"
+                        Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                        CornerRadius="{DynamicResource Mine.Shape.ExtraSmall}"
+                        Padding="12,8"
+                        Margin="0,12,0,0"
+                        Visibility="Collapsed">
+                    <TextBlock x:Name="ResultText"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                </Border>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>
+

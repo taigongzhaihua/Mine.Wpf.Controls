@@ -1,5 +1,5 @@
 ﻿namespace Mine.Wpf.Controls.Gallery.Pages;
-public partial class TypographyPage : System.Windows.Controls.UserControl
+public partial class TypographyPage : Controls.Page
 {
     public TypographyPage() => InitializeComponent();
 }

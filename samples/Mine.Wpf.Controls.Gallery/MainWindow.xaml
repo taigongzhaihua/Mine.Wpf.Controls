@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mine="https://schemas.mine.io/wpf"
     xmlns:local="clr-namespace:Mine.Wpf.Controls.Gallery"
-    xmlns:pages="clr-namespace:Mine.Wpf.Controls.Gallery.Pages"
     Title="Mine Controls Gallery"
     Width="1200" Height="760"
     MinWidth="900" MinHeight="560"
@@ -12,68 +11,21 @@
     WindowStartupLocation="CenterScreen">
 
     <mine:Window.Resources>
-        <!-- Nav item style -->
-        <Style x:Key="NavItemStyle" TargetType="ListBoxItem">
-            <Setter Property="Padding"           Value="16,10"/>
-            <Setter Property="Margin"            Value="8,2"/>
-            <Setter Property="Cursor"            Value="Hand"/>
-            <Setter Property="FontFamily"        Value="{DynamicResource Mine.FontFamily.Default}"/>
-            <Setter Property="FontSize"          Value="{DynamicResource Mine.FontSize.LabelLarge}"/>
-            <Setter Property="Foreground"        Value="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
-            <Setter Property="Background"        Value="Transparent"/>
-            <Setter Property="BorderThickness"   Value="0"/>
-            <Setter Property="FocusVisualStyle"  Value="{x:Null}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <Border x:Name="Bg"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="24"
-                                Padding="{TemplateBinding Padding}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="Icon"
-                                           Text="{Binding Icon}"
-                                           FontSize="20"
-                                           VerticalAlignment="Center"
-                                           Margin="0,0,12,0"
-                                           Foreground="{TemplateBinding Foreground}"/>
-                                <TextBlock Text="{Binding Label}"
-                                           VerticalAlignment="Center"
-                                           Foreground="{TemplateBinding Foreground}"/>
-                            </StackPanel>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bg" Property="Background"
-                                        Value="{DynamicResource Mine.Brush.SurfaceContainerHigh}"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Bg" Property="Background"
-                                        Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
-                                <Setter Property="Foreground"
-                                        Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <!-- Seed color button style -->
         <Style x:Key="SeedButtonStyle" TargetType="Button">
-            <Setter Property="Width"           Value="28"/>
-            <Setter Property="Height"          Value="28"/>
-            <Setter Property="Margin"          Value="3"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Width"            Value="24"/>
+            <Setter Property="Height"           Value="24"/>
+            <Setter Property="Margin"           Value="3"/>
+            <Setter Property="BorderThickness"  Value="0"/>
+            <Setter Property="Cursor"           Value="Hand"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="Bg"
                                 Background="{TemplateBinding Background}"
-                                CornerRadius="14"
-                                Width="28" Height="28">
+                                CornerRadius="12"
+                                Width="24" Height="24">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="4" ShadowDepth="1" Opacity="0.3"/>
                             </Border.Effect>
@@ -89,99 +41,196 @@
         </Style>
     </mine:Window.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="256"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <Grid Background="{DynamicResource Mine.Brush.Background}">
+    <!--
+        NavigationView 作为主壳层：
+        - LeftCompact 默认模式，图标条 + 展开侧栏
+        - PaneTitle = 应用名
+        - Header 由代码动态设置为当前页标题
+        - PaneFooter 放置主题切换 & 主题色按钮
+        - Content 为 Frame（页面导航容器）
+    -->
+        <mine:NavigationView x:Name="MainNav"
+                         DisplayMode="LeftCompact"
+                         IsPaneOpen="False"
+                         IsPaneToggleButtonVisible="True"
+                         PaneTitle="Mine Controls"
+                         SelectionChanged="MainNav_SelectionChanged">
 
-        <!-- ── Navigation Drawer ──────────────────────────────────── -->
-        <Border Grid.Column="0"
-                Background="{DynamicResource Mine.Brush.SurfaceContainerLow}"
-                BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}"
-                BorderThickness="0,0,1,0">
-            <DockPanel>
-                <!-- App title -->
-                <StackPanel DockPanel.Dock="Top" Margin="24,20,24,12">
-                    <TextBlock Text="Mine Controls"
-                               Style="{DynamicResource Mine.Typography.TitleLarge}"/>
-                    <TextBlock Text="Component Gallery"
-                               Style="{DynamicResource Mine.Typography.LabelMedium}"
-                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
-                               Margin="0,2,0,0"/>
-                </StackPanel>
+        <!-- ── Content：页面 Frame ───────────────────────────────── -->
+        <Grid>
+            <mine:Frame x:Name="MainFrame"
+                        DefaultTransition="FadeThrough"
+                        Navigated="MainFrame_Navigated"/>
 
-                <!-- Theme / Seed controls -->
-                <StackPanel DockPanel.Dock="Bottom" Margin="16,0,16,20">
-                    <Separator Margin="0,0,0,12"
-                               Background="{DynamicResource Mine.Brush.OutlineVariant}"/>
-                    <Button Content="切换 Light / Dark"
-                            Style="{DynamicResource {x:Type Button}}"
-                            HorizontalAlignment="Stretch"
-                            Margin="0,0,0,10"
-                            Click="OnToggleTheme"/>
-                    <TextBlock Text="主题色"
-                               Style="{DynamicResource Mine.Typography.LabelSmall}"
-                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
-                               Margin="4,0,0,6"/>
-                    <WrapPanel>
-                        <Button Style="{StaticResource SeedButtonStyle}"
-                                Background="#6750A4" Tag="#6750A4" Click="OnSeedColor" ToolTip="Purple"/>
-                        <Button Style="{StaticResource SeedButtonStyle}"
-                                Background="#006C4E" Tag="#006C4E" Click="OnSeedColor" ToolTip="Green"/>
-                        <Button Style="{StaticResource SeedButtonStyle}"
-                                Background="#005FAF" Tag="#005FAF" Click="OnSeedColor" ToolTip="Blue"/>
-                        <Button Style="{StaticResource SeedButtonStyle}"
-                                Background="#B5270F" Tag="#B5270F" Click="OnSeedColor" ToolTip="Red"/>
-                        <Button Style="{StaticResource SeedButtonStyle}"
-                                Background="#7B5800" Tag="#7B5800" Click="OnSeedColor" ToolTip="Orange"/>
-                        <Button Style="{StaticResource SeedButtonStyle}"
-                                Background="#006874" Tag="#006874" Click="OnSeedColor" ToolTip="Teal"/>
-                    </WrapPanel>
-                </StackPanel>
+            <!-- ── 悬浮 FAB：主题设置，固定在右下角 ───────────────── -->
+            <mine:Button x:Name="ThemeButton"
+                         Variant="Fab"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Bottom"
+                         Margin="0,0,24,24"
+                         Width="56" Height="56"
+                         Padding="0">
+                <mine:MaterialIcon Kind="&#xe40a;" Size="24"/>
+                <ToolTipService.ToolTip>
+                    <mine:RichToolTip Content="主题设置"/>
+                </ToolTipService.ToolTip>
+                <mine:FlyoutService.Flyout>
+                    <mine:Flyout Placement="Top" HorizontalOffset="0">
+                        <ScrollViewer Width="320" MaxHeight="560"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel Margin="12,8">
+                                <TextBlock Text="主题设置"
+                                           FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                           FontSize="{DynamicResource Mine.FontSize.TitleSmall}"
+                                           FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                           Margin="0,0,0,12"/>
 
-                <!-- Nav list -->
-                <ListBox x:Name="NavList"
-                         ItemContainerStyle="{StaticResource NavItemStyle}"
-                         BorderThickness="0"
-                         Background="Transparent"
-                         Margin="0,8,0,0"
-                         SelectionChanged="NavList_SelectionChanged">
-                    <ListBox.Items>
-                        <local:NavItem Label="Button"     Icon="⬡" PageType="{x:Type pages:ButtonPage}"/>
-                        <local:NavItem Label="Text Field" Icon="✎" PageType="{x:Type pages:TextFieldPage}"/>
-                        <local:NavItem Label="Selection"  Icon="✓" PageType="{x:Type pages:SelectionPage}"/>
-                        <local:NavItem Label="Card"       Icon="▭" PageType="{x:Type pages:CardPage}"/>
-                        <local:NavItem Label="Typography" Icon="A" PageType="{x:Type pages:TypographyPage}"/>
-                        <local:NavItem Label="Color"      Icon="◉" PageType="{x:Type pages:ColorPage}"/>
-                    </ListBox.Items>
-                </ListBox>
-            </DockPanel>
-        </Border>
+                                <mine:Card Padding="14,12" Margin="0,0,0,16">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border x:Name="CurrentThemeSwatch"
+                                                Width="32" Height="32" CornerRadius="16"
+                                                Background="{DynamicResource Mine.Brush.Primary}"
+                                                Margin="0,0,12,0"/>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="当前主题"
+                                                       FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                            <TextBlock x:Name="CurrentThemeModeText"
+                                                       FontSize="{DynamicResource Mine.FontSize.TitleSmall}"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                                            <TextBlock x:Name="CurrentThemeValueText"
+                                                       FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </mine:Card>
 
-        <!-- ── Content Area ───────────────────────────────────────── -->
-        <Grid Grid.Column="1" Background="{DynamicResource Mine.Brush.Background}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                                <mine:Switch Content="深色模式"
+                                             x:Name="DarkModeSwitch"
+                                             Margin="0,0,0,16"
+                                             Checked="OnToggleTheme"
+                                             Unchecked="OnToggleTheme"/>
 
-            <!-- Top bar -->
-            <Border Grid.Row="0"
-                    BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}"
-                    BorderThickness="0,0,0,1"
-                    Padding="28,14">
-                <TextBlock x:Name="PageTitle"
-                           Style="{DynamicResource Mine.Typography.TitleLarge}"/>
-            </Border>
+                                <TextBlock Text="主题模式"
+                                           FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                           FontSize="{DynamicResource Mine.FontSize.LabelMedium}"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                           Margin="0,0,0,8"/>
 
-            <!-- Page content -->
-            <ScrollViewer Grid.Row="1"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled">
-                <ContentControl x:Name="ContentArea" Margin="28,24,28,32"/>
-            </ScrollViewer>
+                                <mine:SegmentedControl x:Name="ThemeModeSelector"
+                                                       Margin="0,0,0,16"
+                                                       HorizontalAlignment="Left"
+                                                       SelectionChanged="ThemeModeSelector_SelectionChanged">
+                                    <mine:SegmentedItem Content="预设主题" Icon="&#xE3B6;"/>
+                                    <mine:SegmentedItem Content="自定义主题" Icon="&#xE40A;"/>
+                                </mine:SegmentedControl>
+
+                                <StackPanel x:Name="PresetThemePanel">
+                                    <TextBlock Text="预设主题"
+                                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                               FontSize="{DynamicResource Mine.FontSize.LabelMedium}"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                               Margin="0,0,0,4"/>
+                                    <TextBlock Text="稳定、统一的官方色系，适合快速切换整套视觉风格。"
+                                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                               FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                               TextWrapping="Wrap"
+                                               Margin="0,0,0,10"/>
+                                    <WrapPanel>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#6E56CF" Tag="Violet" Click="OnPresetTheme" ToolTip="Violet"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#5A67D8" Tag="Iris" Click="OnPresetTheme" ToolTip="Iris"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#6750A4" Tag="Purple" Click="OnPresetTheme" ToolTip="Purple"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#394AB6" Tag="Indigo" Click="OnPresetTheme" ToolTip="Indigo"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#0057B8" Tag="Cobalt" Click="OnPresetTheme" ToolTip="Cobalt"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#005FAF" Tag="Blue" Click="OnPresetTheme" ToolTip="Blue"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#007CC7" Tag="Sky" Click="OnPresetTheme" ToolTip="Sky"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#0076A3" Tag="Cyan" Click="OnPresetTheme" ToolTip="Cyan"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#006874" Tag="Teal" Click="OnPresetTheme" ToolTip="Teal"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#007A5A" Tag="Jade" Click="OnPresetTheme" ToolTip="Jade"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#006C4E" Tag="Green" Click="OnPresetTheme" ToolTip="Green"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#2E7D32" Tag="Forest" Click="OnPresetTheme" ToolTip="Forest"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#758F00" Tag="Lime" Click="OnPresetTheme" ToolTip="Lime"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#6B7331" Tag="Olive" Click="OnPresetTheme" ToolTip="Olive"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#8A6300" Tag="Gold" Click="OnPresetTheme" ToolTip="Gold"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#9A6700" Tag="Amber" Click="OnPresetTheme" ToolTip="Amber"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#B05A00" Tag="Orange" Click="OnPresetTheme" ToolTip="Orange"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#B5270F" Tag="DeepOrange" Click="OnPresetTheme" ToolTip="Deep Orange"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#C24F3D" Tag="Coral" Click="OnPresetTheme" ToolTip="Coral"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#BA1A1A" Tag="Red" Click="OnPresetTheme" ToolTip="Red"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#A61D48" Tag="Crimson" Click="OnPresetTheme" ToolTip="Crimson"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#B02F60" Tag="Pink" Click="OnPresetTheme" ToolTip="Pink"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#C2185B" Tag="Rose" Click="OnPresetTheme" ToolTip="Rose"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#9C27B0" Tag="Magenta" Click="OnPresetTheme" ToolTip="Magenta"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#7D5246" Tag="Brown" Click="OnPresetTheme" ToolTip="Brown"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#6D4C41" Tag="Cocoa" Click="OnPresetTheme" ToolTip="Cocoa"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#526373" Tag="Slate" Click="OnPresetTheme" ToolTip="Slate"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#5F6369" Tag="Gray" Click="OnPresetTheme" ToolTip="Gray"/>
+                                    </WrapPanel>
+                                </StackPanel>
+
+                                <StackPanel x:Name="CustomThemePanel" Visibility="Collapsed">
+                                    <TextBlock Text="自定义主题"
+                                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                               FontSize="{DynamicResource Mine.FontSize.LabelMedium}"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                               Margin="0,0,0,4"/>
+                                    <TextBlock Text="使用任意种子色生成主题。你可以直接拾色、快速选择色板，或跟随系统强调色。"
+                                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                               FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                               TextWrapping="Wrap"
+                                               Margin="0,0,0,10"/>
+
+                                    <mine:ColorPicker x:Name="ThemeColorPicker"
+                                                      Margin="0,0,0,12"
+                                                      SelectedColorChanged="ThemeColorPicker_SelectedColorChanged"/>
+
+                                    <WrapPanel Margin="0,0,0,12">
+                                        <mine:Button Variant="Outlined" Content="跟随系统强调色"
+                                                     Margin="0,0,8,8"
+                                                     Click="OnUseSystemAccentSeed"/>
+                                        <mine:Button Variant="Outlined" Content="恢复默认紫"
+                                                     Margin="0,0,8,8"
+                                                     Click="OnUseDefaultSeed"/>
+                                    </WrapPanel>
+
+                                    <TextBlock Text="快速种子"
+                                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                               FontSize="{DynamicResource Mine.FontSize.LabelMedium}"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                               Margin="0,0,0,8"/>
+                                    <WrapPanel>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#6750A4" Tag="#6750A4" Click="OnSeedColor" ToolTip="Purple"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#006C4E" Tag="#006C4E" Click="OnSeedColor" ToolTip="Green"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#005FAF" Tag="#005FAF" Click="OnSeedColor" ToolTip="Blue"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#B5270F" Tag="#B5270F" Click="OnSeedColor" ToolTip="Red"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#7B5800" Tag="#7B5800" Click="OnSeedColor" ToolTip="Orange"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#006874" Tag="#006874" Click="OnSeedColor" ToolTip="Teal"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#2E7D32" Tag="#2E7D32" Click="OnSeedColor" ToolTip="Forest"/>
+                                        <Button Style="{StaticResource SeedButtonStyle}" Background="#C2185B" Tag="#C2185B" Click="OnSeedColor" ToolTip="Rose"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </mine:Flyout>
+                </mine:FlyoutService.Flyout>
+            </mine:Button>
         </Grid>
+
+        </mine:NavigationView>
+
     </Grid>
+
 </mine:Window>
 

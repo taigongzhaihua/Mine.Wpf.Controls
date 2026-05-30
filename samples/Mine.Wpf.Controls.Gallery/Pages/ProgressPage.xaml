@@ -1,0 +1,115 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.ProgressPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Progress Indicators"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Linear ProgressBar ───────────────────────────────── -->
+        <TextBlock Text="Linear ProgressBar"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <TextBlock Text="Determinate" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                <mine:ProgressBar Value="30"  Margin="0,0,0,8"/>
+                <mine:ProgressBar Value="60"  Margin="0,0,0,8"/>
+                <mine:ProgressBar Value="90"  Margin="0,0,0,8"/>
+                <mine:ProgressBar Value="100" Margin="0,0,0,16"/>
+
+                <TextBlock Text="Indeterminate" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
+                <mine:ProgressBar IsIndeterminate="True" Margin="0,0,0,8"/>
+
+                <TextBlock Text="Disabled" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,16,0,12"/>
+                <mine:ProgressBar Value="50" IsEnabled="False"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── ProgressRing ─────────────────────────────────────── -->
+        <TextBlock Text="Circular ProgressRing"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Determinate -->
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                    <TextBlock Text="Determinate" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <mine:ProgressRing Value="25" Margin="8"/>
+                        <mine:ProgressRing Value="50" Margin="8"/>
+                        <mine:ProgressRing Value="75" Margin="8"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,12,0,0">
+                        <mine:ProgressRing Value="25" Width="64" Height="64" StrokeThickness="6" Margin="8"/>
+                        <mine:ProgressRing Value="75" Width="64" Height="64" StrokeThickness="6" Margin="8"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Indeterminate -->
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock Text="Indeterminate" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <mine:ProgressRing IsIndeterminate="True" Width="32" Height="32" StrokeThickness="3" Margin="8"/>
+                        <mine:ProgressRing IsIndeterminate="True" Margin="8"/>
+                        <mine:ProgressRing IsIndeterminate="True" Width="64" Height="64" StrokeThickness="6" Margin="8"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Disabled -->
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                    <TextBlock Text="Disabled" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <mine:ProgressRing Value="60" IsEnabled="False" Margin="8"/>
+                        <mine:ProgressRing IsIndeterminate="True" IsEnabled="False" Margin="8"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </mine:Card>
+
+        <!-- ── Slider ────────────────────────────────────────────── -->
+        <TextBlock Text="Slider"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,24,0">
+                    <TextBlock Text="连续 (Continuous)" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,16"/>
+                    <mine:Slider Value="30"  Margin="0,8"/>
+                    <mine:Slider Value="70"  Margin="0,8"/>
+                    <mine:Slider Value="50" IsEnabled="False" Margin="0,8"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="带值标签 (ShowValueLabel)" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,16"/>
+                    <mine:Slider Value="40" ShowValueLabel="True" Margin="0,8"/>
+                    <mine:Slider Value="80" ShowValueLabel="True" ValueFormat="{}{0:0}%" Margin="0,8"/>
+                </StackPanel>
+            </Grid>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>
+

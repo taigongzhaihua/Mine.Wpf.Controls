@@ -1,0 +1,133 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.IconPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Icons"
+           IsScrollable="False"
+           Padding="28,24,28,32"
+           x:Name="Root">
+
+
+    <DockPanel LastChildFill="True">
+
+        <!-- ── 顶部工具栏 ──────────────────────────────────────────── -->
+        <Border DockPanel.Dock="Top"
+                Padding="0,0,0,16"
+                BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}"
+                BorderThickness="0,0,0,1"
+                Margin="0,0,0,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <mine:SearchBox x:Name="SearchBox"
+                               Grid.Column="0"
+                               Variant="Field"
+                               Placeholder="搜索图标名称…"
+                               IsClearable="True"
+                               Margin="0,0,12,0"
+                               TextChanged="OnSearchChanged"/>
+
+                <mine:Button x:Name="FillToggle"
+                             Grid.Column="1"
+                             Content="Fill: Off"
+                             Padding="16,0"
+                             Height="40"
+                             Margin="0,0,12,0"
+                             Click="OnFillChanged"
+                             Style="{DynamicResource Mine.Style.Button.Outlined}"/>
+
+                <TextBlock x:Name="CountLabel"
+                           Grid.Column="2"
+                           VerticalAlignment="Center"
+                           Style="{DynamicResource Mine.Typography.LabelMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+            </Grid>
+        </Border>
+
+        <!-- ── 图标列表（行虚拟化，自带 ScrollViewer） ───────────── -->
+        <!-- 此 ListBox 必须有约束高度才能虚拟化，
+             MainWindow 导航到此��时会禁用外层 ScrollViewer -->
+        <ListBox x:Name="IconList"
+                 VirtualizingPanel.IsVirtualizing="True"
+                 VirtualizingPanel.VirtualizationMode="Recycling"
+                 ScrollViewer.CanContentScroll="True"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 HorizontalContentAlignment="Stretch"
+                 BorderThickness="0"
+                 Background="Transparent">
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding"                    Value="0"/>
+                    <Setter Property="Margin"                     Value="0"/>
+                    <Setter Property="BorderThickness"            Value="0"/>
+                    <Setter Property="Background"                 Value="Transparent"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="FocusVisualStyle"           Value="{x:Null}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <!-- 每个 Item = IconItem[]（一行）-->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <ItemsControl ItemsSource="{Binding}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="96" Height="88"
+                                        CornerRadius="8"
+                                        Margin="2"
+                                        Cursor="Hand"
+                                        ToolTip="{Binding Name}">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background"
+                                                            Value="{DynamicResource Mine.Brush.SurfaceContainerHigh}"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <StackPanel VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
+                                        <mine:MaterialIcon
+                                            Kind="{Binding Kind}"
+                                            Fill="{Binding Fill}"
+                                            Size="28"
+                                            HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontSize="9"
+                                                   TextAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   MaxWidth="88"
+                                                   Margin="0,4,0,0"
+                                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </DockPanel>
+</mine:Page>
+

@@ -1,0 +1,176 @@
+﻿<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.SearchBoxPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Search Box"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Bar 变体 ──────────────────────────────────────────────── -->
+        <TextBlock Text="Search Bar"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,4"/>
+        <TextBlock Text="胶囊型搜索栏，带阴影层级，适合页面顶部的主搜索场景。"
+                   Style="{DynamicResource Mine.Typography.BodyMedium}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   Margin="0,0,0,16"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="基础搜索栏（含建议列表）"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <!-- 建议列表演示：输入任意字母触发自动过滤 -->
+                <mine:SearchBox x:Name="BarSearch"
+                                Placeholder="搜索城市..."
+                                SuggestionsSource="{Binding Cities, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                AutoFilter="True"
+                                MaxSuggestions="6"
+                                SuggestionSelected="OnSuggestionSelected"/>
+
+                <TextBlock x:Name="BarResult"
+                           Margin="0,12,0,0"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Text="选中项将显示于此..."/>
+            </StackPanel>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="带搜索确认按钮"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <mine:SearchBox Placeholder="搜索内容..."
+                                ShowSearchButton="True"
+                                SuggestionsSource="{Binding Cities, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                Search="OnSearch"/>
+                <TextBlock x:Name="SearchResult"
+                           Margin="0,12,0,0"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Text="按 Enter 或点击搜索按钮触发..."/>
+            </StackPanel>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,24" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="禁用状态"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <mine:SearchBox Placeholder="已禁用的搜索栏"
+                                IsEnabled="False"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── Field 变体 ─────────────────────────────────────────────── -->
+        <TextBlock Text="Search Field"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,4"/>
+        <TextBlock Text="紧凑边框型，适合嵌入工具栏、列表过滤等次要搜索场景。"
+                   Style="{DynamicResource Mine.Typography.BodyMedium}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   Margin="0,0,0,16"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="带建议列表"
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               Margin="0,0,0,12"/>
+                    <mine:SearchBox Variant="Field"
+                                    Placeholder="过滤城市..."
+                                    SuggestionsSource="{Binding Cities, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                    AutoFilter="True"
+                                    MaxSuggestions="5"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="自定义建议项模板"
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               Margin="0,0,0,12"/>
+                    <mine:SearchBox Variant="Field"
+                                    Placeholder="搜索编程语言..."
+                                    SuggestionsSource="{Binding Languages, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                    SuggestionDisplayMemberPath="Name"
+                                    AutoFilter="True">
+                        <mine:SearchBox.SuggestionItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="8" Height="8" CornerRadius="4"
+                                            Background="{Binding ColorBrush}"
+                                            Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Name}"
+                                               FontWeight="Medium"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Tag, StringFormat=' · {0}'}"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </mine:SearchBox.SuggestionItemTemplate>
+                    </mine:SearchBox>
+                </StackPanel>
+            </Grid>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="带搜索按钮 / 禁用"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,12"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <mine:SearchBox Grid.Column="0" Variant="Field"
+                                    Placeholder="带确认按钮..."
+                                    ShowSearchButton="True"/>
+                    <mine:SearchBox Grid.Column="2" Variant="Field"
+                                    Placeholder="已禁用..."
+                                    IsEnabled="False"/>
+                </Grid>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── AutoFilter=False 场景（外部驱动） ─────────────────────── -->
+        <TextBlock Text="外部驱动模式（AutoFilter = False）"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,24,0,4"/>
+        <TextBlock Text="由外部逻辑控制建议列表（如异步 API 搜索），SearchBox 不自动过滤。"
+                   Style="{DynamicResource Mine.Typography.BodyMedium}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   Margin="0,0,0,16"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,24" Variant="Outlined">
+            <StackPanel>
+                <mine:SearchBox x:Name="ManualSearch"
+                                Placeholder="模拟远程搜索..."
+                                AutoFilter="False"
+                                SuggestionsSource="{Binding ManualResults, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                Search="OnManualSearch"
+                                MaxSuggestions="5"/>
+                <TextBlock x:Name="ManualStatus"
+                           Margin="0,10,0,0"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Text="输入内容后按 Enter 触发模拟搜索..."/>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>
+
+

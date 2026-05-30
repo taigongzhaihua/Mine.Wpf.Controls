@@ -2,63 +2,175 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mine="https://schemas.mine.io/wpf">
-    <UserControl.Resources>
-        <!-- Color swatch template -->
-        <DataTemplate x:Key="SwatchTemplate">
-            <Border CornerRadius="12" Width="150" Height="80" Margin="6"
-                    Background="{Binding Bg}">
-                <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
-                    <TextBlock Text="{Binding Role}"
-                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
-                               FontSize="11" Foreground="{Binding Fg}"/>
-                    <TextBlock Text="{Binding Hex}"
-                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
-                               FontSize="10" Opacity="0.75" Foreground="{Binding Fg}"/>
-                </StackPanel>
-            </Border>
-        </DataTemplate>
-    </UserControl.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+    <StackPanel MaxWidth="860" Margin="0,0,0,32">
 
-    <StackPanel MaxWidth="860">
+        <!-- ── 当前主题信息横幅 ─────────────────────────────────── -->
+        <mine:Card Padding="16,12" Margin="0,0,0,20"
+                   Background="{DynamicResource Mine.Brush.PrimaryContainer}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <!-- 色块预览 -->
+                <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18"
+                        Background="{DynamicResource Mine.Brush.Primary}" Margin="0,0,12,0"/>
+                <!-- 文字 -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding ThemeLabel}"
+                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                               FontSize="{DynamicResource Mine.FontSize.TitleSmall}"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+                    <TextBlock Text="{Binding SeedHex}"
+                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                               FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                               Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"
+                               Opacity="0.75"
+                               Visibility="{Binding IsCustom, Converter={StaticResource Mine.Internal.BoolToVisConv}}"/>
+                    <TextBlock Text="颜色由 XAML 资源字典提供，无运行时计算"
+                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                               FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                               Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"
+                               Opacity="0.75"
+                               Visibility="{Binding IsPreset, Converter={StaticResource Mine.Internal.BoolToVisConv}}"/>
+                </StackPanel>
+                <!-- 徽章标签 -->
+                <Border Grid.Column="2" CornerRadius="8" Padding="10,4"
+                        Background="{DynamicResource Mine.Brush.Primary}">
+                    <TextBlock FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                               FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                               Foreground="{DynamicResource Mine.Brush.OnPrimary}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="PRESET"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsCustom}" Value="True">
+                                        <Setter Property="Text" Value="CUSTOM SEED"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Border>
+            </Grid>
+        </mine:Card>
+
+        <!-- ── 自定义模式：调色板预览 ─────────────────────────────── -->
+        <StackPanel Visibility="{Binding IsCustom, Converter={StaticResource Mine.Internal.BoolToVisConv}}">
+            <TextBlock Text="Tonal Palette（OKLCH 生成）"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,8"/>
+            <TextBlock Text="从种子色在 OKLCH 感知均匀色彩空间生成 21 个色调，Secondary/Tertiary 由色相旋转衍生"
+                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                       FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="0,0,0,12" TextWrapping="Wrap"/>
+            <mine:Card Padding="12" Margin="0,0,0,8">
+                <StackPanel>
+                    <TextBlock Text="Primary Palette"
+                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                               FontSize="{DynamicResource Mine.FontSize.LabelMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                               Margin="0,0,0,6"/>
+                    <ItemsControl ItemsSource="{Binding PrimaryTones}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Bg}" Width="52" Height="52"
+                                        CornerRadius="6" Margin="2">
+                                    <TextBlock Text="{Binding Label}" Foreground="{Binding Fg}"
+                                               FontSize="9" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontFamily="{DynamicResource Mine.FontFamily.Default}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="Secondary Palette"
+                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                               FontSize="{DynamicResource Mine.FontSize.LabelMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                               Margin="0,10,0,6"/>
+                    <ItemsControl ItemsSource="{Binding SecondaryTones}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Bg}" Width="52" Height="52"
+                                        CornerRadius="6" Margin="2">
+                                    <TextBlock Text="{Binding Label}" Foreground="{Binding Fg}"
+                                               FontSize="9" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontFamily="{DynamicResource Mine.FontFamily.Default}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="Tertiary Palette"
+                               FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                               FontSize="{DynamicResource Mine.FontSize.LabelMedium}"
+                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                               Margin="0,10,0,6"/>
+                    <ItemsControl ItemsSource="{Binding TertiaryTones}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Bg}" Width="52" Height="52"
+                                        CornerRadius="6" Margin="2">
+                                    <TextBlock Text="{Binding Label}" Foreground="{Binding Fg}"
+                                               FontSize="9" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontFamily="{DynamicResource Mine.FontFamily.Default}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </mine:Card>
+        </StackPanel>
+
+        <!-- ── Color Roles ────────────────────────────────────────── -->
+        <TextBlock Text="Color Roles" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,12,0,8"/>
 
         <!-- Primary -->
-        <TextBlock Text="Primary" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,8"/>
-        <mine:Card Padding="16" Margin="0,0,0,20">
+        <TextBlock Text="Primary" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" Margin="0,0,0,6"/>
+        <mine:Card Padding="16" Margin="0,0,0,12">
             <WrapPanel>
-                <Border CornerRadius="12" Width="150" Height="80" Margin="6"
-                        Background="{DynamicResource Mine.Brush.Primary}">
+                <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.Primary}">
                     <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
-                        <TextBlock Text="Primary" FontFamily="{DynamicResource Mine.FontFamily.Default}" FontSize="11"
-                                   Foreground="{DynamicResource Mine.Brush.OnPrimary}"/>
+                        <TextBlock Text="Primary" FontFamily="{DynamicResource Mine.FontFamily.Default}" FontSize="11" Foreground="{DynamicResource Mine.Brush.OnPrimary}"/>
                     </StackPanel>
                 </Border>
-                <Border CornerRadius="12" Width="150" Height="80" Margin="6"
-                        Background="{DynamicResource Mine.Brush.OnPrimary}">
+                <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.OnPrimary}">
                     <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
-                        <TextBlock Text="On Primary" FontFamily="{DynamicResource Mine.FontFamily.Default}" FontSize="11"
-                                   Foreground="{DynamicResource Mine.Brush.Primary}"/>
+                        <TextBlock Text="On Primary" FontFamily="{DynamicResource Mine.FontFamily.Default}" FontSize="11" Foreground="{DynamicResource Mine.Brush.Primary}"/>
                     </StackPanel>
                 </Border>
-                <Border CornerRadius="12" Width="150" Height="80" Margin="6"
-                        Background="{DynamicResource Mine.Brush.PrimaryContainer}">
+                <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.PrimaryContainer}">
                     <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
-                        <TextBlock Text="Primary Container" FontFamily="{DynamicResource Mine.FontFamily.Default}" FontSize="11"
-                                   Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+                        <TextBlock Text="Primary Container" FontFamily="{DynamicResource Mine.FontFamily.Default}" FontSize="11" Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
                     </StackPanel>
                 </Border>
-                <Border CornerRadius="12" Width="150" Height="80" Margin="6"
-                        Background="{DynamicResource Mine.Brush.OnPrimaryContainer}">
+                <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.OnPrimaryContainer}">
                     <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
-                        <TextBlock Text="On Primary Container" FontFamily="{DynamicResource Mine.FontFamily.Default}" FontSize="11"
-                                   Foreground="{DynamicResource Mine.Brush.PrimaryContainer}"/>
+                        <TextBlock Text="On Primary Container" FontFamily="{DynamicResource Mine.FontFamily.Default}" FontSize="11" Foreground="{DynamicResource Mine.Brush.PrimaryContainer}"/>
                     </StackPanel>
                 </Border>
             </WrapPanel>
         </mine:Card>
 
         <!-- Secondary -->
-        <TextBlock Text="Secondary" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,8"/>
-        <mine:Card Padding="16" Margin="0,0,0,20">
+        <TextBlock Text="Secondary" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" Margin="0,0,0,6"/>
+        <mine:Card Padding="16" Margin="0,0,0,12">
             <WrapPanel>
                 <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.Secondary}">
                     <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
@@ -84,8 +196,9 @@
         </mine:Card>
 
         <!-- Tertiary -->
-        <TextBlock Text="Tertiary" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,8"/>
-        <mine:Card Padding="16" Margin="0,0,0,20">
+        <TextBlock Text="Tertiary" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" Margin="0,0,0,6"/>
+        <mine:Card Padding="16" Margin="0,0,0,12">
             <WrapPanel>
                 <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.Tertiary}">
                     <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
@@ -101,8 +214,9 @@
         </mine:Card>
 
         <!-- Error -->
-        <TextBlock Text="Error" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,8"/>
-        <mine:Card Padding="16" Margin="0,0,0,20">
+        <TextBlock Text="Error" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" Margin="0,0,0,6"/>
+        <mine:Card Padding="16" Margin="0,0,0,12">
             <WrapPanel>
                 <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.Error}">
                     <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
@@ -118,8 +232,9 @@
         </mine:Card>
 
         <!-- Surface -->
-        <TextBlock Text="Surface" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,8"/>
-        <mine:Card Padding="16" Margin="0,0,0,20">
+        <TextBlock Text="Surface" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" Margin="0,0,0,6"/>
+        <mine:Card Padding="16" Margin="0,0,0,12">
             <WrapPanel>
                 <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.Surface}"
                         BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}" BorderThickness="1">
@@ -157,8 +272,9 @@
         </mine:Card>
 
         <!-- Outline -->
-        <TextBlock Text="Outline" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,8"/>
-        <mine:Card Padding="16" Margin="0,0,0,24">
+        <TextBlock Text="Outline" Style="{DynamicResource Mine.Typography.LabelLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}" Margin="0,0,0,6"/>
+        <mine:Card Padding="16" Margin="0,0,0,20">
             <WrapPanel>
                 <Border CornerRadius="12" Width="150" Height="80" Margin="6" Background="{DynamicResource Mine.Brush.Outline}">
                     <StackPanel VerticalAlignment="Bottom" Margin="10,0,10,10">
@@ -174,5 +290,6 @@
         </mine:Card>
 
     </StackPanel>
+    </ScrollViewer>
 </UserControl>
 
