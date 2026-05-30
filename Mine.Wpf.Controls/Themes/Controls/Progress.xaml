@@ -1,0 +1,184 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ProgressBar — Material Design 3 Linear
+         轨道 4px 高，圆角两端
+         Determinate：PART_Indicator 宽度由 WPF 内部设置
+         Indeterminate：PART_Ind1/Ind2 位移和宽度由 C# 代码动态计算
+         ═══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:ProgressBar}">
+        <Setter Property="Minimum"          Value="0"/>
+        <Setter Property="Maximum"          Value="100"/>
+        <Setter Property="Height"           Value="4"/>
+        <Setter Property="Background"       Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
+        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="BorderThickness"  Value="0"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ProgressBar}">
+                    <Grid x:Name="Root" Height="{TemplateBinding Height}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="ProgressStates">
+                                <VisualState x:Name="Determinate">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="IndeterminateTrack"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Indicator"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Indeterminate">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Indicator"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="IndeterminateTrack"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <!-- 轨道背景 -->
+                        <Border x:Name="PART_Track"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="2"/>
+
+                        <!-- Determinate 填充条（WPF 内部自动设宽） -->
+                        <Border x:Name="PART_Indicator"
+                                HorizontalAlignment="Left"
+                                CornerRadius="2"
+                                Background="{TemplateBinding Foreground}"/>
+
+                        <!-- Indeterminate 双条（宽度和 X 由 C# Storyboard 动态控制） -->
+                        <Grid x:Name="IndeterminateTrack"
+                              ClipToBounds="True"
+                              Visibility="Collapsed">
+                            <Border x:Name="PART_Ind1"
+                                    Height="4" CornerRadius="2" Width="0"
+                                    Background="{TemplateBinding Foreground}"
+                                    HorizontalAlignment="Left">
+                                <Border.RenderTransform>
+                                    <TranslateTransform/>
+                                </Border.RenderTransform>
+                            </Border>
+                        </Grid>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Root" Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ProgressRing — Material Design 3 Circular
+         Determinate: 圆弧 StrokeDashArray 由 C# 计算
+         Indeterminate: 固定 3/4 弧旋转动画
+         ═══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:ProgressRing}">
+        <Setter Property="Width"            Value="48"/>
+        <Setter Property="Height"           Value="48"/>
+        <Setter Property="StrokeThickness"  Value="4"/>
+        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="Background"       Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ProgressRing}">
+                    <Grid x:Name="Root"
+                          Width="{TemplateBinding Width}"
+                          Height="{TemplateBinding Height}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="ProgressStates">
+                                <VisualState x:Name="Determinate">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="IndeterminateRing"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeterminateRing"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Indeterminate">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeterminateRing"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="IndeterminateRing"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <!-- 旋转和弧长由 C# Storyboard 驱动 (IndTailFraction / IndArcFraction) -->
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <!-- 轨道背景圆环 -->
+                        <Ellipse Stroke="{TemplateBinding Background}"
+                                 StrokeThickness="{TemplateBinding StrokeThickness}"
+                                 Fill="Transparent"/>
+
+                        <!-- Determinate：弧长由 StrokeDashArray 控制 -->
+                        <Ellipse x:Name="DeterminateRing"
+                                 Stroke="{TemplateBinding Foreground}"
+                                 StrokeThickness="{TemplateBinding StrokeThickness}"
+                                 Fill="Transparent"
+                                 StrokeDashArray="{Binding StrokeDashArray, RelativeSource={RelativeSource AncestorType=controls:ProgressRing}}"
+                                 StrokeDashOffset="{Binding StrokeDashOffset, RelativeSource={RelativeSource AncestorType=controls:ProgressRing}}"
+                                 StrokeStartLineCap="Round"
+                                 StrokeEndLineCap="Round"
+                                 Visibility="Visible"
+                                 RenderTransformOrigin="0.5,0.5">
+                            <!-- 从顶部(-90deg)开始 -->
+                            <Ellipse.RenderTransform>
+                                <RotateTransform Angle="-90"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+
+                                        <!-- Indeterminate：PathGeometry 由 C# ApplyIndAnimation() 动态计算，实现圆形端点 -->
+                                        <Path x:Name="IndeterminateRing"
+                                              Stroke="{TemplateBinding Foreground}"
+                                              StrokeThickness="{TemplateBinding StrokeThickness}"
+                                              StrokeStartLineCap="Round"
+                                              StrokeEndLineCap="Round"
+                                              Visibility="Collapsed"/>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Root" Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
+
+
+
+
+
+
+

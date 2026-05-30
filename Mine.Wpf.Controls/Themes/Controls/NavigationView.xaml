@@ -1,0 +1,319 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+    <!--
+    ┌─────────────────────────────────────────────────────────────────────────┐
+    │  NavigationView 模板结构                                                │
+    │                                                                         │
+    │  外层 Grid（单格）                                                       │
+    │  ├─ [z=0] SplitView PART_SplitView（铺满全区域）                        │
+    │  │    ├─ Pane                                                           │
+    │  │    │    ├─ Row0 56px ─ 汉堡按钮占位空 + PaneTitle 文字              │
+    │  │    │    ├─ Row1  *  ─ ScrollViewer > PART_MenuList                  │
+    │  │    │    └─ Row2 Auto─ PART_FooterList                               │
+    │  │    └─ Content                                                        │
+    │  │         ├─ Row0 Auto─ PART_Header（动态左 Padding = HeaderPadding） │
+    │  │         └─ Row1  *  ─ ContentPresenter（页面内容）                   │
+    │  └─ [z=1] Button PART_PaneToggleButton（浮层，始终在左上角）            │
+    └─────────────────────────────────────────────────────────────────────────┘
+    -->
+
+    <!-- ═══ NavigationViewItem ════════════════════════════════════════════ -->
+    <!--
+        视觉结构：大圆角胶囊（Pill）背景 + 图标列（40px）+ 标签列（*）
+        选中态：整个胶囊背景改色（无选中竖条指示器）
+        Compact：仅隐藏 Label，图标自动居中于 40px 列
+    -->
+    <Style TargetType="{x:Type controls:NavigationViewItem}">
+        <Setter Property="MinHeight"                  Value="40"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Padding"                    Value="0"/>
+        <Setter Property="Cursor"                     Value="Hand"/>
+        <Setter Property="FocusVisualStyle"           Value="{x:Null}"/>
+        <Setter Property="Background"                 Value="Transparent"/>
+        <Setter Property="Foreground"                 Value="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:NavigationViewItem}">
+                    <!--
+                        Margin=4,2：与 WinUI NavigationViewItemButtonMargin 一致
+                        CornerRadius=20：高度 MinHeight=36，半径=18 即为胶囊；
+                                         设 20 确保任意高度下都是胶囊形状
+                    -->
+                    <Border x:Name="LayoutRoot"
+                            Margin="4,2"
+                            MinHeight="{TemplateBinding MinHeight}"
+                            CornerRadius="20"
+                            Background="{TemplateBinding Background}"
+                            HorizontalAlignment="Stretch"
+                            ToolTipService.IsEnabled="False">
+                        <!--
+                            ToolTip：Compact 模式下（标签不可见）从 Pane 右侧弹出，
+                            显示 Item 的 Content（文字标签），让用户知道图标含义。
+                            Expanded 模式下标签已可见，ToolTipService.IsEnabled=False 不显示。
+                        -->
+                        <ToolTipService.ToolTip>
+                            <controls:RichToolTip
+                                Content="{Binding PlacementTarget.TemplatedParent.Content,
+                                    RelativeSource={RelativeSource Self}}"
+                                Placement="Right"
+                                HorizontalOffset="-12"
+                                VerticalOffset="-16"
+                                ToolTipService.InitialShowDelay="0"/>
+                        </ToolTipService.ToolTip>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/> <!-- 图标列，NavigationViewIconBoxWidth=40 -->
+                                <ColumnDefinition Width="*"/> <!-- 标签列 -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 图标：始终居中于 40px 列 -->
+                            <TextBlock x:Name="Icon"
+                                       Grid.Column="0"
+                                       Text="{TemplateBinding Icon}"
+                                       FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
+                                       FontSize="20"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="{TemplateBinding Foreground}"/>
+
+                            <!-- 标签：Compact 模式隐藏 -->
+                            <ContentPresenter x:Name="Label"
+                                              Grid.Column="1"
+                                              Margin="4,0,12,0"
+                                              VerticalAlignment="Center"
+                                              TextBlock.FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                              TextBlock.FontSize="{DynamicResource Mine.FontSize.LabelLarge}"
+                                              TextBlock.FontWeight="Medium"
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- 悬停：轻微高亮 -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="LayoutRoot" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <!-- 选中：整个胶囊改为 SecondaryContainer 色 -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="LayoutRoot" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+                        </Trigger>
+                        <Trigger Property="LayoutMode" Value="Compact">
+                            <Setter TargetName="Label"      Property="Visibility"               Value="Collapsed"/>
+                            <Setter TargetName="LayoutRoot" Property="Width"                    Value="40"/>
+                            <Setter TargetName="LayoutRoot" Property="ToolTipService.IsEnabled" Value="True"/>
+                            <Setter TargetName="LayoutRoot" Property="HorizontalAlignment"      Value="Left"></Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- ═══ NavigationView ═════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:NavigationView}">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:NavigationView}">
+                    <!--
+                        单格 Grid，SplitView 在 z=0 铺满，汉堡按钮在 z=1 浮于左上角。
+                        这样汉堡按钮在任何 DisplayMode / IsPaneOpen 状态下都始终可见。
+                    -->
+                    <Grid>
+                        <!-- ─── z=0  SplitView（主体布局容器）────────────────── -->
+                        <controls:SplitView x:Name="PART_SplitView"
+                                            Panel.ZIndex="0"
+                                            OpenPaneLength="{TemplateBinding OpenPaneLength}"
+                                            CompactPaneLength="{TemplateBinding CompactPaneLength}"
+                                            PaneBackground="{DynamicResource Mine.Brush.Surface}"
+                                            Background="{DynamicResource Mine.Brush.Background}">
+
+                            <!-- ── Pane 侧边栏 ────────────────────────────── -->
+                            <controls:SplitView.Pane>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <!--
+                                            Row0 = 56px：给浮层汉堡按钮预留空间
+                                            （按钮 40px + 上下各 8px margin = 56px）
+                                        -->
+                                        <RowDefinition Height="56"/>
+                                        <RowDefinition Height="Auto"/> <!-- 搜索框（可选） -->
+                                        <RowDefinition Height="*"/>    <!-- 主导航列表 -->
+                                        <RowDefinition Height="Auto"/> <!-- Footer 列表 -->
+                                        <RowDefinition Height="Auto"/> <!-- PaneFooter 自定义内容 -->
+                                    </Grid.RowDefinitions>
+
+                                    <!--
+                                        Row0：汉堡按钮占位区 + PaneTitle
+                                        Padding 左侧 = 52px，与汉堡按钮宽度对齐，PaneTitle 紧跟其右。
+                                        Compact 模式下 Pane 宽=56px，PaneTitle 被裁掉，符合预期。
+                                    -->
+                                    <Border Grid.Row="0"
+                                            Padding="52,0,12,0">
+                                        <TextBlock Text="{TemplateBinding PaneTitle}"
+                                                   VerticalAlignment="Center"
+                                                   FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                   FontSize="{DynamicResource Mine.FontSize.TitleSmall}"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </Border>
+
+                                    <!--
+                                        Row1：搜索框（可选）
+                                        - 默认 Collapsed，IsSearchBoxVisible=true 时显示
+                                        - Compact 模式下 Pane 宽=56px，搜索框被 ClipToBounds 裁掉，
+                                          代码层面会将其 Collapsed 以节省布局空间
+                                        - Variant=Field：边框型，适合嵌入 Pane
+                                        - Margin=8,4：与列表项左侧保持一致的呼吸感
+                                    -->
+                                    <controls:SearchBox x:Name="PART_AutoSuggestBox"
+                                                        Grid.Row="1"
+                                                        Variant="Field"
+                                                        Placeholder="{TemplateBinding AutoSuggestBoxPlaceholder}"
+                                                        Margin="8,4,8,4"
+                                                        Visibility="Collapsed"/>
+
+                                    <!-- 主导航列表（可滚动） -->
+                                    <controls:NavigationViewList
+                                        x:Name="PART_MenuList"
+                                        Grid.Row="2"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        Padding="0"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                        ItemsSource="{TemplateBinding MenuItemsSource}"/>
+
+                                    <!-- Footer 导航列表 -->
+                                    <controls:NavigationViewList
+                                        x:Name="PART_FooterList"
+                                        Grid.Row="3"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        Padding="0,0,0,8"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                        ItemsSource="{TemplateBinding FooterMenuItemsSource}"/>
+
+                                    <!-- PaneFooter：固定在底部的自定义内容 -->
+                                    <ContentPresenter Grid.Row="4"
+                                                      Content="{TemplateBinding PaneFooter}"/>
+                                </Grid>
+                            </controls:SplitView.Pane>
+
+                            <!-- ── Content 主内容区 ───────────────────────── -->
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/> <!-- Header 行（自适应高度）-->
+                                    <RowDefinition Height="*"/>    <!-- 页面内容 -->
+                                </Grid.RowDefinitions>
+
+                                <!--
+                                    Header 行：
+                                    - Padding 由代码动态写入 HeaderPadding 属性：
+                                      Overlay 模式 → 左 Padding = CompactPaneLength (48px)
+                                                      避免内容被浮层汉堡按钮遮挡
+                                      其他模式   → 左 Padding = 0（Pane 已占据左侧空间）
+                                    - MinHeight=56 与汉堡按钮行等高，视觉对齐
+                                    - Header 为 null 时隐藏整行
+                                -->
+                                <Border x:Name="PART_Header"
+                                        Grid.Row="0"
+                                        MinHeight="56"
+                                        Padding="{TemplateBinding HeaderPadding}"
+                                        Visibility="Visible">
+                                    <ContentPresenter Content="{TemplateBinding Header}"
+                                                      VerticalAlignment="Center"
+                                                      Margin="16,0"
+                                                      TextBlock.FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                      TextBlock.FontSize="{DynamicResource Mine.FontSize.TitleLarge}"
+                                                      TextBlock.FontWeight="SemiBold"
+                                                      TextBlock.Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                                </Border>
+
+                                <!-- 页面内容 -->
+                                <ContentPresenter Grid.Row="1"
+                                                  Content="{TemplateBinding Content}"/>
+                            </Grid>
+                        </controls:SplitView>
+
+                        <!-- ─── z=1  汉堡按钮（浮层，始终可见）──────────────── -->
+                        <!--
+                            位置：左上角，Margin=4,8（左4px，上8px）
+                            尺寸：40×40，CornerRadius=20（圆形）
+                            与 Pane Row0(56px) 视觉居中：(56-40)/2=8px，上下各 8px ✓
+                            与 CompactPaneLength(48px) 水平中心对齐：4+20=24 = 48/2 ✓
+                        -->
+                        <Button x:Name="PART_PaneToggleButton"
+                                Panel.ZIndex="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Width="40" Height="40"
+                                Margin="5,8"
+                                Focusable="False">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background"       Value="Transparent"/>
+                                    <Setter Property="BorderThickness"  Value="0"/>
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                    <Setter Property="Cursor"           Value="Hand"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="Bg"
+                                                        Background="{TemplateBinding Background}"
+                                                        CornerRadius="20"
+                                                        Width="40" Height="40">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Bg" Property="Background">
+                                                            <Setter.Value>
+                                                                <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                    <Trigger Property="IsPressed" Value="True">
+                                                        <Setter TargetName="Bg" Property="Background">
+                                                            <Setter.Value>
+                                                                <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.12"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                            <!-- 汉堡菜单图标（Material Symbols: menu） -->
+                            <TextBlock FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
+                                       FontSize="22"
+                                       Text="&#xE5D2;"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                        </Button>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Header 为 null 时隐藏整个 Header 行 -->
+                        <DataTrigger Binding="{Binding Header, RelativeSource={RelativeSource Self}}"
+                                     Value="{x:Null}">
+                            <Setter TargetName="PART_Header" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

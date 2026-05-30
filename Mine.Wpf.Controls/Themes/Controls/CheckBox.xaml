@@ -96,64 +96,6 @@
         </Setter>
     </Style>
 
-    <!-- �T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T
-         MineRadioButton style
-         �T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T�T -->
-    <Style TargetType="{x:Type controls:RadioButton}">
-        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.OnSurface}"/>
-        <Setter Property="FontFamily"       Value="{DynamicResource Mine.FontFamily.Default}"/>
-        <Setter Property="FontSize"         Value="{DynamicResource Mine.FontSize.BodyMedium}"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Cursor"           Value="Hand"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:RadioButton}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Grid Width="40" Height="40">
-                            <!-- Ripple background -->
-                            <Ellipse x:Name="Ripple"
-                                     Fill="{DynamicResource Mine.Brush.Primary}"
-                                     Opacity="0"
-                                     Width="40" Height="40"/>
-
-                            <!-- Outer ring -->
-                            <Ellipse x:Name="OuterRing"
-                                     Width="20" Height="20"
-                                     Stroke="{DynamicResource Mine.Brush.OnSurfaceVariant}"
-                                     StrokeThickness="2"
-                                     Fill="Transparent"/>
-
-                            <!-- Inner dot (checked) -->
-                            <Ellipse x:Name="InnerDot"
-                                     Width="10" Height="10"
-                                     Fill="{DynamicResource Mine.Brush.Primary}"
-                                     Visibility="Collapsed"/>
-                        </Grid>
-
-                        <ContentPresenter Margin="4,0,0,0"
-                                          VerticalAlignment="Center"
-                                          RecognizesAccessKey="True"/>
-                    </StackPanel>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="OuterRing" Property="Stroke" Value="{DynamicResource Mine.Brush.Primary}"/>
-                            <Setter TargetName="InnerDot"  Property="Visibility" Value="Visible"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Ripple" Property="Opacity" Value="0.08"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Ripple" Property="Opacity" Value="0.16"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.38"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
 </ResourceDictionary>
 

@@ -1,13 +1,20 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters">
+
+    <!-- 本地 converter：将 ActualWidth/Height/CornerRadius 转为 RectangleGeometry 实现真圆角裁剪 -->
+    <conv:RoundedRectClipConverter x:Key="Local.CardClipConv"/>
+
     <!-- Card 默认样式 -->
     <Style TargetType="{x:Type controls:Card}">
         <Setter Property="Background"          Value="{DynamicResource Mine.Brush.SurfaceContainerLow}"/>
         <Setter Property="Foreground"          Value="{DynamicResource Mine.Brush.OnSurface}"/>
         <Setter Property="BorderThickness"     Value="0"/>
         <Setter Property="CornerRadius"        Value="{DynamicResource Mine.Shape.Medium}"/>
-        <Setter Property="Padding"             Value="16"/>
+        <Setter Property="Padding"                    Value="16"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment"   Value="Stretch"/>
         <Setter Property="Effect"              Value="{DynamicResource Mine.Elevation.1}"/>
         <Setter Property="Cursor"              Value="Arrow"/>
         <Setter Property="FocusVisualStyle"    Value="{x:Null}"/>
@@ -21,8 +28,15 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding CornerRadius}"
                             Effect="{TemplateBinding Effect}"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                            ClipToBounds="True">
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <!-- 真圆角裁剪：绑定 ActualWidth/Height/CornerRadius → RectangleGeometry -->
+                        <Border.Clip>
+                            <MultiBinding Converter="{StaticResource Local.CardClipConv}">
+                                <Binding Path="ActualWidth"  RelativeSource="{RelativeSource Self}"/>
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
+                                <Binding Path="CornerRadius" RelativeSource="{RelativeSource Self}"/>
+                            </MultiBinding>
+                        </Border.Clip>
                         <Grid>
                             <!-- 海拔着色叠加层 -->
                             <Border x:Name="TintLayer"

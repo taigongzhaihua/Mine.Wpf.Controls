@@ -1,0 +1,321 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters">
+
+    <!-- 本地 converter 实例（StaticResource 在 XAML 加载时解析，需声明在同一文件内） -->
+    <conv:NullToVisibilityConverter x:Key="Local.NullToVisConv"/>
+    <!-- RoundedRectClipConv: 将 ActualWidth/ActualHeight 转为带圆角的 RectangleGeometry，
+         用于 UIElement.Clip，实现真正的圆角裁剪（ClipToBounds 只裁矩形区域）。-->
+    <conv:RoundedRectClipConverter x:Key="Local.ListViewClipConv" RadiusX="12" RadiusY="12"/>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ListViewItem — Material 3 风格
+         ══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type ListViewItem}">
+        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="FontFamily"       Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"         Value="{DynamicResource Mine.FontSize.BodyMedium}"/>
+        <Setter Property="Background"       Value="Transparent"/>
+        <Setter Property="BorderThickness"  Value="0"/>
+        <Setter Property="Padding"          Value="16,0,0,0"/>
+        <Setter Property="Height"           Value="44"/>
+        <Setter Property="Margin"           Value="0,2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Cursor"           Value="Arrow"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Grid x:Name="Root" SnapsToDevicePixels="True">
+                        <Border x:Name="Bg" Background="{TemplateBinding Background}"
+                                CornerRadius="{DynamicResource Mine.Shape.Small}"/>
+                        <Border x:Name="StateLayer" CornerRadius="{DynamicResource Mine.Shape.Small}"
+                                Background="{DynamicResource Mine.Brush.OnSurface}" Opacity="0"/>
+                        <GridViewRowPresenter x:Name="PART_Row"
+                                              Content="{TemplateBinding Content}"
+                                              Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Columns="{Binding Path=(GridView.ColumnCollection),
+                                                         RelativeSource={RelativeSource TemplatedParent}}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- hover: StateLayer 淡入淡出 -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="StateLayer"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.08" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="StateLayer"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <!-- selected: 背景/前景色切换 + StateLayer 颜色更新 -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bg" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+                            <Setter TargetName="StateLayer" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Root" Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ListView — Material 3 风格
+         ══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type ListView}">
+        <Setter Property="Background"       Value="{DynamicResource Mine.Brush.Surface}"/>
+        <Setter Property="BorderBrush"      Value="{DynamicResource Mine.Brush.OutlineVariant}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="FontFamily"       Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"   Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll"              Value="True"/>
+        <Setter Property="VirtualizingPanel.IsVirtualizing"           Value="True"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode"       Value="Recycling"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListView}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource Mine.Shape.Medium}"
+                            SnapsToDevicePixels="True">
+                        <!-- 显式圆角 Clip：ClipToBounds 只裁矩形，不裁圆角；
+                             MultiBinding 将 ActualWidth/Height 转为 RectangleGeometry(R=12) -->
+                        <Border.Clip>
+                            <MultiBinding Converter="{StaticResource Local.ListViewClipConv}">
+                                <Binding Path="ActualWidth"  RelativeSource="{RelativeSource Self}"/>
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
+                            </MultiBinding>
+                        </Border.Clip>
+                        <DockPanel>
+                            <Border x:Name="HeaderRow"
+                                    DockPanel.Dock="Top"
+                                    Background="{DynamicResource Mine.Brush.SurfaceContainerLow}"
+                                    BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}"
+                                    BorderThickness="0,0,0,1"
+                                    Visibility="{Binding View.Columns,
+                                                 RelativeSource={RelativeSource TemplatedParent},
+                                                 Converter={StaticResource Local.NullToVisConv}}">
+                                <ItemsControl
+                                    ItemsSource="{Binding View.Columns,
+                                                  RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <!-- 每列独立 hover/press，用 Button+ControlTemplate 获得 IsPressed -->
+                                            <Button Width="{Binding Width}" Cursor="Arrow"
+                                                    Focusable="False" IsTabStop="False">
+                                                 <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Grid>
+                                                            <!-- hover/press 背景层，用 Opacity 动画过渡 -->
+                                                            <Border x:Name="HoverBg"
+                                                                    Background="{DynamicResource Mine.Brush.SurfaceContainerHigh}"
+                                                                    Opacity="0"/>
+                                                            <Border x:Name="PressBg"
+                                                                    Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                                                    Opacity="0"/>
+                                                            <Border Padding="16,10" Background="Transparent">
+                                                                <ContentPresenter
+                                                                    Content="{Binding Header}"
+                                                                    TextBlock.Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                                    TextBlock.FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                                    TextBlock.FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                                                    TextBlock.FontWeight="Medium"/>
+                                                            </Border>
+                                                        </Grid>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Trigger.EnterActions>
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="HoverBg"
+                                                                                             Storyboard.TargetProperty="Opacity"
+                                                                                             To="1" Duration="0:0:0.12"/>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </Trigger.EnterActions>
+                                                                <Trigger.ExitActions>
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="HoverBg"
+                                                                                             Storyboard.TargetProperty="Opacity"
+                                                                                             To="0" Duration="0:0:0.12"/>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </Trigger.ExitActions>
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Trigger.EnterActions>
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="PressBg"
+                                                                                             Storyboard.TargetProperty="Opacity"
+                                                                                             To="1" Duration="0:0:0.08"/>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </Trigger.EnterActions>
+                                                                <Trigger.ExitActions>
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="PressBg"
+                                                                                             Storyboard.TargetProperty="Opacity"
+                                                                                             To="0" Duration="0:0:0.12"/>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </Trigger.ExitActions>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Border>
+                            <!-- 数据行（含滚动条） -->
+                            <ScrollViewer Focusable="False">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ListBoxItem — Material 3 风格
+         ══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="Background"       Value="Transparent"/>
+        <Setter Property="BorderThickness"  Value="0"/>
+        <Setter Property="Padding"          Value="16,0"/>
+        <Setter Property="Height"           Value="44"/>
+        <Setter Property="Margin"           Value="4,2"/>
+        <Setter Property="FontFamily"       Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"         Value="{DynamicResource Mine.FontSize.BodyMedium}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Cursor"           Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Bg" Background="{TemplateBinding Background}"
+                            CornerRadius="{DynamicResource Mine.Shape.Small}"
+                            SnapsToDevicePixels="True">
+                        <Grid>
+                            <Border x:Name="StateLayer"
+                                    CornerRadius="{DynamicResource Mine.Shape.Small}"
+                                    Background="{DynamicResource Mine.Brush.OnSurface}" Opacity="0"/>
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="StateLayer"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.08" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="StateLayer"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0" Duration="0:0:0.12"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bg" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+                            <Setter TargetName="StateLayer" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ListBox — Material 3 风格
+         ══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type ListBox}">
+        <Setter Property="Background"       Value="{DynamicResource Mine.Brush.Surface}"/>
+        <Setter Property="BorderBrush"      Value="{DynamicResource Mine.Brush.OutlineVariant}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="FontFamily"       Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="Padding"          Value="0,4"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"   Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll"              Value="True"/>
+        <Setter Property="VirtualizingPanel.IsVirtualizing"           Value="True"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode"       Value="Recycling"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{DynamicResource Mine.Shape.Medium}"
+                            SnapsToDevicePixels="True" ClipToBounds="True">
+                        <ScrollViewer Focusable="False" Padding="{TemplateBinding Padding}">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
+

@@ -1,0 +1,520 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:primitives="clr-namespace:Mine.Wpf.Controls.Primitives">
+
+    <Style x:Key="Mine.DatePicker.IconButton" TargetType="Button">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse x:Name="StateLayer" Fill="{DynamicResource Mine.Brush.OnSurfaceVariant}" Opacity="0"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Opacity" Value="0.08"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="StateLayer" Property="Opacity" Value="0.16"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Mine.DatePicker.TextButton" TargetType="Button">
+        <Setter Property="MinWidth" Value="64"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Mine.FontSize.LabelLarge}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="StateLayer" CornerRadius="18" Background="Transparent" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.16"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Mine.DatePicker.DayButton" TargetType="Button">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Mine.FontSize.BodyMedium}"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse x:Name="RangeFill"
+                                 Fill="{DynamicResource Mine.Brush.PrimaryContainer}"
+                                 Opacity="0.72"
+                                 Visibility="Collapsed"/>
+                        <Ellipse x:Name="HoverLayer" Fill="{DynamicResource Mine.Brush.OnSurface}" Opacity="0"/>
+                        <Ellipse x:Name="TodayStroke" Stroke="{DynamicResource Mine.Brush.Primary}" StrokeThickness="1.5" Visibility="Collapsed"/>
+                        <Ellipse x:Name="ConfirmedStroke" Stroke="{DynamicResource Mine.Brush.Primary}" StrokeThickness="1.5" Visibility="Collapsed"/>
+                        <Ellipse x:Name="SelectedFill" Fill="{DynamicResource Mine.Brush.Primary}" Visibility="Collapsed"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="HoverLayer" Property="Opacity" Value="0.08"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="HoverLayer" Property="Opacity" Value="0.16"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsToday}" Value="True">
+                            <Setter TargetName="TodayStroke" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsConfirmed}" Value="True">
+                            <Setter TargetName="ConfirmedStroke" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsInRange}" Value="True">
+                            <Setter TargetName="RangeFill" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                            <Setter TargetName="SelectedFill" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="TodayStroke" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="ConfirmedStroke" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsOutsideMonth}" Value="True">
+                <Setter Property="Opacity" Value="0.24"/>
+            </DataTrigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.38"/>
+                <Setter Property="Cursor" Value="Arrow"/>
+            </Trigger>
+            <DataTrigger Binding="{Binding IsToday}" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsConfirmed}" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsInRange}" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type controls:DatePicker}">
+        <Setter Property="MinWidth" Value="220"/>
+        <Setter Property="MinHeight" Value="40"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Mine.Brush.Outline}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Mine.FontSize.BodyLarge}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:DatePicker}">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="LabelStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition From="LabelNormal" To="LabelFloated" GeneratedDuration="0">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                             Storyboard.TargetProperty="ScaleX"
+                                                             To="0.75" Duration="0:0:0.15">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut"/>
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                             Storyboard.TargetProperty="ScaleY"
+                                                             To="0.75" Duration="0:0:0.15">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut"/>
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                                             Storyboard.TargetProperty="Y"
+                                                             To="-20" Duration="0:0:0.15">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut"/>
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                    <VisualTransition From="LabelFloated" To="LabelNormal" GeneratedDuration="0">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                             Storyboard.TargetProperty="ScaleX"
+                                                             To="1" Duration="0:0:0.15">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseIn"/>
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                             Storyboard.TargetProperty="ScaleY"
+                                                             To="1" Duration="0:0:0.15">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseIn"/>
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                                             Storyboard.TargetProperty="Y"
+                                                             To="-1" Duration="0:0:0.15">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseIn"/>
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="LabelNormal">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                         Storyboard.TargetProperty="ScaleX" To="1" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                         Storyboard.TargetProperty="ScaleY" To="1" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                                         Storyboard.TargetProperty="Y" To="-1" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="LabelFloated">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                         Storyboard.TargetProperty="ScaleX" To="0.75" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HintScale"
+                                                         Storyboard.TargetProperty="ScaleY" To="0.75" Duration="0"/>
+                                        <DoubleAnimation Storyboard.TargetName="HintTranslate"
+                                                         Storyboard.TargetProperty="Y" To="-20" Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid x:Name="PART_InputBorder"
+                              Grid.Row="0"
+                              Background="Transparent"
+                              MinHeight="40"
+                              SnapsToDevicePixels="True">
+                            <primitives:NotchedOutlineBorder x:Name="Container"
+                                                             BorderBrush="{TemplateBinding BorderBrush}"
+                                                             BorderThickness="1"
+                                                             CornerRadius="4"
+                                                             NotchStart="12"
+                                                             NotchWidth="0"
+                                                             MinHeight="40">
+                                <Grid Margin="12,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
+                                               FontFamily="{TemplateBinding FontFamily}"
+                                               FontSize="{TemplateBinding FontSize}"
+                                               Foreground="{TemplateBinding Foreground}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"
+                                               IsHitTestVisible="False"/>
+
+                                    <controls:MaterialIcon Grid.Column="1"
+                                                           Kind="&#xE916;"
+                                                           Size="20"
+                                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                           VerticalAlignment="Center"
+                                                           Margin="12,0,0,0"
+                                                           IsHitTestVisible="False"/>
+                                </Grid>
+                            </primitives:NotchedOutlineBorder>
+
+                            <Border x:Name="FilledContainer"
+                                    Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                    BorderBrush="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                    BorderThickness="0,0,0,1"
+                                    CornerRadius="4,4,0,0"
+                                    Visibility="Collapsed">
+                                <Grid Margin="12,4,12,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid Grid.Column="0">
+                                        <TextBlock x:Name="FilledHintText"
+                                                   Text="{TemplateBinding Hint}"
+                                                   FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                   FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                   VerticalAlignment="Top"
+                                                   IsHitTestVisible="False"/>
+                                        <TextBlock Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
+                                                   FontFamily="{TemplateBinding FontFamily}"
+                                                   FontSize="{TemplateBinding FontSize}"
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   VerticalAlignment="Bottom"
+                                                   Margin="0,16,0,0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   IsHitTestVisible="False"/>
+                                    </Grid>
+
+                                    <controls:MaterialIcon Grid.Column="1"
+                                                           Kind="&#xE916;"
+                                                           Size="20"
+                                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                           VerticalAlignment="Center"
+                                                           Margin="12,0,0,0"
+                                                           IsHitTestVisible="False"/>
+                                </Grid>
+                            </Border>
+
+                            <TextBlock x:Name="PART_Hint"
+                                       Text="{TemplateBinding Hint}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       IsHitTestVisible="False"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Margin="16,0,0,0"
+                                       Padding="0"
+                                       RenderTransformOrigin="0,0.5">
+                                <TextBlock.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform x:Name="HintScale" ScaleX="1" ScaleY="1"/>
+                                        <TranslateTransform x:Name="HintTranslate" Y="-1"/>
+                                    </TransformGroup>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Grid>
+
+                        <TextBlock x:Name="HelperText"
+                                   Grid.Row="1"
+                                   Text="{TemplateBinding HelperText}"
+                                   FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                   FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                   Margin="12,2,12,0"/>
+
+                        <controls:Flyout x:Name="PART_Flyout"
+                                         Grid.Row="0"
+                                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                         Placement="Bottom"
+                                         MinWidth="328"
+                                         MaxWidth="360"
+                                         Background="{DynamicResource Mine.Brush.SurfaceContainerHigh}"
+                                         Padding="0">
+                            <Border Width="328" Padding="16,16,16,8">
+                                <StackPanel>
+                                    <TextBlock x:Name="PopupHeader"
+                                               Text="选择日期"
+                                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                               Margin="0,0,0,8"/>
+
+                                    <Border BorderBrush="{DynamicResource Mine.Brush.Outline}"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            Margin="0,0,0,12">
+                                        <TextBox x:Name="PART_PopupInput"
+                                                 BorderThickness="0"
+                                                 Background="Transparent"
+                                                 Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                                 FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                 FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                                 Padding="10,7"
+                                                 ToolTip="输入日期后按 Enter；范围模式可用 yyyy-MM-dd – yyyy-MM-dd"/>
+                                    </Border>
+
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button x:Name="PART_PrevMonth" Grid.Column="0" Style="{StaticResource Mine.DatePicker.IconButton}">
+                                            <controls:MaterialIcon Kind="&#xE5CB;" Size="22" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                        </Button>
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding ViewMonthYear}"
+                                                   Style="{DynamicResource Mine.Typography.TitleSmall}"
+                                                   Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                                   FontWeight="Medium"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                        <Button x:Name="PART_NextMonth" Grid.Column="2" Style="{StaticResource Mine.DatePicker.IconButton}">
+                                            <controls:MaterialIcon Kind="&#xE5CC;" Size="22" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                        </Button>
+                                    </Grid>
+
+                                    <ItemsControl ItemsSource="{Binding WeekdayNames}" Margin="0,0,0,4">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="7"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}"
+                                                           FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                           FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                           FontWeight="Medium"
+                                                           HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="PART_DayItems" ItemsSource="{Binding CalendarDays}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="6" Columns="7"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type controls:CalendarDayItem}">
+                                                <Button Style="{StaticResource Mine.DatePicker.DayButton}"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Tag="{Binding}">
+                                                    <TextBlock Text="{Binding Label}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button x:Name="PART_TodayButton" Grid.Column="0" Content="今天" Style="{StaticResource Mine.DatePicker.TextButton}"/>
+                                        <Button x:Name="PART_ClearButton" Grid.Column="1" Content="清除" Style="{StaticResource Mine.DatePicker.TextButton}"/>
+                                        <Button x:Name="PART_CancelButton" Grid.Column="3" Content="取消" Style="{StaticResource Mine.DatePicker.TextButton}"/>
+                                        <Button x:Name="PART_ConfirmButton" Grid.Column="4" Content="确定" Style="{StaticResource Mine.DatePicker.TextButton}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </controls:Flyout>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Variant" Value="Filled">
+                            <Setter TargetName="Container" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="PART_Hint" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="FilledContainer" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="SelectionMode" Value="Range">
+                            <Setter TargetName="PopupHeader" Property="Text" Value="选择日期范围"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <Setter TargetName="FilledContainer" Property="BorderBrush" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant" Value="Outlined"/>
+                                <Condition Property="IsKeyboardFocusWithin" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="Container" Property="BorderThickness" Value="2"/>
+                            <Setter TargetName="PART_Hint" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant" Value="Filled"/>
+                                <Condition Property="IsKeyboardFocusWithin" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="FilledContainer" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="FilledContainer" Property="BorderThickness" Value="0,0,0,2"/>
+                            <Setter TargetName="FilledHintText" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant" Value="Outlined"/>
+                                <Condition Property="IsOpen" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="Container" Property="BorderThickness" Value="2"/>
+                            <Setter TargetName="PART_Hint" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant" Value="Filled"/>
+                                <Condition Property="IsOpen" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="FilledContainer" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="FilledContainer" Property="BorderThickness" Value="0,0,0,2"/>
+                            <Setter TargetName="FilledHintText" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiTrigger>
+                        <Trigger Property="HelperText" Value="">
+                            <Setter TargetName="HelperText" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_InputBorder" Property="Opacity" Value="0.38"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

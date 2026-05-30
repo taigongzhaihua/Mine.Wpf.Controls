@@ -84,12 +84,15 @@
                         </MultiBinding>
                     </Border.CornerRadius>
                     <StackPanel x:Name="ContentPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}">
-                        <ContentPresenter x:Name="IconPresenter"
-                                          Content="{TemplateBinding Icon}"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center"
-                                          Margin="0,0,8,0"
-                                          Visibility="Visible"/>
+                        <ContentControl x:Name="IconPresenter"
+                                        Content="{TemplateBinding Icon}"
+                                        FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
+                                        FontSize="18"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Margin="0,0,8,0"
+                                        Visibility="Visible"/>
                         <ContentPresenter x:Name="PART_Content"
                                           Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -110,6 +113,9 @@
             <Trigger Property="Icon" Value="{x:Null}">
                 <Setter TargetName="IconPresenter" Property="Visibility" Value="Collapsed"/>
             </Trigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                <Setter TargetName="IconPresenter" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
             <Trigger Property="Content" Value="{x:Null}">
                 <Setter TargetName="PART_Content" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="IconPresenter" Property="Margin" Value="0"/>
@@ -170,6 +176,10 @@
         <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
     </Style>
 
+    <!-- FilledTonal 别名，与 MD3 规范命名一致 -->
+    <Style x:Key="Mine.Style.Button.FilledTonal" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Tonal}"/>
+
     <!-- OUTLINED -->
     <Style x:Key="Mine.Style.Button.Outlined" TargetType="{x:Type controls:Button}"
            BasedOn="{StaticResource Mine.Style.Button.Filled}">
@@ -182,15 +192,6 @@
                 <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.0}"/>
             </Trigger>
         </Style.Triggers>
-    </Style>
-
-    <!-- TEXT -->
-    <Style x:Key="Mine.Style.Button.Text" TargetType="{x:Type controls:Button}"
-           BasedOn="{StaticResource Mine.Style.Button.Filled}">
-        <Setter Property="Background"      Value="Transparent"/>
-        <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding"         Value="12,10"/>
     </Style>
 
     <!-- ELEVATED -->
@@ -209,6 +210,16 @@
         </Style.Triggers>
     </Style>
 
+    <!-- TEXT -->
+    <Style x:Key="Mine.Style.Button.Text" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Filled}">
+        <Setter Property="Background"      Value="Transparent"/>
+        <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding"         Value="12,10"/>
+        <Setter Property="Effect"          Value="{DynamicResource Mine.Elevation.0}"/>
+    </Style>
+
     <!-- FAB -->
     <Style x:Key="Mine.Style.Button.Fab" TargetType="{x:Type controls:Button}"
            BasedOn="{StaticResource Mine.Style.Button.Filled}">
@@ -221,7 +232,7 @@
         <Setter Property="Effect"       Value="{DynamicResource Mine.Elevation.3}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.4}"/>
+                <Setter Property="Effect" Value="{DynamicResource Mine.Elevation.3}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -230,9 +241,7 @@
     <Style x:Key="Mine.Style.Button.ExtendedFab" TargetType="{x:Type controls:Button}"
            BasedOn="{StaticResource Mine.Style.Button.Fab}">
         <Setter Property="Width"        Value="NaN"/>
-        <Setter Property="Height"       Value="56"/>
         <Setter Property="Padding"      Value="16,0,20,0"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource Mine.Shape.Large}"/>
     </Style>
 
     <!-- Default style — Variant dispatcher -->

@@ -1,0 +1,168 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:attached="clr-namespace:Mine.Wpf.Controls.Attached"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+
+    <!-- ══════════════════════════════════════════════════════════════
+         ToolTip — Material Design 3
+         Plain  : InverseSurface 底色，单行/多行文本，ExtraSmall 圆角，淡入动画
+         Rich   : SurfaceContainer 底色，可选标题 + 正文，Medium 圆角，淡入+上滑动画
+         ══════════════════════════════════════════════════════════════ -->
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         Plain ToolTip（默认全局样式）
+         ═══════════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type ToolTip}">
+        <Setter Property="Background"      Value="{DynamicResource Mine.Brush.InverseSurface}"/>
+        <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.InverseOnSurface}"/>
+        <Setter Property="FontFamily"      Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"        Value="{DynamicResource Mine.FontSize.BodySmall}"/>
+        <Setter Property="Padding"         Value="8,4"/>
+        <Setter Property="MaxWidth"        Value="280"/>
+        <Setter Property="HasDropShadow"   Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToolTip}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{DynamicResource Mine.Shape.ExtraSmall}"
+                            Padding="{TemplateBinding Padding}"
+                            MaxWidth="{TemplateBinding MaxWidth}"
+                            Opacity="0">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.22" Direction="270"/>
+                        </Border.Effect>
+                        <Border.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Root"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         From="0" To="1" Duration="0:0:0.15">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Border.Triggers>
+                        <ContentPresenter TextBlock.Foreground="{TemplateBinding Foreground}"
+                                          TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                                          TextBlock.FontSize="{TemplateBinding FontSize}"
+                                          RecognizesAccessKey="True">
+                            <ContentPresenter.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         Rich ToolTip（mine:RichToolTip）
+         用法：
+           <Button.ToolTip>
+             <mine:RichToolTip mine:ToolTipAssist.Title="标题（可省略）"
+                               Content="这里是详细说明文本。"/>
+           </Button.ToolTip>
+         ═══════════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:RichToolTip}">
+        <Setter Property="Background"      Value="{DynamicResource Mine.Brush.SurfaceContainer}"/>
+        <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="FontFamily"      Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"        Value="{DynamicResource Mine.FontSize.BodyMedium}"/>
+        <Setter Property="Padding"         Value="12"/>
+        <Setter Property="MaxWidth"        Value="312"/>
+        <Setter Property="HasDropShadow"   Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:RichToolTip}">
+                    <Grid Margin="16">
+                        <Grid.Effect>
+                            <DropShadowEffect BlurRadius="16"
+                                              ShadowDepth="4"
+                                              Opacity="0.28"
+                                              Direction="270" />
+                        </Grid.Effect>
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="{DynamicResource Mine.Shape.Medium}"
+                                BorderBrush="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                BorderThickness="1"
+                                Padding="{TemplateBinding Padding}"
+                                MaxWidth="{TemplateBinding MaxWidth}"
+                                Opacity="0">
+                        
+                        <Border.RenderTransform>
+                            <TranslateTransform x:Name="SlideTransform" Y="6"/>
+                        </Border.RenderTransform>
+                        <Border.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Root"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         From="0" To="1" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="SlideTransform"
+                                                         Storyboard.TargetProperty="Y"
+                                                         From="6" To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Border.Triggers>
+
+                        <StackPanel>
+                            <!-- 标题（可选，Title 为空时折叠） -->
+                            <TextBlock x:Name="TitleBlock"
+                                       Text="{Binding Path=(attached:ToolTipAssist.Title),
+                                                       RelativeSource={RelativeSource TemplatedParent}}"
+                                       FontFamily="{TemplateBinding FontFamily}"
+                                       FontSize="{DynamicResource Mine.FontSize.LabelLarge}"
+                                       FontWeight="SemiBold"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,0,4"
+                                       Visibility="Visible"/>
+
+                            <!-- 正文 -->
+                            <TextBlock Text="{TemplateBinding Content}"
+                                       FontFamily="{TemplateBinding FontFamily}"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=(attached:ToolTipAssist.Title),
+                                                        RelativeSource={RelativeSource Self},
+                                                        TargetNullValue='',
+                                                        FallbackValue=''}"
+                                     Value="">
+                            <Setter TargetName="TitleBlock" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 向后兼容别名 -->
+    <Style x:Key="Mine.Style.ToolTip.Rich" TargetType="{x:Type controls:RichToolTip}"
+           BasedOn="{StaticResource {x:Type controls:RichToolTip}}"/>
+
+</ResourceDictionary>
+

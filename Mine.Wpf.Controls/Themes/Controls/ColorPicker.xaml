@@ -1,0 +1,134 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters">
+    <!-- 本文件内部使用的转换器（StaticResource 无法跨 MergedDictionary） -->
+    <conv:BoolToVisibilityConverter x:Key="Local.BoolToVisConv"/>
+    <Style TargetType="{x:Type controls:ColorPicker}">
+        <Setter Property="Width"            Value="280"/>
+        <Setter Property="Focusable"        Value="False"/>
+        <Setter Property="Background"       Value="{DynamicResource Mine.Brush.SurfaceContainerHigh}"/>
+        <Setter Property="Foreground"       Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="FontFamily"       Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ColorPicker}">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="12" Padding="16">
+                        <StackPanel>
+
+                            <!-- SB 面板（饱和度×亮度） -->
+                            <Canvas x:Name="PART_SbCanvas"
+                                    Height="200" Margin="0,0,0,12"
+                                    ClipToBounds="True">
+                                <!-- 色相背景 -->
+                                <Rectangle x:Name="PART_HueBg"
+                                           Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                           Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Canvas}}">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="Red"/>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <!-- 白色渐变 (左→右透明) -->
+                                <Rectangle Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                           Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Canvas}}">
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Color="White" Offset="0"/>
+                                            <GradientStop Color="Transparent" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <!-- 黑色渐变 (上→下透明) -->
+                                <Rectangle Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                           Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Canvas}}">
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                            <GradientStop Color="Transparent" Offset="0"/>
+                                            <GradientStop Color="Black" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <!-- SB 游标 -->
+                                <Ellipse x:Name="PART_SbThumb"
+                                         Width="18" Height="18"
+                                         Canvas.Left="0" Canvas.Top="0"
+                                         Stroke="White" StrokeThickness="2"
+                                         Fill="Transparent"
+                                         IsHitTestVisible="False"/>
+                            </Canvas>
+
+                            <!-- 色相滑块 -->
+                            <TextBlock Text="色相 Hue"
+                                       FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       Margin="0,0,0,4"/>
+                            <Slider x:Name="PART_HueSlider"
+                                    Minimum="0" Maximum="360"
+                                    Value="0"
+                                    Margin="0,0,0,8"
+                                    FocusVisualStyle="{x:Null}">
+                                <Slider.Background>
+                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                        <GradientStop Color="#FF0000" Offset="0"/>
+                                        <GradientStop Color="#FFFF00" Offset="0.167"/>
+                                        <GradientStop Color="#00FF00" Offset="0.333"/>
+                                        <GradientStop Color="#00FFFF" Offset="0.5"/>
+                                        <GradientStop Color="#0000FF" Offset="0.667"/>
+                                        <GradientStop Color="#FF00FF" Offset="0.833"/>
+                                        <GradientStop Color="#FF0000" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Slider.Background>
+                            </Slider>
+
+                            <!-- 透明度滑块（可选） -->
+                            <StackPanel x:Name="AlphaPanel"
+                                        Visibility="{Binding ShowAlpha,
+                                                     RelativeSource={RelativeSource TemplatedParent},
+                                                     Converter={StaticResource Local.BoolToVisConv}}">
+                                <TextBlock Text="透明度 Alpha"
+                                           FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                           Margin="0,0,0,4"/>
+                                <Slider x:Name="PART_AlphaSlider"
+                                        Minimum="0" Maximum="255"
+                                        Value="255"
+                                        Margin="0,0,0,8"
+                                        FocusVisualStyle="{x:Null}"/>
+                            </StackPanel>
+
+                            <!-- 预览 + HEX 输入 -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="48"/>
+                                    <ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="PART_Preview"
+                                        Grid.Column="0"
+                                        Height="40"
+                                        CornerRadius="4"
+                                        Background="{DynamicResource Mine.Brush.Primary}"/>
+                                <Border Grid.Column="2"
+                                        Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                        CornerRadius="4" Padding="8,0">
+                                    <TextBox x:Name="PART_HexBox"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             Foreground="{TemplateBinding Foreground}"
+                                             FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                             FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                             VerticalAlignment="Center"
+                                             FocusVisualStyle="{x:Null}"
+                                             MaxLength="9"/>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
+
+

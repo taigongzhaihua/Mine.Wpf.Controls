@@ -1,0 +1,565 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:primitives="clr-namespace:Mine.Wpf.Controls.Primitives"
+                    xmlns:helpers="clr-namespace:Mine.Wpf.Controls.Helpers">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         Popup 下拉容器样式 — 含展开动画 + 阴影
+         ═══════════════════════════════════════════════════════════ -->
+    <!-- Popup 容器：外层 Grid 承载阴影+动画，内层 Border 圆角裁剪内容 -->
+    <Style x:Key="Mine.Style.ComboBox.PopupGrid" TargetType="Grid">
+        <Setter Property="Margin"       Value="12,4,30,30"/>
+        <Setter Property="Effect"       Value="{DynamicResource Mine.Elevation.3}"/>
+        <Setter Property="RenderTransformOrigin" Value="0.5,0"/>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="1"/>
+                </TransformGroup>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <EventTrigger RoutedEvent="Grid.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="Opacity"
+                            From="0" To="1" Duration="0:0:0.12">
+                            <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
+                            From="0.92" To="1" Duration="0:0:0.15">
+                            <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="Mine.Style.ComboBox.PopupBorder" TargetType="Border">
+        <Setter Property="Background"             Value="{DynamicResource Mine.Brush.SurfaceContainerHigh}"/>
+        <Setter Property="CornerRadius"            Value="8"/>
+        <Setter Property="helpers:ClipHelper.CornerRadius" Value="8"/>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ComboBoxItem — MD3 风格列表行（支持多选 CheckBox）
+         ═══════════════════════════════════════════════════════════ -->
+    <Style x:Key="Mine.Style.ComboBoxItem" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Padding"                Value="16,0"/>
+        <Setter Property="Height"                 Value="48"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+        <Setter Property="FontFamily"             Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"               Value="{DynamicResource Mine.FontSize.BodyLarge}"/>
+        <Setter Property="Foreground"             Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="Background"             Value="Transparent"/>
+        <Setter Property="Cursor"                 Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Grid ClipToBounds="True">
+                        <Border x:Name="StateLayer" Background="Transparent" CornerRadius="0"/>
+                        <Border x:Name="Indicator"
+                                Width="3" HorizontalAlignment="Left"
+                                Background="{DynamicResource Mine.Brush.Primary}"
+                                CornerRadius="0,2,2,0"
+                                Visibility="Collapsed"/>
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- 多选复选框（仅 IsMultiSelectMode=True 时可见） -->
+                            <CheckBox x:Name="MultiCheck"
+                                      Grid.Column="0"
+                                      IsChecked="{Binding Path=(controls:ComboBox.IsMultiChecked),
+                                                          RelativeSource={RelativeSource TemplatedParent}}"
+                                      IsHitTestVisible="False"
+                                      Visibility="Collapsed"
+                                      VerticalAlignment="Center"
+                                      Margin="0,0,12,0"/>
+                            <ContentPresenter Grid.Column="1"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.12"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="Indicator" Property="Visibility" Value="Visible"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected"  Value="True"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.20"/>
+                                </Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                        <!-- 多选模式：显示 CheckBox，隐藏左侧选中指示条 -->
+                        <Trigger Property="controls:ComboBox.IsMultiSelectMode" Value="True">
+                            <Setter TargetName="MultiCheck" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="Indicator"  Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <!-- 多选模式下不高亮选中行（选中状态由 CheckBox 表示） -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="controls:ComboBox.IsMultiSelectMode" Value="True"/>
+                                <Condition Property="IsSelected" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="StateLayer" Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ComboBox — Outlined 变体模板（默认）
+         使用 NotchedOutlineBorder，浮动标签时边框有缺口
+         ═══════════════════════════════════════════════════════════ -->
+    <ControlTemplate x:Key="Mine.Template.ComboBox.Outlined" TargetType="{x:Type controls:ComboBox}">
+        <Grid x:Name="Root">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 外层 Grid：NotchedOutlineBorder + PART_Hint 同层叠放（与 TextBox Outlined 一致） -->
+            <Grid Grid.Row="0">
+
+                <!-- 缺口边框 -->
+                <primitives:NotchedOutlineBorder x:Name="Container"
+                        BorderBrush="{DynamicResource Mine.Brush.Outline}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        NotchStart="12"
+                        NotchWidth="0"
+                        MinHeight="48">
+
+                    <!-- Hover 层 -->
+                    <Border x:Name="HoverLayer"
+                            CornerRadius="4"
+                            Background="Transparent">
+                        <Grid Margin="16,0,12,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 单选时显示选中项 -->
+                            <ContentPresenter x:Name="SelectionPresenter"
+                                              Grid.Column="0"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              VerticalAlignment="Center"
+                                              IsHitTestVisible="False"/>
+
+                            <!-- 多选时显示逗号分隔文本 -->
+                            <TextBlock x:Name="PART_SelectionText"
+                                       Grid.Column="0"
+                                       Text="{TemplateBinding SelectionText}"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"
+                                       Visibility="Collapsed"
+                                       IsHitTestVisible="False"/>
+
+                            <!-- 展开箭头 -->
+                            <controls:MaterialIcon x:Name="ChevronIcon"
+                                       Grid.Column="1"
+                                       Kind="&#xE5CF;"
+                                       Size="20"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,4,0"
+                                       RenderTransformOrigin="0.5,0.5">
+                                <controls:MaterialIcon.RenderTransform>
+                                    <RotateTransform Angle="0"/>
+                                </controls:MaterialIcon.RenderTransform>
+                            </controls:MaterialIcon>
+                        </Grid>
+                    </Border>
+                </primitives:NotchedOutlineBorder>
+
+                <!-- 浮动标签：与边框同层，居中对齐，浮动时上移至缺口 -->
+                <TextBlock x:Name="PART_Hint"
+                           Text="{TemplateBinding Hint}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                           FontSize="{DynamicResource Mine.FontSize.BodyLarge}"
+                           IsHitTestVisible="False"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="16,0,0,0"
+                           RenderTransformOrigin="0,0.5">
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="HintScale" ScaleX="1" ScaleY="1"/>
+                            <TranslateTransform x:Name="HintTranslate" Y="0"/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+
+            </Grid>
+
+            <!-- 辅助文本 -->
+            <TextBlock x:Name="HelperText"
+                       Grid.Row="1"
+                       Text="{TemplateBinding HelperText}"
+                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                       FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="16,4,16,0"
+                       Visibility="Collapsed"/>
+
+            <!-- 保留零尺寸 PART_Popup 以兼容基类模板部件查找；实际可见下拉由 Flyout 承载 -->
+            <Popup x:Name="PART_Popup"
+                   Grid.Row="0"
+                   Placement="Bottom"
+                   PlacementTarget="{Binding ElementName=Container}"
+                   AllowsTransparency="True"
+                   Focusable="False"
+                   PopupAnimation="None">
+                <Border Width="0" Height="0" Background="Transparent" IsHitTestVisible="False"/>
+            </Popup>
+
+            <controls:Flyout Grid.Row="0"
+                             IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                             PlacementTarget="{Binding ElementName=Container}"
+                             Placement="Bottom"
+                             AutoPlacement="True"
+                             ConstrainToWorkArea="True"
+                             ViewportMargin="16"
+                             VerticalOffset="4"
+                             MinWidth="{Binding ActualWidth, ElementName=Container}"
+                             MaxWidth="{Binding ActualWidth, ElementName=Container}"
+                             MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                             Background="{DynamicResource Mine.Brush.SurfaceContainerHigh}"
+                             Padding="0">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                </ScrollViewer>
+            </controls:Flyout>
+
+            <!-- 透明 ToggleButton 接管点击 -->
+            <ToggleButton Grid.Row="0"
+                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay,
+                                      RelativeSource={RelativeSource TemplatedParent}}"
+                          Opacity="0" Focusable="False" IsTabStop="False" ClickMode="Press"/>
+
+        </Grid>
+        <ControlTemplate.Triggers>
+            <!-- 聚焦/展开：Primary 色边框 2px + 标签变色 -->
+            <Trigger Property="IsDropDownOpen" Value="True">
+                <Setter TargetName="Container"   Property="BorderBrush"     Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter TargetName="Container"   Property="BorderThickness" Value="2"/>
+                <Setter TargetName="PART_Hint"   Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter TargetName="ChevronIcon" Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ChevronIcon"
+                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                             To="180" Duration="0:0:0.15">
+                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ChevronIcon"
+                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                             To="0" Duration="0:0:0.15">
+                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+            <!-- IsMouseOver -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="HoverLayer" Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+            </Trigger>
+            <!-- Disabled -->
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Root" Property="Opacity" Value="0.38"/>
+            </Trigger>
+            <!-- 辅助文本 -->
+            <Trigger Property="HelperText" Value="{x:Null}">
+                <Setter TargetName="HelperText" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <DataTrigger Binding="{Binding HelperText, RelativeSource={RelativeSource Self}}" Value="">
+                <Setter TargetName="HelperText" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+            <!-- 多选模式：切换头部显示 -->
+            <Trigger Property="IsMultiSelect" Value="True">
+                <Setter TargetName="SelectionPresenter"  Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="PART_SelectionText"  Property="Visibility" Value="Visible"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ComboBox — Filled 变体模���
+         ════════════════════���══════════════════════════════════════ -->
+    <ControlTemplate x:Key="Mine.Template.ComboBox.Filled" TargetType="{x:Type controls:ComboBox}">
+        <Grid x:Name="Root">
+            <!-- ...existing VSM... -->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="IndicatorScale"
+                                             Storyboard.TargetProperty="ScaleX" To="0" Duration="0"/>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
+                                                           Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="IndicatorScale"
+                                             Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2">
+                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
+                                                           Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Hint"
+                                                           Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Root"
+                                             Storyboard.TargetProperty="Opacity"
+                                             To="0.38" Duration="0"/>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" MinHeight="48"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="FilledBg"
+                    Grid.Row="0"
+                    Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                    CornerRadius="4,4,0,0">
+                <Grid>
+                    <Border x:Name="HoverLayer" CornerRadius="4,4,0,0" Background="Transparent"/>
+                    <Grid Margin="16,0,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <TextBlock x:Name="PART_Hint"
+                                       Text="{TemplateBinding Hint}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="{DynamicResource Mine.FontSize.BodyLarge}"
+                                       VerticalAlignment="Center"
+                                       RenderTransformOrigin="0,0.5">
+                                <TextBlock.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <!-- 单选时显示选中项 -->
+                            <ContentPresenter x:Name="SelectionPresenter"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              Margin="0,12,0,0"
+                                              VerticalAlignment="Center"
+                                              IsHitTestVisible="False"/>
+                            <!-- 多选时显示逗号分隔文本 -->
+                            <TextBlock x:Name="PART_SelectionText"
+                                       Text="{TemplateBinding SelectionText}"
+                                       Margin="0,12,0,0"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"
+                                       Visibility="Collapsed"
+                                       IsHitTestVisible="False"/>
+                        </Grid>
+
+                        <controls:MaterialIcon x:Name="ChevronIcon"
+                                   Grid.Column="1"
+                                   Kind="&#xE5CF;"
+                                   Size="20"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                   VerticalAlignment="Center"
+                                   Margin="8,0,4,0"
+                                   RenderTransformOrigin="0.5,0.5">
+                            <controls:MaterialIcon.RenderTransform>
+                                <RotateTransform Angle="0"/>
+                            </controls:MaterialIcon.RenderTransform>
+                        </controls:MaterialIcon>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border x:Name="Indicator"
+                    Grid.Row="0" Height="1"
+                    Background="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                    VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0"/>
+            <Border x:Name="ActiveIndicator"
+                    Grid.Row="0" Height="2"
+                    Background="{DynamicResource Mine.Brush.Primary}"
+                    VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0">
+                <Border.RenderTransform>
+                    <ScaleTransform x:Name="IndicatorScale" ScaleX="0"/>
+                </Border.RenderTransform>
+            </Border>
+
+            <TextBlock x:Name="HelperText"
+                       Grid.Row="1"
+                       Text="{TemplateBinding HelperText}"
+                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                       FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="16,4,16,0"
+                       Visibility="Collapsed"/>
+
+            <Popup x:Name="PART_Popup"
+                   Grid.Row="0"
+                   Placement="Bottom"
+                   PlacementTarget="{Binding ElementName=FilledBg}"
+                   AllowsTransparency="True"
+                   Focusable="False"
+                   PopupAnimation="None">
+                <Border Width="0" Height="0" Background="Transparent" IsHitTestVisible="False"/>
+            </Popup>
+
+            <controls:Flyout Grid.Row="0"
+                             IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                             PlacementTarget="{Binding ElementName=FilledBg}"
+                             Placement="Bottom"
+                             AutoPlacement="True"
+                             ConstrainToWorkArea="True"
+                             ViewportMargin="16"
+                             VerticalOffset="4"
+                             MinWidth="{Binding ActualWidth, ElementName=FilledBg}"
+                             MaxWidth="{Binding ActualWidth, ElementName=FilledBg}"
+                             MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                             Background="{DynamicResource Mine.Brush.SurfaceContainerHigh}"
+                             Padding="0">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                </ScrollViewer>
+            </controls:Flyout>
+
+            <ToggleButton Grid.Row="0"
+                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay,
+                                      RelativeSource={RelativeSource TemplatedParent}}"
+                          Opacity="0" Focusable="False" IsTabStop="False" ClickMode="Press"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="HoverLayer" Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsDropDownOpen" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ChevronIcon"
+                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                             To="180" Duration="0:0:0.15">
+                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ChevronIcon"
+                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                             To="0" Duration="0:0:0.15">
+                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseIn"/></DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+            <!-- 多选模式：切换头部显示 -->
+            <Trigger Property="IsMultiSelect" Value="True">
+                <Setter TargetName="SelectionPresenter" Property="Visibility" Value="Collapsed"/>
+                <Setter TargetName="PART_SelectionText" Property="Visibility" Value="Visible"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ComboBox 主样式（根据 Variant 切换模板）
+         ═══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:ComboBox}">
+        <Setter Property="Variant"                     Value="Outlined"/>
+        <Setter Property="MaxDropDownHeight"           Value="320"/>
+        <Setter Property="FontFamily"                  Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"                    Value="{DynamicResource Mine.FontSize.BodyLarge}"/>
+        <Setter Property="Foreground"                  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="MinWidth"                    Value="160"/>
+        <Setter Property="FocusVisualStyle"            Value="{x:Null}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ItemContainerStyle"          Value="{StaticResource Mine.Style.ComboBoxItem}"/>
+        <Setter Property="Template"
+                Value="{StaticResource Mine.Template.ComboBox.Outlined}"/>
+        <Style.Triggers>
+            <Trigger Property="Variant" Value="Filled">
+                <Setter Property="Template"
+                        Value="{StaticResource Mine.Template.ComboBox.Filled}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
+

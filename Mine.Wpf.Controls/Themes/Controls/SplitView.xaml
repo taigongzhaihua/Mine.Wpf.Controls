@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SplitView
+         Pane（左侧边栏）+ Content（主内容区）布局容器。
+         动画、边距由代码控制，模板只负责结构层次。
+         ══════════════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:SplitView}">
+        <Setter Property="PaneBackground" Value="{DynamicResource Mine.Brush.Surface}"/>
+        <Setter Property="Background"     Value="{DynamicResource Mine.Brush.Background}"/>
+        <Setter Property="Focusable"      Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:SplitView}">
+                    <!--
+                        根 Grid：ClipToBounds 防止 Pane 在动画过程中溢出。
+                        层叠顺序（从下到上）：
+                          0. PART_ContentRoot — 主内容（全宽，Margin 由代码设置）
+                          1. PART_Scrim       — 半透明遮罩（Overlay 模式专用）
+                          2. PART_PaneRoot    — 侧边栏（ZIndex 由代码设置）
+                    -->
+                    <Grid Background="{TemplateBinding Background}"
+                          ClipToBounds="True">
+
+                        <!-- 主内容区：Margin.Left 由代码驱动（Inline 模式下跟随 Pane 宽度） -->
+                        <ContentPresenter x:Name="PART_ContentRoot"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+
+                        <!-- Scrim：Overlay / CompactOverlay 模式，Pane 打开时淡入 -->
+                        <Rectangle x:Name="PART_Scrim"
+                                   Fill="Black"
+                                   Opacity="0"
+                                   IsHitTestVisible="False"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"/>
+
+                        <!-- 侧边栏：Width / TranslateX 由代码驱动 -->
+                        <Border x:Name="PART_PaneRoot"
+                                Background="{TemplateBinding PaneBackground}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Stretch"
+                                ClipToBounds="True">
+                            <!-- RenderTransform 在代码 OnApplyTemplate 中赋值 -->
+                            <ContentPresenter Content="{Binding Pane,
+                                                  RelativeSource={RelativeSource TemplatedParent}}"
+                                              ContentTemplate="{Binding PaneTemplate,
+                                                  RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Border>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
+

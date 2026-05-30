@@ -1,0 +1,103 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+    <!--
+    ┌──────────────────────────────────────────────────────────────────┐
+    │  Badge 模板结构                                                   │
+    │                                                                  │
+    │  Grid（单格，ClipToBounds=False）                                 │
+    │  ├─ ContentPresenter   ← 宿主内容（图标、按钮等）                  │
+    │  └─ Border PART_Badge  ← 徽标本体，定位于右上角                   │
+    │       └─ TextBlock     ← 徽标文字（Small 时隐藏）                 │
+    │                                                                  │
+    │  BadgeVariant 触发器控制 PART_Badge 的尺寸与圆角：               │
+    │    Hidden  → Visibility=Collapsed                                │
+    │    Small   → Width=6, Height=6, CornerRadius=3, TextHidden       │
+    │    Large   → Width=Auto, Height=16, CornerRadius=8, TextVisible  │
+    └──────────────────────────────────────────────────────────────────┘
+    -->
+    <Style TargetType="{x:Type controls:Badge}">
+        <Setter Property="Focusable"    Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:Badge}">
+                    <!--
+                        ClipToBounds=False：徽标要溢出宿主控件边界显示在右上角，
+                        不能裁剪。
+                    -->
+                    <Grid ClipToBounds="False">
+                        <!-- 宿主内容 -->
+                        <ContentPresenter x:Name="Content"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                        <!--
+                            徽标本体：
+                            - 定位锚点 = 右上角 (HAlign=Right, VAlign=Top)
+                            - 再通过 RenderTransform 向右上偏移 50%（即自身尺寸的一半）
+                              + BadgeHorizontalOffset / BadgeVerticalOffset
+                            - Material 3 规范颜色：Error / OnError
+                        -->
+                        <Border x:Name="PART_Badge"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                MinWidth="16"
+                                Height="16"
+                                CornerRadius="8"
+                                Padding="4,0"
+                                Background="{DynamicResource Mine.Brush.Error}"
+                                RenderTransformOrigin="0.5,0.5">
+                            <!-- RenderTransform 由 Badge.cs 代码动态计算，确保中心锚定角点向外延伸 -->
+                            <TextBlock x:Name="BadgeLabel"
+                                       Text="{TemplateBinding BadgeText}"
+                                       Foreground="{DynamicResource Mine.Brush.OnError}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="11"
+                                       FontWeight="Medium"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       LineStackingStrategy="BlockLineHeight"
+                                       LineHeight="16"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Hidden：徽标不可见 -->
+                        <Trigger Property="BadgeVariant" Value="Hidden">
+                            <Setter TargetName="PART_Badge" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <!-- Small：小圆点，无文字 -->
+                        <Trigger Property="BadgeVariant" Value="Small">
+                            <Setter TargetName="PART_Badge" Property="MinWidth"      Value="6"/>
+                            <Setter TargetName="PART_Badge" Property="Width"         Value="6"/>
+                            <Setter TargetName="PART_Badge" Property="Height"        Value="6"/>
+                            <Setter TargetName="PART_Badge" Property="CornerRadius"  Value="3"/>
+                            <Setter TargetName="PART_Badge" Property="Padding"       Value="0"/>
+                            <Setter TargetName="BadgeLabel" Property="Visibility"    Value="Collapsed"/>
+                        </Trigger>
+
+                        <!-- TopLeft placement -->
+                        <Trigger Property="BadgePlacement" Value="TopLeft">
+                            <Setter TargetName="PART_Badge" Property="HorizontalAlignment" Value="Left"/>
+                            <Setter TargetName="PART_Badge" Property="VerticalAlignment"   Value="Top"/>
+                        </Trigger>
+
+                        <!-- BottomRight placement -->
+                        <Trigger Property="BadgePlacement" Value="BottomRight">
+                            <Setter TargetName="PART_Badge" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="PART_Badge" Property="VerticalAlignment"   Value="Bottom"/>
+                        </Trigger>
+
+                        <!-- BottomLeft placement -->
+                        <Trigger Property="BadgePlacement" Value="BottomLeft">
+                            <Setter TargetName="PART_Badge" Property="HorizontalAlignment" Value="Left"/>
+                            <Setter TargetName="PART_Badge" Property="VerticalAlignment"   Value="Bottom"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
+

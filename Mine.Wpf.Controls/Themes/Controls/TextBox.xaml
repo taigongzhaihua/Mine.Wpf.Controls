@@ -3,6 +3,7 @@
                     xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
                     xmlns:primitives="clr-namespace:Mine.Wpf.Controls.Primitives">
 
+
     <!-- ═══════════════════════════════════════════════════════════
          TextBox — Filled variant template
          ═══════════════════════════════════════════════════════════ -->
@@ -38,27 +39,17 @@
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetName="IndicatorScale"
                                              Storyboard.TargetProperty="ScaleX" To="0" Duration="0"/>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
-                                                           Storyboard.TargetProperty="Background">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
-                            </ObjectAnimationUsingKeyFrames>
-                            <!-- Normal 状态不锁定 PART_Hint Foreground，
-                                 让它回落到模板 XAML 中设置的 OnSurfaceVariant，
-                                 避免动画层与模板层产生"两个真相源"的竞争 -->
+                            <!-- Normal 状态不锁定 Indicator Background 与 PART_Hint Foreground，
+                                 让它们回落到模板 XAML 中设置的默认值，
+                                 避免与 ValidationStates.Error 产生动画优先级冲突 -->
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Focused">
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetName="IndicatorScale"
                                              Storyboard.TargetProperty="ScaleX" To="1" Duration="0"/>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
-                                                           Storyboard.TargetProperty="Background">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Primary}"/>
-                            </ObjectAnimationUsingKeyFrames>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Hint"
-                                                           Storyboard.TargetProperty="Foreground">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Primary}"/>
-                            </ObjectAnimationUsingKeyFrames>
+                            <!-- PART_Hint.Foreground 在聚焦时改色由 ControlTemplate.Triggers 处理，
+                                 避免 VSM 动画优先级覆盖错误状态颜色 -->
                         </Storyboard>
                     </VisualState>
                     <VisualState x:Name="Disabled">
@@ -237,20 +228,16 @@
                                    Margin="4,0,0,0"
                                    Visibility="Visible"/>
 
-                        <Button x:Name="PART_ClearButton"
-                                Grid.Column="3"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Padding="2"
-                                Margin="4,0,0,0"
-                                VerticalAlignment="Center"
-                                Cursor="Hand"
-                                Visibility="Collapsed"
-                                FocusVisualStyle="{x:Null}">
-                            <Path Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                                  Fill="{DynamicResource Mine.Brush.OnSurfaceVariant}"
-                                  Width="14" Height="14" Stretch="Uniform"/>
-                        </Button>
+                        <controls:Button x:Name="PART_ClearButton"
+                                         Grid.Column="3"
+                                         Variant="Text" Width="24" Height="24"
+                                         Padding="2"
+                                         Margin="4,0,0,0"
+                                         VerticalAlignment="Center"
+                                         Visibility="Collapsed">
+                            <controls:MaterialIcon Kind="&#xE5CD;" Size="16"
+                                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                        </controls:Button>
                     </Grid>
                 </Grid>
             </Border>
@@ -266,10 +253,26 @@
 
         <ControlTemplate.Triggers>
             <!-- 以下属性驱动的 Trigger 不适合放入 VSM（值监听而非状态机） -->
+            <!-- 聚焦时 Hint 变为 Primary 色 -->
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter TargetName="PART_Hint" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+            </Trigger>
             <Trigger Property="HasError" Value="True">
                 <Setter TargetName="PART_HelperText" Property="Text"
                         Value="{Binding ErrorMessage, RelativeSource={RelativeSource TemplatedParent}}"/>
+                <Setter TargetName="Indicator"       Property="Background"  Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="FocusIndicator"  Property="Background"  Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="PART_Hint"       Property="Foreground"  Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="PART_HelperText" Property="Foreground"  Value="{DynamicResource Mine.Brush.Error}"/>
             </Trigger>
+            <!-- 聚焦且错误：优先显示错误色（MultiTrigger 优先级高于单 Trigger） -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsKeyboardFocusWithin" Value="True"/>
+                    <Condition Property="HasError"              Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter TargetName="PART_Hint" Property="Foreground" Value="{DynamicResource Mine.Brush.Error}"/>
+            </MultiTrigger>
             <Trigger Property="SuffixText" Value="{x:Null}">
                 <Setter TargetName="SuffixText" Property="Visibility" Value="Collapsed"/>
             </Trigger>
@@ -441,20 +444,18 @@
                                    Margin="4,0,0,0"
                                    Visibility="Visible"/>
 
-                        <Button x:Name="PART_ClearButton"
-                                Grid.Column="3"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Padding="2"
-                                Margin="4,0,0,0"
-                                VerticalAlignment="Center"
-                                Cursor="Hand"
-                                Visibility="Collapsed"
-                                FocusVisualStyle="{x:Null}">
-                            <Path Data="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                                  Fill="{DynamicResource Mine.Brush.OnSurfaceVariant}"
-                                  Width="14" Height="14" Stretch="Uniform"/>
-                        </Button>
+                        <controls:Button x:Name="PART_ClearButton"
+                                         Grid.Column="3"
+                                         Variant="Text"
+                                         Width="24"
+                                         Height="24"
+                                         Padding="2"
+                                         Margin="4,0,0,0"
+                                         VerticalAlignment="Center"
+                                         Visibility="Collapsed">
+                            <controls:MaterialIcon Kind="&#xE5CD;" Size="16"
+                                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                        </controls:Button>
                     </Grid>
                 </primitives:NotchedOutlineBorder>
 

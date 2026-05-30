@@ -1,0 +1,729 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:primitives="clr-namespace:Mine.Wpf.Controls.Primitives">
+
+    <Style x:Key="Mine.TimePicker.IconButton" TargetType="Button">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse x:Name="StateLayer" Fill="{DynamicResource Mine.Brush.OnSurfaceVariant}" Opacity="0"/>
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Opacity" Value="0.08"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="StateLayer" Property="Opacity" Value="0.16"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Mine.TimePicker.TextButton" TargetType="Button">
+        <Setter Property="MinWidth" Value="64"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Mine.FontSize.LabelLarge}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="StateLayer" CornerRadius="18" Background="Transparent" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.16"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Mine.TimePicker.HeaderButton" TargetType="Button">
+        <Setter Property="Width" Value="72"/>
+        <Setter Property="Height" Value="72"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="{DynamicResource Mine.Brush.SurfaceContainerHighest}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Mine.Brush.OutlineVariant}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Container"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Container" Property="Opacity" Value="0.92"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Container" Property="Opacity" Value="0.84"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Mine.TimePicker.ChoiceButton" TargetType="Button">
+        <Setter Property="Width" Value="56"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Mine.FontSize.BodyMedium}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Container"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="18"
+                            Padding="{TemplateBinding Padding}">
+                        <Grid>
+                            <Border x:Name="StateLayer" Background="Transparent" CornerRadius="18"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.12"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Mine.Brush.PrimaryContainer}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="Mine.TimePicker.HeaderSegment" TargetType="Border">
+        <Setter Property="Width" Value="96"/>
+        <Setter Property="Height" Value="80"/>
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Background" Value="{DynamicResource Mine.Brush.PrimaryContainer}"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+
+    <Style x:Key="Mine.TimePicker.MeridiemButton" TargetType="Button">
+        <Setter Property="MinWidth" Value="72"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="18,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Mine.Brush.OutlineVariant}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Mine.FontSize.LabelLarge}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Container"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="18">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Container" Property="Opacity" Value="0.92"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Mine.TimePicker.ClockItemButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse x:Name="StateLayer" Fill="Transparent"/>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Fill">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="StateLayer" Property="Fill">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.16"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type controls:TimePicker}">
+        <Setter Property="MinWidth" Value="240"/>
+        <Setter Property="MinHeight" Value="40"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Mine.Brush.Outline}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Mine.FontSize.BodyLarge}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:TimePicker}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid x:Name="PART_InputBorder"
+                              Grid.Row="0"
+                              Background="Transparent"
+                              MinHeight="40"
+                              SnapsToDevicePixels="True">
+                            <primitives:NotchedOutlineBorder x:Name="Container"
+                                                             BorderBrush="{TemplateBinding BorderBrush}"
+                                                             BorderThickness="1"
+                                                             CornerRadius="4"
+                                                             NotchStart="12"
+                                                             NotchWidth="0"
+                                                             MinHeight="40">
+                                <Grid Margin="12,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
+                                               FontFamily="{TemplateBinding FontFamily}"
+                                               FontSize="{TemplateBinding FontSize}"
+                                               Foreground="{TemplateBinding Foreground}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"
+                                               IsHitTestVisible="False"/>
+
+                                    <controls:MaterialIcon Grid.Column="1"
+                                                           Kind="&#xE192;"
+                                                           Size="20"
+                                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                           VerticalAlignment="Center"
+                                                           Margin="12,0,0,0"
+                                                           IsHitTestVisible="False"/>
+                                </Grid>
+                            </primitives:NotchedOutlineBorder>
+
+                            <Border x:Name="FilledContainer"
+                                    Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                    BorderBrush="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                    BorderThickness="0,0,0,1"
+                                    CornerRadius="4,4,0,0"
+                                    Visibility="Collapsed">
+                                <Grid Margin="12,4,12,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid Grid.Column="0">
+                                        <TextBlock x:Name="FilledHintText"
+                                                   Text="{TemplateBinding Hint}"
+                                                   FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                   FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                   VerticalAlignment="Top"
+                                                   IsHitTestVisible="False"/>
+                                        <TextBlock Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
+                                                   FontFamily="{TemplateBinding FontFamily}"
+                                                   FontSize="{TemplateBinding FontSize}"
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   VerticalAlignment="Bottom"
+                                                   Margin="0,16,0,0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   IsHitTestVisible="False"/>
+                                    </Grid>
+
+                                    <controls:MaterialIcon Grid.Column="1"
+                                                           Kind="&#xE192;"
+                                                           Size="20"
+                                                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                           VerticalAlignment="Center"
+                                                           Margin="12,0,0,0"
+                                                           IsHitTestVisible="False"/>
+                                </Grid>
+                            </Border>
+
+                            <TextBlock x:Name="PART_Hint"
+                                       Text="{TemplateBinding Hint}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       IsHitTestVisible="False"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Margin="16,0,0,0"
+                                       Padding="0"
+                                       RenderTransformOrigin="0,0.5">
+                                <TextBlock.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform x:Name="HintScale" ScaleX="1" ScaleY="1"/>
+                                        <TranslateTransform x:Name="HintTranslate" Y="-1"/>
+                                    </TransformGroup>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Grid>
+
+                        <TextBlock x:Name="HelperText"
+                                   Grid.Row="1"
+                                   Text="{TemplateBinding HelperText}"
+                                   FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                   FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                   Margin="12,2,12,0"/>
+
+                        <controls:Flyout x:Name="PART_Flyout"
+                                         Grid.Row="0"
+                                         DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                         Placement="Bottom"
+                                         AutoPlacement="True"
+                                         ConstrainToWorkArea="True"
+                                         ViewportMargin="16"
+                                         MinWidth="392"
+                                         MaxWidth="420"
+                                         Background="{DynamicResource Mine.Brush.SurfaceContainerHigh}"
+                                         Padding="0">
+                            <Border Width="392" Padding="16,16,16,12">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <ScrollViewer Grid.Row="0"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  HorizontalScrollBarVisibility="Disabled"
+                                                  CanContentScroll="False">
+                                        <StackPanel>
+                                            <TextBlock Text="选择时间"
+                                                       Style="{DynamicResource Mine.Typography.LabelLarge}"
+                                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                       Margin="0,0,0,12"/>
+
+                                            <Border Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                                    CornerRadius="24"
+                                                    Padding="16"
+                                                    Margin="0,0,0,16">
+                                                <StackPanel HorizontalAlignment="Center">
+                                                    <Grid HorizontalAlignment="Center">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Button x:Name="PART_HourHeader" Grid.Column="0" Style="{StaticResource Mine.TimePicker.HeaderButton}">
+                                                            <TextBlock Text="{Binding PendingHourText}"
+                                                                       FontSize="32"
+                                                                       FontWeight="SemiBold"/>
+                                                        </Button>
+
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text=":"
+                                                                   Margin="6,0"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="28"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+
+                                                        <Button x:Name="PART_MinuteHeader" Grid.Column="2" Style="{StaticResource Mine.TimePicker.HeaderButton}">
+                                                            <TextBlock Text="{Binding PendingMinuteText}"
+                                                                       FontSize="32"
+                                                                       FontWeight="SemiBold"/>
+                                                        </Button>
+
+                                                        <TextBlock x:Name="SecondSeparator"
+                                                                   Grid.Column="3"
+                                                                   Text=":"
+                                                                   Margin="6,0"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="28"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+
+                                                        <Button x:Name="PART_SecondHeader" Grid.Column="4" Style="{StaticResource Mine.TimePicker.HeaderButton}">
+                                                            <TextBlock Text="{Binding PendingSecondText}"
+                                                                       FontSize="32"
+                                                                       FontWeight="SemiBold"/>
+                                                        </Button>
+                                                    </Grid>
+
+                                                    <StackPanel x:Name="MeridiemPanel"
+                                                                Margin="0,12,0,0"
+                                                                HorizontalAlignment="Center"
+                                                                Orientation="Horizontal"
+                                                                Visibility="Collapsed">
+                                                        <Button x:Name="PART_AmButton"
+                                                                Style="{StaticResource Mine.TimePicker.MeridiemButton}"
+                                                                Content="AM"
+                                                                Margin="0,0,8,0"/>
+                                                        <Button x:Name="PART_PmButton"
+                                                                Style="{StaticResource Mine.TimePicker.MeridiemButton}"
+                                                                Content="PM"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <Grid HorizontalAlignment="Center" Margin="0,0,0,16">
+                                                <Ellipse Width="280"
+                                                         Height="280"
+                                                         Fill="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                                         Stroke="{DynamicResource Mine.Brush.OutlineVariant}"
+                                                         StrokeThickness="1"/>
+                                                <ItemsControl x:Name="PART_ClockItems"
+                                                              ItemsSource="{Binding ClockItems}"
+                                                              Width="280"
+                                                              Height="280">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <Canvas Width="280" Height="280"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemContainerStyle>
+                                                        <Style TargetType="ContentPresenter">
+                                                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                                                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                                                        </Style>
+                                                    </ItemsControl.ItemContainerStyle>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate DataType="{x:Type controls:TimePickerClockItem}">
+                                                            <Button Style="{StaticResource Mine.TimePicker.ClockItemButton}"
+                                                                    Width="{Binding Size}"
+                                                                    Height="{Binding Size}"
+                                                                    Tag="{Binding}">
+                                                                <Grid x:Name="ItemRoot"
+                                                                      RenderTransformOrigin="0.5,0.5">
+                                                                    <Grid.RenderTransform>
+                                                                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                                                    </Grid.RenderTransform>
+                                                                    <Ellipse x:Name="SelectionCircle"
+                                                                             Fill="{DynamicResource Mine.Brush.Primary}"
+                                                                             Margin="2"
+                                                                             Opacity="0"
+                                                                             Stroke="Transparent"
+                                                                             StrokeThickness="0"/>
+                                                                    <TextBlock x:Name="MajorLabel"
+                                                                               Text="{Binding Label}"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               FontSize="14"
+                                                                               FontWeight="SemiBold"
+                                                                               Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                                                               Visibility="Collapsed"/>
+                                                                    <Border x:Name="TickMark"
+                                                                            Width="4"
+                                                                            Height="4"
+                                                                            Background="{DynamicResource Mine.Brush.OutlineVariant}"
+                                                                            CornerRadius="2"
+                                                                            HorizontalAlignment="Center"
+                                                                            VerticalAlignment="Center"
+                                                                            Visibility="Collapsed"/>
+                                                                </Grid>
+                                                            </Button>
+                                                            <DataTemplate.Triggers>
+                                                                <DataTrigger Binding="{Binding IsMajorLabel}" Value="True">
+                                                                    <Setter TargetName="MajorLabel" Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsMajorLabel}" Value="False">
+                                                                    <Setter TargetName="TickMark" Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsMajorTick}" Value="True">
+                                                                    <Setter TargetName="TickMark" Property="Width" Value="8"/>
+                                                                    <Setter TargetName="TickMark" Property="Height" Value="8"/>
+                                                                    <Setter TargetName="TickMark" Property="CornerRadius" Value="4"/>
+                                                                    <Setter TargetName="TickMark" Property="Background" Value="{DynamicResource Mine.Brush.Outline}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                    <Setter TargetName="TickMark" Property="Background" Value="{DynamicResource Mine.Brush.Primary}"/>
+                                                                </DataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected}" Value="True"/>
+                                                                        <Condition Binding="{Binding IsMajorLabel}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter TargetName="SelectionCircle" Property="Opacity" Value="0.2"/>
+                                                                    <Setter TargetName="SelectionCircle" Property="Stroke" Value="{DynamicResource Mine.Brush.Primary}"/>
+                                                                    <Setter TargetName="SelectionCircle" Property="StrokeThickness" Value="1.5"/>
+                                                                    <Setter TargetName="MajorLabel" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                                                                    <Setter TargetName="ItemRoot" Property="RenderTransform">
+                                                                        <Setter.Value>
+                                                                            <ScaleTransform ScaleX="1.08" ScaleY="1.08"/>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <Setter TargetName="MajorLabel" Property="FontWeight" Value="Bold"/>
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected}" Value="True"/>
+                                                                        <Condition Binding="{Binding IsMajorTick}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter TargetName="TickMark" Property="Width" Value="10"/>
+                                                                    <Setter TargetName="TickMark" Property="Height" Value="10"/>
+                                                                    <Setter TargetName="TickMark" Property="CornerRadius" Value="5"/>
+                                                                </MultiDataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsSelected}" Value="True"/>
+                                                                        <Condition Binding="{Binding IsMajorTick}" Value="False"/>
+                                                                        <Condition Binding="{Binding IsMajorLabel}" Value="False"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter TargetName="TickMark" Property="Width" Value="7"/>
+                                                                    <Setter TargetName="TickMark" Property="Height" Value="7"/>
+                                                                    <Setter TargetName="TickMark" Property="CornerRadius" Value="3.5"/>
+                                                                </MultiDataTrigger>
+                                                            </DataTemplate.Triggers>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                <Ellipse Width="12"
+                                                         Height="12"
+                                                         Fill="{DynamicResource Mine.Brush.Primary}"
+                                                         HorizontalAlignment="Center"
+                                                         VerticalAlignment="Center"/>
+                                            </Grid>
+
+                                            <Border x:Name="MillisecondPanel"
+                                                    Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                                    CornerRadius="16"
+                                                    Padding="16"
+                                                    Margin="0,0,0,4">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="140"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Column="0">
+                                                        <TextBlock Text="毫秒"
+                                                                   Style="{DynamicResource Mine.Typography.LabelMedium}"
+                                                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                                        <TextBlock Text="{Binding PendingMillisecondText}"
+                                                                   Style="{DynamicResource Mine.Typography.TitleLarge}"
+                                                                   Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                                                   Margin="0,4,0,0"/>
+                                                    </StackPanel>
+                                                    <controls:NumericUpDown x:Name="PART_MillisecondInput"
+                                                                            Grid.Column="1"
+                                                                            Height="56"
+                                                                            Minimum="0"
+                                                                            Maximum="999"
+                                                                            SmallChange="1"
+                                                                            StringFormat="F0"
+                                                                            Hint="毫秒"/>
+                                                </Grid>
+                                            </Border>
+                                        </StackPanel>
+                                    </ScrollViewer>
+
+                                    <Grid Grid.Row="1" Margin="0,12,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button x:Name="PART_NowButton" Grid.Column="0" Content="现在" Style="{StaticResource Mine.TimePicker.TextButton}"/>
+                                        <Button x:Name="PART_ClearButton" Grid.Column="1" Content="清除" Style="{StaticResource Mine.TimePicker.TextButton}"/>
+                                        <Button x:Name="PART_CancelButton" Grid.Column="3" Content="取消" Style="{StaticResource Mine.TimePicker.TextButton}"/>
+                                        <Button x:Name="PART_ConfirmButton" Grid.Column="4" Content="确定" Style="{StaticResource Mine.TimePicker.TextButton}"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </controls:Flyout>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Variant" Value="Filled">
+                            <Setter TargetName="Container" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="PART_Hint" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="FilledContainer" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="Is24Hours" Value="False">
+                            <Setter TargetName="MeridiemPanel" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="ClockMode" Value="Hour">
+                            <Setter TargetName="PART_HourHeader" Property="Background" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_HourHeader" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_HourHeader" Property="Foreground" Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+                        </Trigger>
+                        <Trigger Property="ClockMode" Value="Minute">
+                            <Setter TargetName="PART_MinuteHeader" Property="Background" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_MinuteHeader" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_MinuteHeader" Property="Foreground" Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+                        </Trigger>
+                        <Trigger Property="ClockMode" Value="Second">
+                            <Setter TargetName="PART_SecondHeader" Property="Background" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_SecondHeader" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_SecondHeader" Property="Foreground" Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+                        </Trigger>
+                        <Trigger Property="Precision" Value="Second">
+                            <Setter TargetName="MillisecondPanel" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="Precision" Value="Minute">
+                            <Setter TargetName="SecondSeparator" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="PART_SecondHeader" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="MillisecondPanel" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <Setter TargetName="FilledContainer" Property="BorderBrush" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant" Value="Outlined"/>
+                                <Condition Property="IsKeyboardFocusWithin" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="Container" Property="BorderThickness" Value="2"/>
+                            <Setter TargetName="PART_Hint" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant" Value="Filled"/>
+                                <Condition Property="IsKeyboardFocusWithin" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="FilledContainer" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="FilledContainer" Property="BorderThickness" Value="0,0,0,2"/>
+                            <Setter TargetName="FilledHintText" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant" Value="Outlined"/>
+                                <Condition Property="IsOpen" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="Container" Property="BorderThickness" Value="2"/>
+                            <Setter TargetName="PART_Hint" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant" Value="Filled"/>
+                                <Condition Property="IsOpen" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="FilledContainer" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="FilledContainer" Property="BorderThickness" Value="0,0,0,2"/>
+                            <Setter TargetName="FilledHintText" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsAmPending" Value="True">
+                            <Setter TargetName="PART_AmButton" Property="Background" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_AmButton" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_AmButton" Property="Foreground" Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+                        </Trigger>
+                        <Trigger Property="IsPmPending" Value="True">
+                            <Setter TargetName="PART_PmButton" Property="Background" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_PmButton" Property="BorderBrush" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="PART_PmButton" Property="Foreground" Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+                        </Trigger>
+                        <Trigger Property="HelperText" Value="">
+                            <Setter TargetName="HelperText" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_InputBorder" Property="Opacity" Value="0.38"/>
+                            <Setter Property="Cursor" Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
