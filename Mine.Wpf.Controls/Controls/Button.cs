@@ -37,6 +37,7 @@ public class Button : ButtonBase
     public static readonly DependencyProperty IconProperty =
         DependencyProperty.Register(nameof(Icon), typeof(object), typeof(Button),
             new PropertyMetadata(null));
+    /// <summary>按钮图标（可选）。支持 Material Symbols 字符串或任意 UIElement，例如 MaterialIcon。</summary>
     public object? Icon
     {
         get => GetValue(IconProperty);
@@ -87,7 +88,7 @@ public class Button : ButtonBase
         // FAB 变体保持正圆形
         if (Variant == ButtonVariant.Fab)
         {
-            double size = Math.Max(ActualWidth, ActualHeight);
+            var size = Math.Max(ActualWidth, ActualHeight);
             CornerRadius = new CornerRadius(size / 2);
         }
     }
@@ -97,6 +98,8 @@ public enum ButtonVariant
 {
     Filled,
     Tonal,
+    /// <summary>FilledTonal 是 Tonal 的别名，与 MD3 规范命名保持一致。</summary>
+    FilledTonal = Tonal,
     Outlined,
     Text,
     Elevated,

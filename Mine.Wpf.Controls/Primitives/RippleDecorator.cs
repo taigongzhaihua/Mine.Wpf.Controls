@@ -86,7 +86,7 @@ public class RippleDecorator : ContentControl
 
         var cr = CornerRadius;
         // 对非均匀圆角取最小值用于 RectangleGeometry（四角均匀时精确）
-        double r = Math.Min(Math.Min(cr.TopLeft, cr.TopRight), Math.Min(cr.BottomLeft, cr.BottomRight));
+        var r = Math.Min(Math.Min(cr.TopLeft, cr.TopRight), Math.Min(cr.BottomLeft, cr.BottomRight));
         Clip = new RectangleGeometry(new Rect(0, 0, w, h), r, r);
     }
     // ── 水波纹逻辑 ────────────────────────────────────────────────
@@ -99,11 +99,11 @@ public class RippleDecorator : ContentControl
     public void StartRipple(Point origin)
     {
         if (_canvas is null) return;
-        double w = ActualWidth;
-        double h = ActualHeight;
+        var w = ActualWidth;
+        var h = ActualHeight;
         if (w <= 0 || h <= 0) return;
         // 优先使用 RippleBrush 颜色，否则回退到 RippleColor
-        Color rippleColor = RippleColor;
+        var rippleColor = RippleColor;
         if (RippleBrush is SolidColorBrush scb)
         {
             var c = scb.Color;
@@ -111,9 +111,9 @@ public class RippleDecorator : ContentControl
         }
         var center = IsCentered ? new Point(w / 2, h / 2) : origin;
         // 半径 = 到最远角的距离
-        double r = Math.Sqrt(
-            Math.Max(center.X, w - center.X) * Math.Max(center.X, w - center.X) +
-            Math.Max(center.Y, h - center.Y) * Math.Max(center.Y, h - center.Y));
+        var r = Math.Sqrt(
+                          Math.Max(center.X, w - center.X) * Math.Max(center.X, w - center.X) +
+                          Math.Max(center.Y, h - center.Y) * Math.Max(center.Y, h - center.Y));
         var ellipse = new Ellipse
         {
             Width                 = 0,
@@ -127,7 +127,7 @@ public class RippleDecorator : ContentControl
         Canvas.SetTop(ellipse, center.Y);
         _canvas.Children.Add(ellipse);
         // 扩散动画
-        double target = r * 2;
+        var target = r * 2;
         var dur  = new Duration(TimeSpan.FromMilliseconds(400));
         var ease = new CubicEase { EasingMode = EasingMode.EaseOut };
         var wAnim = new DoubleAnimation(0, target, dur) { EasingFunction = ease };

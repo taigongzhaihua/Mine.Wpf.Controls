@@ -44,23 +44,13 @@ public class CheckBox : System.Windows.Controls.CheckBox
     }
     private void UpdateCheckState(bool useTransitions)
     {
-        string state = IsChecked switch
-        {
-            true  => "Checked",
-            false => "Unchecked",
-            null  => "Indeterminate"
-        };
+        var state = IsChecked switch
+                    {
+                        true  => "Checked",
+                        false => "Unchecked",
+                        null  => "Indeterminate"
+                    };
         VisualStateManager.GoToState(this, state, useTransitions);
-    }
-}
-/// <summary>Material 3 单选按钮。</summary>
-public class RadioButton : System.Windows.Controls.RadioButton
-{
-    static RadioButton()
-    {
-        DefaultStyleKeyProperty.OverrideMetadata(
-            typeof(RadioButton),
-            new FrameworkPropertyMetadata(typeof(RadioButton)));
     }
 }
 /// <summary>标签位置枚举。</summary>

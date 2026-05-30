@@ -8,7 +8,7 @@ namespace Mine.Wpf.Controls.Controls;
 /// </summary>
 [TemplatePart(Name = PartHint,        Type = typeof(TextBlock))]
 [TemplatePart(Name = PartHelper,      Type = typeof(TextBlock))]
-[TemplatePart(Name = PartClearButton, Type = typeof(System.Windows.Controls.Button))]
+[TemplatePart(Name = PartClearButton, Type = typeof(Button))]
 [TemplateVisualState(Name = "Normal",   GroupName = "CommonStates")]
 [TemplateVisualState(Name = "Focused",  GroupName = "CommonStates")]
 [TemplateVisualState(Name = "Disabled", GroupName = "CommonStates")]
@@ -150,7 +150,7 @@ public class TextBox : System.Windows.Controls.TextBox
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        if (GetTemplateChild(PartClearButton) is System.Windows.Controls.Button clear)
+        if (GetTemplateChild(PartClearButton) is Button clear)
             clear.Click += (_, _) => { Clear(); Focus(); };
 
         _notchedBorder = GetTemplateChild(PartContainer) as NotchedOutlineBorder;
@@ -212,7 +212,7 @@ public class TextBox : System.Windows.Controls.TextBox
     /// <summary>根据 IsFocused / HasText 切换标签浮动状态，并同步缺口宽度。</summary>
     private void UpdateLabelState(bool useTransitions)
     {
-        bool floated = IsFocused || HasText;
+        var floated = IsFocused || HasText;
         VisualStateManager.GoToState(this, floated ? "LabelFloated" : "LabelNormal", useTransitions);
 
         // Outlined 变体：更新缺口宽度
