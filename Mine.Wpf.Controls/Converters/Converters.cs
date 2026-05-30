@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 namespace Mine.Wpf.Controls.Converters;
@@ -11,7 +12,7 @@ public sealed class BoolToVisibilityConverter : IValueConverter
     public bool UseHidden { get; set; }
     public object Convert(object value, Type t, object p, CultureInfo c)
     {
-        bool b = value is true;
+        var b = value is true;
         if (Invert) b = !b;
         return b ? Visibility.Visible : (UseHidden ? Visibility.Hidden : Visibility.Collapsed);
     }
@@ -34,7 +35,7 @@ public sealed class StringToVisibilityConverter : IValueConverter
     public bool Invert { get; set; }
     public object Convert(object value, Type t, object p, CultureInfo c)
     {
-        bool hasVal = !string.IsNullOrEmpty(value as string);
+        var hasVal = !string.IsNullOrEmpty(value as string);
         return (Invert ? !hasVal : hasVal) ? Visibility.Visible : Visibility.Collapsed;
     }
     public object ConvertBack(object value, Type t, object p, CultureInfo c) => Binding.DoNothing;
@@ -62,7 +63,7 @@ public sealed class ElevationToOpacityConverter : IValueConverter
     private static readonly double[] Opacities = [0, 0.05, 0.08, 0.11, 0.12, 0.14];
     public object Convert(object value, Type t, object p, CultureInfo c)
     {
-        int level = value is int i ? Math.Clamp(i, 0, 5) : 0;
+        var level = value is int i ? Math.Clamp(i, 0, 5) : 0;
         return Opacities[level];
     }
     public object ConvertBack(object value, Type t, object p, CultureInfo c) => Binding.DoNothing;
@@ -73,10 +74,55 @@ public sealed class NullToVisibilityConverter : IValueConverter
     public bool Invert { get; set; }
     public object Convert(object value, Type t, object p, CultureInfo c)
     {
-        bool isNull = value is null;
+        var isNull = value is null;
         return (Invert ? !isNull : isNull) ? Visibility.Collapsed : Visibility.Visible;
     }
     public object ConvertBack(object value, Type t, object p, CultureInfo c) => Binding.DoNothing;
+}
+/// <summary>当值为 GridView 实例时返回 true，否则 false。</summary>
+public sealed class IsGridViewConverter : IValueConverter
+{
+    public object Convert(object? value, Type t, object? p, CultureInfo c) => value is GridView;
+    public object ConvertBack(object? value, Type t, object? p, CultureInfo c) => Binding.DoNothing;
+}
+/// <summary>
+/// MultiBinding 转换器：将 ActualWidth 和 ActualHeight 转换为带圆角的 RectangleGeometry，
+/// 用于 UIElement.Clip 绑定，实现真正的圆角裁剪（ClipToBounds 只裁矩形）。
+/// 输入顺序：[0] ActualWidth，[1] ActualHeight
+/// </summary>
+public class RoundedRectClipConverter : IMultiValueConverter
+{
+    public double RadiusX { get; set; } = 8;
+    public double RadiusY { get; set; } = 8;
+
+    /// <summary>
+    /// values[0]=ActualWidth, values[1]=ActualHeight, values[2]=CornerRadius(可选)
+    /// 当传入第三个值（CornerRadius）时以其 TopLeft 覆盖 RadiusX/Y。
+    /// 也可通过 ConverterParameter（double 或字符串）指定圆角半径。
+    /// </summary>
+    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (values[0] is double w && values[1] is double h && w > 0 && h > 0)
+        {
+            double rx = RadiusX, ry = RadiusY;
+            if (values.Length > 2 && values[2] is CornerRadius cr)
+            {
+                rx = cr.TopLeft;
+                ry = cr.TopLeft;
+            }
+            else if (parameter != null &&
+                     double.TryParse(parameter.ToString(), System.Globalization.NumberStyles.Any,
+                                     CultureInfo.InvariantCulture, out var pr))
+            {
+                rx = ry = pr;
+            }
+            return new RectangleGeometry(new Rect(0, 0, w, h), rx, ry);
+        }
+        return Geometry.Empty;
+    }
+
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        => throw new NotImplementedException();
 }
 /// <summary>当值非 null 时返回 true，否则返回 false。</summary>
 public sealed class NullToBoolConverter : IValueConverter
@@ -85,6 +131,14 @@ public sealed class NullToBoolConverter : IValueConverter
         => value != null;
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotImplementedException();
+}
+/// <summary>将 double 值除以 2，用于 Avatar 图标 FontSize = Size / 2。</summary>
+public sealed class HalfValueConverter : IValueConverter
+{
+    public static readonly HalfValueConverter Instance = new();
+    public object Convert(object value, Type t, object p, CultureInfo c)
+        => value is double d ? d / 2.0 : 20.0;
+    public object ConvertBack(object value, Type t, object p, CultureInfo c) => Binding.DoNothing;
 }
 /// <summary>
 /// 使用 CSS border-radius 比例压缩算法限制 CornerRadius，防止超大圆角值导致渲染变形。
@@ -104,24 +158,24 @@ public class CornerRadiusFilterConverter : IMultiValueConverter
         {
             return values.Length > 0 && values[0] is CornerRadius r ? r : new CornerRadius(0);
         }
-        double tl = cr.TopLeft;
-        double tr = cr.TopRight;
-        double bl = cr.BottomLeft;
-        double br = cr.BottomRight;
+        var tl = cr.TopLeft;
+        var tr = cr.TopRight;
+        var bl = cr.BottomLeft;
+        var br = cr.BottomRight;
         // 水平方向：上边（tl+tr）和下边（bl+br）
-        double topH   = tl + tr;
-        double botH   = bl + br;
-        double hScale = Math.Min(
-            topH > width ? width / topH : 1.0,
-            botH > width ? width / botH : 1.0);
+        var topH   = tl + tr;
+        var botH   = bl + br;
+        var hScale = Math.Min(
+                              topH > width ? width / topH : 1.0,
+                              botH > width ? width / botH : 1.0);
         // 垂直方向：左边（tl+bl）和右边（tr+br）
-        double leftV  = tl + bl;
-        double rightV = tr + br;
-        double vScale = Math.Min(
-            leftV  > height ? height / leftV  : 1.0,
-            rightV > height ? height / rightV : 1.0);
+        var leftV  = tl + bl;
+        var rightV = tr + br;
+        var vScale = Math.Min(
+                              leftV  > height ? height / leftV  : 1.0,
+                              rightV > height ? height / rightV : 1.0);
         // 取水平与垂直压缩比的最小值
-        double scale = Math.Min(hScale, vScale);
+        var scale = Math.Min(hScale, vScale);
         if (scale >= 1.0) return cr; // 无需压缩，直接返回原值
         return new CornerRadius(
             tl * scale,

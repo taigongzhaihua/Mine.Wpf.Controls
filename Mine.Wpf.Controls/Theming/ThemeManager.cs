@@ -5,223 +5,317 @@ using Microsoft.Win32;
 namespace Mine.Wpf.Controls.Theming;
 /// <summary>
 /// 主题管理器——运行时主题切换的核心 API。
-/// 调用 <see cref="ApplyTheme"/> 来切换亮/暗模式和种子颜色。
 /// </summary>
 public static class ThemeManager
 {
+    // ── 颜色角色列表 ──────────────────────────────────────────────
+    private static readonly string[] ColorRoles =
+    [
+        "Primary", "OnPrimary", "PrimaryContainer", "OnPrimaryContainer",
+        "Secondary", "OnSecondary", "SecondaryContainer", "OnSecondaryContainer",
+        "Tertiary", "OnTertiary", "TertiaryContainer", "OnTertiaryContainer",
+        "Error", "OnError", "ErrorContainer", "OnErrorContainer",
+        "Surface", "OnSurface", "SurfaceVariant", "OnSurfaceVariant", "SurfaceTint",
+        "SurfaceContainerLowest", "SurfaceContainerLow", "SurfaceContainer",
+        "SurfaceContainerHigh", "SurfaceContainerHighest",
+        "Background", "OnBackground",
+        "Outline", "OutlineVariant",
+        "InverseSurface", "InverseOnSurface", "InversePrimary",
+        "Shadow", "Scrim",
+        "Warning", "OnWarning", "WarningContainer", "OnWarningContainer",
+        "Success", "OnSuccess", "SuccessContainer", "OnSuccessContainer",
+        "Info", "OnInfo", "InfoContainer", "OnInfoContainer",
+    ];
+
+    // ── 托管画笔（惰性创建：首次用户触发主题切换时才初始化）────────
+    // 写入 Application.Resources["Mine.Brush.*"]，优先级高于合并字典。
+    // 后续切换只需对画笔 Color 属性做 ColorAnimation，实现平滑过渡。
+    private static readonly Dictionary<string, SolidColorBrush> _brushes = new(48);
+
+    // 写入 Application.Resources 的 Mine.Color.* key，切换到预设时需清除
+    private static readonly HashSet<string> _colorOverrideKeys = new(48);
+
     // ── 状态 ──────────────────────────────────────────────────────
     private static ThemeMode    _mode      = ThemeMode.System;
     private static Color        _seedColor = Color.FromRgb(0x67, 0x50, 0xA4);
+    private static ThemePreset  _preset    = ThemePreset.None;
     private static ColorScheme? _current;
     private static bool         _followSystemAccent;
-    public static ThemeMode   Mode      => _mode;
-    public static Color       SeedColor => _seedColor;
-    public static ColorScheme Current   => _current ??= BuildScheme();
+    private static bool         _initialized;
+
+    private static WeakReference<ThemeDictionary>? _themeDictRef;
+    private static readonly Color DefaultSeedColor = Color.FromRgb(0x67, 0x50, 0xA4);
+
+    public static ThemeMode    Mode      => _mode;
+    public static Color        SeedColor => _seedColor;
+    public static ThemePreset  Preset    => _preset;
+    public static ColorScheme? Current   => _preset == ThemePreset.None ? (_current ??= BuildScheme()) : null;
     public static event EventHandler<ThemeChangedEventArgs>? ThemeChanged;
+
+    // ── 注册 ──────────────────────────────────────────────────────
+    internal static void Register(ThemeDictionary dict)
+        => _themeDictRef = new WeakReference<ThemeDictionary>(dict);
+
     // ── 公共 API ──────────────────────────────────────────────────
-    /// <summary>立即应用新主题（带平滑颜色过渡动画）。</summary>
     public static void ApplyTheme(ThemeMode mode, Color? seedColor = null)
     {
         _mode      = mode;
         _seedColor = seedColor ?? _seedColor;
+        _preset    = ThemePreset.None;
         _current   = null;
-        var scheme = Current;
-        WriteToResources(scheme, animated: true);
-        ThemeChanged?.Invoke(null, new ThemeChangedEventArgs(scheme, IsEffectiveDark()));
+        WriteToResources(animate: _initialized);
+        ThemeChanged?.Invoke(null, new ThemeChangedEventArgs(Current, IsEffectiveDark()));
     }
-    /// <summary>在亮色与暗色之间切换（基于当前实际视觉状态）。</summary>
+
+    public static void ApplyPresetTheme(ThemeMode mode, ThemePreset preset)
+    {
+        _mode    = mode;
+        _preset  = preset;
+        _current = null;
+        WriteToResources(animate: _initialized);
+        ThemeChanged?.Invoke(null, new ThemeChangedEventArgs(null, IsEffectiveDark()));
+    }
+
     public static void ToggleLightDark()
-        => ApplyTheme(IsEffectiveDark() ? ThemeMode.Light : ThemeMode.Dark, _seedColor);
-    /// <summary>跟随 Windows 主题色作为种子颜色。</summary>
+    {
+        var newMode = IsEffectiveDark() ? ThemeMode.Light : ThemeMode.Dark;
+        if (_preset != ThemePreset.None)
+            ApplyPresetTheme(newMode, _preset);
+        else
+            ApplyTheme(newMode, _seedColor);
+    }
+
     public static void UseSystemAccent(bool follow = true)
     {
         _followSystemAccent = follow;
         if (follow) UpdateFromSystemAccent();
     }
-    /// <summary>初始化——从 App.xaml.cs 或 ThemeDictionary 调用一次即可。</summary>
+
     internal static void Initialize()
     {
+        if (_initialized) return;
+        _initialized = true;
         SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
-        ApplyTheme(_mode, _seedColor);
+        // 初始化阶段：只切字典 + 写颜色，不做动画，不创建托管画笔
+        WriteToResources(animate: false);
+        ThemeChanged?.Invoke(null, new ThemeChangedEventArgs(Current, IsEffectiveDark()));
     }
+
     // ── 内部方法 ──────────────────────────────────────────────────
-    internal static bool IsEffectiveDark()
+    public static bool IsEffectiveDark() => _mode switch
     {
-        if (_mode == ThemeMode.Dark)  return true;
-        if (_mode == ThemeMode.Light) return false;
-        return IsSystemDark();
-    }
+        ThemeMode.Dark  => true,
+        ThemeMode.Light => false,
+        _               => IsSystemDark()
+    };
+
     private static bool IsSystemDark()
     {
         try
         {
             using var key = Registry.CurrentUser.OpenSubKey(
                 @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
-            var val = key?.GetValue("AppsUseLightTheme");
-            return val is int i && i == 0;
+            return key?.GetValue("AppsUseLightTheme") is int and 0;
         }
         catch { return false; }
     }
+
     private static Color GetSystemAccentColor()
     {
         try
         {
             using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\DWM");
-            var raw = key?.GetValue("AccentColor");
-            if (raw is int abgr)
-            {
-                byte r = (byte)(abgr & 0xFF);
-                byte g = (byte)((abgr >>  8) & 0xFF);
-                byte b = (byte)((abgr >> 16) & 0xFF);
-                return Color.FromRgb(r, g, b);
-            }
+            if (key?.GetValue("AccentColor") is int abgr)
+                return Color.FromRgb((byte)(abgr & 0xFF), (byte)((abgr >> 8) & 0xFF), (byte)((abgr >> 16) & 0xFF));
         }
-        catch { /* 忽略注册表读取异常 */ }
-        return Color.FromRgb(0x67, 0x50, 0xA4);
+        catch { }
+        return DefaultSeedColor;
     }
+
     private static void UpdateFromSystemAccent()
     {
         _seedColor = GetSystemAccentColor();
+        _preset    = ThemePreset.None;
         _current   = null;
-        WriteToResources(Current, animated: true);
+        WriteToResources(animate: _initialized);
     }
+
     private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
     {
-        if (e.Category == UserPreferenceCategory.General)
+        if (e.Category != UserPreferenceCategory.General) return;
+        if (_followSystemAccent) UpdateFromSystemAccent();
+        if (_mode == ThemeMode.System)
         {
-            if (_followSystemAccent) UpdateFromSystemAccent();
-            if (_mode == ThemeMode.System)
+            _current = null;
+            Application.Current?.Dispatcher.BeginInvoke(() =>
             {
-                _current = null;
-                var scheme = Current;
-                Application.Current?.Dispatcher.BeginInvoke(() =>
-                {
-                    WriteToResources(scheme, animated: true);
-                    ThemeChanged?.Invoke(null, new ThemeChangedEventArgs(scheme, IsEffectiveDark()));
-                });
-            }
+                WriteToResources(animate: true);
+                ThemeChanged?.Invoke(null, new ThemeChangedEventArgs(Current, IsEffectiveDark()));
+            });
         }
     }
+
     private static ColorScheme BuildScheme()
-    {
-        bool dark = IsEffectiveDark();
-        return dark
+        => IsEffectiveDark()
             ? TonalPaletteGenerator.BuildDark(_seedColor)
             : TonalPaletteGenerator.BuildLight(_seedColor);
-    }
+
     // ── 资源写入 ──────────────────────────────────────────────────
     /// <summary>
-    /// 将所有颜色角色写入 Application.Current.Resources。
-    /// SolidColorBrush 对象在原处更新（避免重新布局开销）。
+    /// 主题切换核心：
+    /// 1. 切换颜色字典；
+    /// 2. 自定义种子色时写入 Mine.Color.* 覆盖值；
+    /// 3. 动画模式下对 ThemeDictionary.AnimatedBrushes 中的托管画笔执行 ColorAnimation。
+    ///    画笔存放于 ThemeDictionary.AnimatedBrushes（独立 ResourceDictionary），
+    ///    避免 Application.Resources 被 WPF 密封后画笔遭到冻结导致 BeginAnimation 崩溃。
     /// </summary>
-    private static void WriteToResources(ColorScheme scheme, bool animated)
+    private static void WriteToResources(bool animate)
     {
         var app = Application.Current;
         if (app == null) return;
-        app.Dispatcher.BeginInvoke(() =>
+
+        void Write()
         {
-            var res = app.Resources;
-            WriteRole(res, "Primary",             scheme.Primary,             animated);
-            WriteRole(res, "OnPrimary",           scheme.OnPrimary,           animated);
-            WriteRole(res, "PrimaryContainer",    scheme.PrimaryContainer,    animated);
-            WriteRole(res, "OnPrimaryContainer",  scheme.OnPrimaryContainer,  animated);
-            WriteRole(res, "Secondary",            scheme.Secondary,            animated);
-            WriteRole(res, "OnSecondary",          scheme.OnSecondary,          animated);
-            WriteRole(res, "SecondaryContainer",   scheme.SecondaryContainer,   animated);
-            WriteRole(res, "OnSecondaryContainer", scheme.OnSecondaryContainer, animated);
-            WriteRole(res, "Tertiary",            scheme.Tertiary,            animated);
-            WriteRole(res, "OnTertiary",          scheme.OnTertiary,          animated);
-            WriteRole(res, "TertiaryContainer",   scheme.TertiaryContainer,   animated);
-            WriteRole(res, "OnTertiaryContainer", scheme.OnTertiaryContainer, animated);
-            WriteRole(res, "Error",            scheme.Error,            animated);
-            WriteRole(res, "OnError",          scheme.OnError,          animated);
-            WriteRole(res, "ErrorContainer",   scheme.ErrorContainer,   animated);
-            WriteRole(res, "OnErrorContainer", scheme.OnErrorContainer, animated);
-            WriteRole(res, "Surface",                 scheme.Surface,                 animated);
-            WriteRole(res, "OnSurface",               scheme.OnSurface,               animated);
-            WriteRole(res, "SurfaceVariant",          scheme.SurfaceVariant,          animated);
-            WriteRole(res, "OnSurfaceVariant",        scheme.OnSurfaceVariant,        animated);
-            WriteRole(res, "SurfaceTint",             scheme.SurfaceTint,             animated);
-            WriteRole(res, "SurfaceContainerLowest",  scheme.SurfaceContainerLowest,  animated);
-            WriteRole(res, "SurfaceContainerLow",     scheme.SurfaceContainerLow,     animated);
-            WriteRole(res, "SurfaceContainer",        scheme.SurfaceContainer,        animated);
-            WriteRole(res, "SurfaceContainerHigh",    scheme.SurfaceContainerHigh,    animated);
-            WriteRole(res, "SurfaceContainerHighest", scheme.SurfaceContainerHighest, animated);
-            WriteRole(res, "Background",   scheme.Background,   animated);
-            WriteRole(res, "OnBackground", scheme.OnBackground, animated);
-            WriteRole(res, "Outline",        scheme.Outline,        animated);
-            WriteRole(res, "OutlineVariant", scheme.OutlineVariant, animated);
-            WriteRole(res, "InverseSurface",   scheme.InverseSurface,   animated);
-            WriteRole(res, "InverseOnSurface", scheme.InverseOnSurface, animated);
-            WriteRole(res, "InversePrimary",   scheme.InversePrimary,   animated);
-            WriteRole(res, "Shadow", scheme.Shadow, false);
-            WriteRole(res, "Scrim",  scheme.Scrim,  false);
-            WriteRole(res, "Warning",            scheme.Warning,            animated);
-            WriteRole(res, "OnWarning",          scheme.OnWarning,          animated);
-            WriteRole(res, "WarningContainer",   scheme.WarningContainer,   animated);
-            WriteRole(res, "OnWarningContainer", scheme.OnWarningContainer, animated);
-            WriteRole(res, "Success",            scheme.Success,            animated);
-            WriteRole(res, "OnSuccess",          scheme.OnSuccess,          animated);
-            WriteRole(res, "SuccessContainer",   scheme.SuccessContainer,   animated);
-            WriteRole(res, "OnSuccessContainer", scheme.OnSuccessContainer, animated);
-            WriteRole(res, "Info",               scheme.Info,               animated);
-            WriteRole(res, "OnInfo",             scheme.OnInfo,             animated);
-            WriteRole(res, "InfoContainer",      scheme.InfoContainer,      animated);
-            WriteRole(res, "OnInfoContainer",    scheme.OnInfoContainer,    animated);
-        });
-    }
-    private static void WriteRole(ResourceDictionary res, string role, Color color, bool animated)
-    {
-        string colorKey = $"Mine.Color.{role}";
-        string brushKey = $"Mine.Brush.{role}";
-        // 更新 Color 资源
-        if (res.Contains(colorKey))
-        {
-            if (animated && res[colorKey] is Color oldColor && oldColor != color)
-                AnimateBrushColor(res, brushKey, oldColor, color);
-            res[colorKey] = color;
-        }
-        else
-        {
-            res[colorKey] = color;
-        }
-        // 更新 Brush 资源（原处变更，避免触发重新布局）
-        if (res[brushKey] is SolidColorBrush existing)
-        {
-            if (existing.IsFrozen)
+            var dark = IsEffectiveDark();
+            var res  = app.Resources;
+
+            // ── 1. 切换颜色字典 ──────────────────────────────────────
+            ThemeDictionary? themeDict = null;
+            _themeDictRef?.TryGetTarget(out themeDict);
+            themeDict?.SwapColorDictionary(_preset, dark);
+
+            // ── 2. 处理 Color 覆盖值 ─────────────────────────────────
+            ColorScheme? scheme = null;
+            if (_preset == ThemePreset.None && _seedColor != DefaultSeedColor)
             {
-                res[brushKey] = new SolidColorBrush(color);
-            }
-            else if (animated)
-            {
-                var anim = new ColorAnimation(color, new Duration(TimeSpan.FromMilliseconds(200)))
+                scheme = _current ??= BuildScheme();
+                foreach (var role in ColorRoles)
                 {
-                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
-                };
-                existing.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+                    var key = $"Mine.Color.{role}";
+                    res[key] = SchemeColor(scheme, role);
+                    _colorOverrideKeys.Add(key);
+                }
             }
             else
             {
-                existing.Color = color;
+                foreach (var key in _colorOverrideKeys) res.Remove(key);
+                _colorOverrideKeys.Clear();
+            }
+
+            // ── 3. 画笔动画 ───────────────────────────────────────────
+            if (!animate || themeDict == null) return;
+
+            var brushHost = themeDict.AnimatedBrushes;
+
+            // 惰性初始化：首次动画调用时创建托管画笔，写入 AnimatedBrushes
+            if (_brushes.Count == 0)
+            {
+                foreach (var role in ColorRoles)
+                {
+                    var color = GetTargetColor(res, scheme, role);
+                    var brush = new SolidColorBrush(color);
+                    _brushes[role] = brush;
+                    brushHost[$"Mine.Brush.{role}"] = brush;
+                }
+                return; // 首次直接设置颜色，无动画
+            }
+
+            // 后续切换：ColorAnimation 平滑过渡
+            var duration = new Duration(TimeSpan.FromMilliseconds(300));
+            var easing   = new CubicEase { EasingMode = EasingMode.EaseOut };
+            foreach (var role in ColorRoles)
+            {
+                var target = GetTargetColor(res, scheme, role);
+                if (!_brushes.TryGetValue(role, out var brush)) continue;
+
+                if (brush.IsFrozen)
+                {
+                    // 画笔意外被冻结时重新创建（防御性处理）
+                    brush = new SolidColorBrush(target);
+                    _brushes[role] = brush;
+                    brushHost[$"Mine.Brush.{role}"] = brush;
+                    continue;
+                }
+
+                var from = brush.Color; // 当前有效颜色（可能是上一次动画的值）
+                var anim = new ColorAnimation(from, target, duration)
+                {
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                };
+                brush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
             }
         }
+
+        if (app.Dispatcher.CheckAccess())
+            Write();
         else
-        {
-            res[brushKey] = new SolidColorBrush(color);
-        }
+            app.Dispatcher.BeginInvoke(Write);
     }
-    private static void AnimateBrushColor(ResourceDictionary res, string key, Color from, Color to)
+
+    /// <summary>获取指定角色的目标颜色：自定义种子用 scheme，其余从已切换字典读取。</summary>
+    private static Color GetTargetColor(ResourceDictionary res, ColorScheme? scheme, string role)
     {
-        if (res[key] is not SolidColorBrush brush || brush.IsFrozen) return;
-        var anim = new ColorAnimation(from, to, new Duration(TimeSpan.FromMilliseconds(200)))
-        {
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
-        };
-        brush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+        if (scheme != null) return SchemeColor(scheme, role);
+        var key = $"Mine.Color.{role}";
+        try { return (Color)res[key]; }
+        catch { return Colors.Transparent; }
     }
+
+    private static Color SchemeColor(ColorScheme s, string role) => role switch
+    {
+        "Primary"               => s.Primary,
+        "OnPrimary"             => s.OnPrimary,
+        "PrimaryContainer"      => s.PrimaryContainer,
+        "OnPrimaryContainer"    => s.OnPrimaryContainer,
+        "Secondary"             => s.Secondary,
+        "OnSecondary"           => s.OnSecondary,
+        "SecondaryContainer"    => s.SecondaryContainer,
+        "OnSecondaryContainer"  => s.OnSecondaryContainer,
+        "Tertiary"              => s.Tertiary,
+        "OnTertiary"            => s.OnTertiary,
+        "TertiaryContainer"     => s.TertiaryContainer,
+        "OnTertiaryContainer"   => s.OnTertiaryContainer,
+        "Error"                 => s.Error,
+        "OnError"               => s.OnError,
+        "ErrorContainer"        => s.ErrorContainer,
+        "OnErrorContainer"      => s.OnErrorContainer,
+        "Surface"               => s.Surface,
+        "OnSurface"             => s.OnSurface,
+        "SurfaceVariant"        => s.SurfaceVariant,
+        "OnSurfaceVariant"      => s.OnSurfaceVariant,
+        "SurfaceTint"           => s.SurfaceTint,
+        "SurfaceContainerLowest"  => s.SurfaceContainerLowest,
+        "SurfaceContainerLow"     => s.SurfaceContainerLow,
+        "SurfaceContainer"        => s.SurfaceContainer,
+        "SurfaceContainerHigh"    => s.SurfaceContainerHigh,
+        "SurfaceContainerHighest" => s.SurfaceContainerHighest,
+        "Background"            => s.Background,
+        "OnBackground"          => s.OnBackground,
+        "Outline"               => s.Outline,
+        "OutlineVariant"        => s.OutlineVariant,
+        "InverseSurface"        => s.InverseSurface,
+        "InverseOnSurface"      => s.InverseOnSurface,
+        "InversePrimary"        => s.InversePrimary,
+        "Shadow"                => s.Shadow,
+        "Scrim"                 => s.Scrim,
+        "Warning"               => s.Warning,
+        "OnWarning"             => s.OnWarning,
+        "WarningContainer"      => s.WarningContainer,
+        "OnWarningContainer"    => s.OnWarningContainer,
+        "Success"               => s.Success,
+        "OnSuccess"             => s.OnSuccess,
+        "SuccessContainer"      => s.SuccessContainer,
+        "OnSuccessContainer"    => s.OnSuccessContainer,
+        "Info"                  => s.Info,
+        "OnInfo"                => s.OnInfo,
+        "InfoContainer"         => s.InfoContainer,
+        "OnInfoContainer"       => s.OnInfoContainer,
+        _                       => Colors.Transparent,
+    };
 }
-public sealed class ThemeChangedEventArgs(ColorScheme scheme, bool isDark) : EventArgs
+
+public sealed class ThemeChangedEventArgs(ColorScheme? scheme, bool isDark) : EventArgs
 {
-    public ColorScheme Scheme { get; } = scheme;
-    public bool        IsDark  { get; } = isDark;
+    public ColorScheme? Scheme { get; } = scheme;
+    public bool         IsDark  { get; } = isDark;
 }

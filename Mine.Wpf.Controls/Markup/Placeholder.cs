@@ -17,9 +17,9 @@ public sealed class ThemeResourceExtension : MarkupExtension
     public override object? ProvideValue(IServiceProvider serviceProvider)
     {
         if (ResourceKey is null) return null;
-        string fullKey = ResourceKey.StartsWith("Mine.", StringComparison.Ordinal)
-            ? ResourceKey
-            : $"Mine.{ResourceKey}";
+        var fullKey = ResourceKey.StartsWith("Mine.", StringComparison.Ordinal)
+                          ? ResourceKey
+                          : $"Mine.{ResourceKey}";
         // 返回 DynamicResourceExtension 以保持绑定持续有效
         var dynRes = new DynamicResourceExtension(fullKey);
         return dynRes.ProvideValue(serviceProvider);
