@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Resources/ColorBrushes.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <!-- Teal 暗色 预设主题 -->
+    <Color x:Key="Mine.Color.Primary">#FF99F4FF</Color>
+    <Color x:Key="Mine.Color.OnPrimary">#FF005B66</Color>
+    <Color x:Key="Mine.Color.PrimaryContainer">#FF008999</Color>
+    <Color x:Key="Mine.Color.OnPrimaryContainer">#FFCCFAFF</Color>
+    <Color x:Key="Mine.Color.Secondary">#FF99FFD7</Color>
+    <Color x:Key="Mine.Color.OnSecondary">#FF00663E</Color>
+    <Color x:Key="Mine.Color.SecondaryContainer">#FF00995C</Color>
+    <Color x:Key="Mine.Color.OnSecondaryContainer">#FFCCFFEB</Color>
+    <Color x:Key="Mine.Color.Tertiary">#FFA499FF</Color>
+    <Color x:Key="Mine.Color.OnTertiary">#FF0B0066</Color>
+    <Color x:Key="Mine.Color.TertiaryContainer">#FF100099</Color>
+    <Color x:Key="Mine.Color.OnTertiaryContainer">#FFD1CCFF</Color>
+    <Color x:Key="Mine.Color.Error">#FFF0ACA8</Color>
+    <Color x:Key="Mine.Color.OnError">#FF57130F</Color>
+    <Color x:Key="Mine.Color.ErrorContainer">#FF831C16</Color>
+    <Color x:Key="Mine.Color.OnErrorContainer">#FFF8D5D3</Color>
+    <Color x:Key="Mine.Color.Surface">#FF001B1F</Color>
+    <Color x:Key="Mine.Color.OnSurface">#FFCCFAFF</Color>
+    <Color x:Key="Mine.Color.SurfaceVariant">#FF00995C</Color>
+    <Color x:Key="Mine.Color.OnSurfaceVariant">#FF99FFD7</Color>
+    <Color x:Key="Mine.Color.SurfaceTint">#FF99F4FF</Color>
+    <Color x:Key="Mine.Color.SurfaceContainerLowest">#FF001214</Color>
+    <Color x:Key="Mine.Color.SurfaceContainerLow">#FF002E33</Color>
+    <Color x:Key="Mine.Color.SurfaceContainer">#FF00373D</Color>
+    <Color x:Key="Mine.Color.SurfaceContainerHigh">#FF004E57</Color>
+    <Color x:Key="Mine.Color.SurfaceContainerHighest">#FF006570</Color>
+    <Color x:Key="Mine.Color.Background">#FF001B1F</Color>
+    <Color x:Key="Mine.Color.OnBackground">#FFCCFAFF</Color>
+    <Color x:Key="Mine.Color.Outline">#FF33FFAE</Color>
+    <Color x:Key="Mine.Color.OutlineVariant">#FF00995C</Color>
+    <Color x:Key="Mine.Color.InverseSurface">#FFCCFAFF</Color>
+    <Color x:Key="Mine.Color.InverseOnSurface">#FF005B66</Color>
+    <Color x:Key="Mine.Color.InversePrimary">#FF00B7CC</Color>
+    <Color x:Key="Mine.Color.Shadow">#FF000000</Color>
+    <Color x:Key="Mine.Color.Scrim">#FF000000</Color>
+    <Color x:Key="Mine.Color.Warning">#FFF5BF15</Color>
+    <Color x:Key="Mine.Color.OnWarning">#FF3F2E00</Color>
+    <Color x:Key="Mine.Color.WarningContainer">#FF5C4300</Color>
+    <Color x:Key="Mine.Color.OnWarningContainer">#FFFFDF99</Color>
+    <Color x:Key="Mine.Color.Success">#FF9AD6A0</Color>
+    <Color x:Key="Mine.Color.OnSuccess">#FF003914</Color>
+    <Color x:Key="Mine.Color.SuccessContainer">#FF00521F</Color>
+    <Color x:Key="Mine.Color.OnSuccessContainer">#FFB5F2BB</Color>
+    <Color x:Key="Mine.Color.Info">#FF86CEFF</Color>
+    <Color x:Key="Mine.Color.OnInfo">#FF003449</Color>
+    <Color x:Key="Mine.Color.InfoContainer">#FF004C68</Color>
+    <Color x:Key="Mine.Color.OnInfoContainer">#FFC5E7FF</Color>
+</ResourceDictionary>

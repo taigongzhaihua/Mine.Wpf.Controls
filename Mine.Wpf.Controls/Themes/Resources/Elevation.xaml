@@ -5,12 +5,12 @@
         通过 DropShadowEffect 资源实现（等级 0-5）。
         表面着色叠加层透明度见 ElevationToOpacityConverter。
     -->
-    <DropShadowEffect x:Key="Mine.Elevation.0" BlurRadius="0"  ShadowDepth="0" Opacity="0"    Color="#000000"/>
-    <DropShadowEffect x:Key="Mine.Elevation.1" BlurRadius="4"  ShadowDepth="1" Opacity="0.12" Color="#000000"/>
-    <DropShadowEffect x:Key="Mine.Elevation.2" BlurRadius="8"  ShadowDepth="2" Opacity="0.14" Color="#000000"/>
-    <DropShadowEffect x:Key="Mine.Elevation.3" BlurRadius="12" ShadowDepth="4" Opacity="0.16" Color="#000000"/>
-    <DropShadowEffect x:Key="Mine.Elevation.4" BlurRadius="16" ShadowDepth="6" Opacity="0.18" Color="#000000"/>
-    <DropShadowEffect x:Key="Mine.Elevation.5" BlurRadius="24" ShadowDepth="8" Opacity="0.20" Color="#000000"/>
+    <DropShadowEffect x:Key="Mine.Elevation.0" BlurRadius="0"  ShadowDepth="0"  Opacity="0"    Color="#000000"/>
+    <DropShadowEffect x:Key="Mine.Elevation.1" BlurRadius="10" ShadowDepth="2"  Opacity="0.28" Color="#000000"/>
+    <DropShadowEffect x:Key="Mine.Elevation.2" BlurRadius="16" ShadowDepth="4"  Opacity="0.30" Color="#000000"/>
+    <DropShadowEffect x:Key="Mine.Elevation.3" BlurRadius="22" ShadowDepth="6"  Opacity="0.32" Color="#000000"/>
+    <DropShadowEffect x:Key="Mine.Elevation.4" BlurRadius="28" ShadowDepth="8"  Opacity="0.34" Color="#000000"/>
+    <DropShadowEffect x:Key="Mine.Elevation.5" BlurRadius="38" ShadowDepth="12" Opacity="0.36" Color="#000000"/>
     <!-- 各海拔等级的表面着色透明度（在模板中作为 Border Opacity 使用） -->
     <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.Elevation.TintOpacity.0">0.00</sys:Double>
     <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="Mine.Elevation.TintOpacity.1">0.05</sys:Double>

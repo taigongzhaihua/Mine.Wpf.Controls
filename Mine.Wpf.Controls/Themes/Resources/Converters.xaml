@@ -14,7 +14,8 @@
     <conv:BrushToColorConverter       x:Key="Mine.Internal.BrushToColorConv"/>
     <conv:ElevationToOpacityConverter x:Key="Mine.Internal.ElevToOpacityConv"/>
 
-    <conv:NullToBoolConverter x:Key="Mine.Internal.NullToBoolConv"/>
+    <conv:NullToBoolConverter  x:Key="Mine.Internal.NullToBoolConv"/>
+    <conv:HalfValueConverter   x:Key="Mine.Internal.HalfConv"/>
 
 </ResourceDictionary>
 
