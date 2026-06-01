@@ -91,7 +91,7 @@
                         <Grid>
                             <!-- 默认搜索图标（LeadingContent 为 null 时显示） -->
                             <controls:MaterialIcon x:Name="DefaultLeadingIcon"
-                                                   Kind="&#xE8B6;" Size="20"
+                                                   Kind="Search" Size="20"
                                                    Foreground="{DynamicResource Mine.Brush.OnSurface}"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"
@@ -135,7 +135,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <controls:MaterialIcon Kind="&#xE5CD;" Size="18"
+                        <controls:MaterialIcon Kind="Clear" Size="18"
                                                Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
@@ -158,7 +158,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <controls:MaterialIcon Kind="&#xE8B6;" Size="20"
+                        <controls:MaterialIcon Kind="Search" Size="20"
                                                Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
@@ -241,7 +241,7 @@
 
                     <!-- 搜索图标 -->
                     <controls:MaterialIcon Grid.Column="0"
-                                           Kind="&#xE8B6;" Size="16"
+                                           Kind="Search" Size="16"
                                            Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                            Margin="10,0,4,0" VerticalAlignment="Center"/>
 
@@ -275,7 +275,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <controls:MaterialIcon Kind="&#xE5CD;" Size="14"
+                        <controls:MaterialIcon Kind="Clear" Size="14"
                                                Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
@@ -299,7 +299,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <controls:MaterialIcon Kind="&#xE8B6;" Size="15"
+                        <controls:MaterialIcon Kind="Search" Size="15"
                                                Foreground="{DynamicResource Mine.Brush.OnSecondaryContainer}"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"

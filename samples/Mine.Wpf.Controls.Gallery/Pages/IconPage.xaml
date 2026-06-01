@@ -93,7 +93,7 @@
                                         CornerRadius="8"
                                         Margin="2"
                                         Cursor="Hand"
-                                        ToolTip="{Binding Name}">
+                                        ToolTip="{Binding DisplayName}">
                                     <Border.Style>
                                         <Style TargetType="Border">
                                             <Setter Property="Background" Value="Transparent"/>
@@ -108,11 +108,11 @@
                                     <StackPanel VerticalAlignment="Center"
                                                 HorizontalAlignment="Center">
                                         <mine:MaterialIcon
-                                            Kind="{Binding Kind}"
+                                            Kind="{Binding FieldName}"
                                             Fill="{Binding Fill}"
                                             Size="28"
                                             HorizontalAlignment="Center"/>
-                                        <TextBlock Text="{Binding Name}"
+                                        <TextBlock Text="{Binding DisplayName}"
                                                    FontSize="9"
                                                    TextAlignment="Center"
                                                    TextTrimming="CharacterEllipsis"

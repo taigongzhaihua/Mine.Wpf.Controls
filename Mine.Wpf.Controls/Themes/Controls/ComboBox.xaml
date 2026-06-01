@@ -192,7 +192,7 @@
                             <!-- 展开箭头 -->
                             <controls:MaterialIcon x:Name="ChevronIcon"
                                        Grid.Column="1"
-                                       Kind="&#xE5CF;"
+                                       Kind="ExpandMore"
                                        Size="20"
                                        Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                        VerticalAlignment="Center"
@@ -428,7 +428,7 @@
 
                         <controls:MaterialIcon x:Name="ChevronIcon"
                                    Grid.Column="1"
-                                   Kind="&#xE5CF;"
+                                   Kind="ExpandMore"
                                    Size="20"
                                    Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                    VerticalAlignment="Center"

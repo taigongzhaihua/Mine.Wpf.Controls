@@ -1,0 +1,379 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters">
+    <!--
+    ══════════════════════════════════════════════════════════════
+     Stepper — Material Design 3
+     · 水平 / 垂直方向
+     · 步骤状态：Pending / Active / Completed
+     · 步骤圈：24px 圆，完成显示对勾，其余显示序号
+     · 水平：UniformGrid 等宽分配，圆圈上方，连接线右延伸，标签下方
+     · 垂直：圆圈左列，连接线从圆圈底延伸至 Item 底，内容右列
+    ══════════════════════════════════════════════════════════════
+    -->
+    <conv:StringIsNotNullOrEmptyConverter x:Key="Local.StringNotEmptyConv"/>
+
+    <!-- ═══ Stepper ═════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:Stepper}">
+        <Setter Property="Focusable"           Value="False"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <!-- 水平：UniformGrid 等宽分配每个 Item -->
+                    <UniformGrid Rows="1" IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:Stepper}">
+                    <ItemsPresenter/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ═══ StepperItem ════════════════════════════════════════════ -->
+    <!--
+        水平模式 Item 结构（UniformGrid 每格等宽）：
+          Row0: [圆圈] [连接线（剩余宽度）]   连接线在圆圈右侧同行，最后一项不显示
+          Row1: [Label / Desc 居中对齐]
+
+        垂直模式 Item 结构（由 DataTrigger 切换 Template 内元素）：
+          Col0: [圆圈]
+                [竖线（Grid.RowSpan 撑满右列高度）]
+          Col1: [Label + Desc + Content]
+    -->
+    <Style TargetType="{x:Type controls:StepperItem}">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:StepperItem}">
+                    <Grid x:Name="Root">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <!-- Row0: 圆圈 + 连接线 -->
+                            <RowDefinition Height="Auto"/>
+                            <!-- Row1: 标签区（水平模式）/ 内容区（垂直模式） -->
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- ══ 水平模式：Row0 ══════════════════════════════════
+                             三列：[左半线 *][圆圈 24px][右半线 *]
+                             圆圈固定在中间列，连接线各占剩余一半，天然居中对齐 -->
+                        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                              x:Name="HorzTopRow"
+                              Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>    <!-- 左半连接线 -->
+                                <ColumnDefinition Width="Auto"/> <!-- 圆圈 24px -->
+                                <ColumnDefinition Width="*"/>    <!-- 右半连接线 -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 左半连接线（第一步隐藏） -->
+                            <Border x:Name="HorzLeftConnector"
+                                    Grid.Column="0"
+                                    Height="2"
+                                    VerticalAlignment="Center"
+                                    Background="{DynamicResource Mine.Brush.OutlineVariant}"/>
+
+                            <!-- 圆圈（z 层在线上方） -->
+                            <Grid Grid.Column="1">
+                                <Border x:Name="StepCircle"
+                                        Width="24" Height="24"
+                                        CornerRadius="12"
+                                        Background="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                <TextBlock x:Name="CheckIcon"
+                                           Text="&#xE876;"
+                                           FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
+                                           FontSize="16"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="Collapsed"/>
+                                <TextBlock x:Name="StepNumber"
+                                           Text="{TemplateBinding StepIndex}"
+                                           FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <!-- 右半连接线（最后一步隐藏） -->
+                            <Border x:Name="HorzConnector"
+                                    Grid.Column="2"
+                                    Height="2"
+                                    VerticalAlignment="Center"
+                                    Background="{DynamicResource Mine.Brush.OutlineVariant}"
+                                    Visibility="Collapsed"/>
+                        </Grid>
+
+                        <!-- ══ 水平模式：Row1 ══════════════════════════════════
+                             标签 + 描述，居中显示                             -->
+                        <StackPanel x:Name="HorzLabelRow"
+                                    Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+                                    Orientation="Vertical"
+                                    HorizontalAlignment="Center">
+                            <TextBlock x:Name="LabelText"
+                                       Text="{TemplateBinding Label}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="{DynamicResource Mine.FontSize.LabelLarge}"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="NoWrap"/>
+                            <TextBlock x:Name="DescText"
+                                       Text="{TemplateBinding Description}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       Visibility="Collapsed"/>
+                        </StackPanel>
+
+                        <!-- ══ 垂直模式：左列圆圈 + 竖线（默认 Collapsed）══ -->
+                        <Grid x:Name="VertLeftCol"
+                              Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                              Width="24"
+                              Margin="0,0,0,0"
+                              Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <!-- 圆圈（复用同一批 x:Name，Collapsed 时不渲染） -->
+                            <Border x:Name="VertStepCircle"
+                                    Grid.Row="0"
+                                    Width="24" Height="24"
+                                    CornerRadius="12"
+                                    HorizontalAlignment="Center"
+                                    Background="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            <TextBlock x:Name="VertCheckIcon"
+                                       Grid.Row="0"
+                                       Text="&#xE876;"
+                                       FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
+                                       FontSize="16"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Visibility="Collapsed"/>
+                            <TextBlock x:Name="VertStepNumber"
+                                       Grid.Row="0"
+                                       Text="{TemplateBinding StepIndex}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="White"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                            <!-- 竖线：撑满 Row1（即右列内容的高度） -->
+                            <Border x:Name="VertConnector"
+                                    Grid.Row="1"
+                                    Width="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Background="{DynamicResource Mine.Brush.OutlineVariant}"
+                                    Visibility="Collapsed"/>
+                        </Grid>
+
+                        <!-- ══ 垂直模式：右列标签 + 描述 + 内容（默认 Collapsed）══ -->
+                        <StackPanel x:Name="VertRightCol"
+                                    Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                                    Orientation="Vertical"
+                                    Margin="12,0,0,16"
+                                    Visibility="Collapsed">
+                            <TextBlock x:Name="VertLabelText"
+                                       Text="{TemplateBinding Label}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="{DynamicResource Mine.FontSize.LabelLarge}"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       TextWrapping="NoWrap"/>
+                            <TextBlock x:Name="VertDescText"
+                                       Text="{TemplateBinding Description}"
+                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                       FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       TextWrapping="Wrap"
+                                       Visibility="Collapsed"/>
+                            <ContentPresenter x:Name="VertContent"
+                                              Margin="0,8,0,0"
+                                              Visibility="Collapsed"/>
+                        </StackPanel>
+
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <!-- ══ 状态：Active ══════════════════════════════════ -->
+                        <Trigger Property="Status" Value="Active">
+                            <Setter TargetName="StepCircle"    Property="Background"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="VertStepCircle" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="LabelText"     Property="Foreground"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="LabelText"     Property="FontWeight" Value="SemiBold"/>
+                            <Setter TargetName="VertLabelText" Property="Foreground"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="VertLabelText" Property="FontWeight" Value="SemiBold"/>
+                        </Trigger>
+
+                        <!-- ══ 状态：Completed ══════════════════════════════ -->
+                        <Trigger Property="Status" Value="Completed">
+                            <Setter TargetName="StepCircle"    Property="Background"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="CheckIcon"     Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="StepNumber"    Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="VertStepCircle" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                            <Setter TargetName="VertCheckIcon" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="VertStepNumber" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="LabelText"     Property="Foreground"
+                                    Value="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <Setter TargetName="VertLabelText" Property="Foreground"
+                                    Value="{DynamicResource Mine.Brush.OnSurface}"/>
+                        </Trigger>
+
+                        <!-- ══ 有 Description（水平）══════════════════════════ -->
+                        <DataTrigger Binding="{Binding Description, RelativeSource={RelativeSource Self},
+                                               Converter={StaticResource Local.StringNotEmptyConv}}"
+                                     Value="True">
+                            <Setter TargetName="DescText" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+
+                        <!-- ══ 有 Description（垂直）══════════════════════════ -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                           Value="Vertical"/>
+                                <Condition Binding="{Binding Description, RelativeSource={RelativeSource Self},
+                                                     Converter={StaticResource Local.StringNotEmptyConv}}"
+                                           Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="VertDescText" Property="Visibility" Value="Visible"/>
+                        </MultiDataTrigger>
+
+                        <!-- ══ 非最后一步：水平连接线 ══════════════════════════ -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsLastStep, RelativeSource={RelativeSource Self}}"
+                                           Value="False"/>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                           Value="Horizontal"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="HorzConnector" Property="Visibility" Value="Visible"/>
+                        </MultiDataTrigger>
+
+                        <!-- 已完成段：右半连接线变 Primary 色 -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsLastStep, RelativeSource={RelativeSource Self}}"
+                                           Value="False"/>
+                                <Condition Binding="{Binding Status, RelativeSource={RelativeSource Self}}"
+                                           Value="Completed"/>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                           Value="Horizontal"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="HorzConnector" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiDataTrigger>
+
+                        <!-- 左半连接线：非第一步时显示 -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding StepIndex, RelativeSource={RelativeSource Self}}"
+                                           Value="1"/>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                           Value="Horizontal"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="HorzLeftConnector" Property="Visibility" Value="Hidden"/>
+                        </MultiDataTrigger>
+
+                        <!-- 左半连接线：已完成或激活时变 Primary 色 -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Status, RelativeSource={RelativeSource Self}}"
+                                           Value="Completed"/>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                           Value="Horizontal"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="HorzLeftConnector" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Status, RelativeSource={RelativeSource Self}}"
+                                           Value="Active"/>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                           Value="Horizontal"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="HorzLeftConnector" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiDataTrigger>
+
+                        <!-- ══ 垂直模式：切换为垂直布局 ══════════════════════ -->
+                        <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                     Value="Vertical">
+                            <!-- 隐藏水平布局元素 -->
+                            <Setter TargetName="HorzTopRow"   Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="HorzLabelRow" Property="Visibility" Value="Collapsed"/>
+                            <!-- 显示垂直布局元素 -->
+                            <Setter TargetName="VertLeftCol"  Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="VertRightCol" Property="Visibility" Value="Visible"/>
+                            <!-- 内容区在垂直模式展开 -->
+                            <Setter TargetName="VertContent"  Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+
+                        <!-- 垂直模式 + 非最后一步：显示竖线 -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                           Value="Vertical"/>
+                                <Condition Binding="{Binding IsLastStep, RelativeSource={RelativeSource Self}}"
+                                           Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="VertConnector" Property="Visibility" Value="Visible"/>
+                        </MultiDataTrigger>
+
+                        <!-- 垂直 + 非最后 + Completed：竖线变 Primary 色 -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
+                                           Value="Vertical"/>
+                                <Condition Binding="{Binding IsLastStep, RelativeSource={RelativeSource Self}}"
+                                           Value="False"/>
+                                <Condition Binding="{Binding Status, RelativeSource={RelativeSource Self}}"
+                                           Value="Completed"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="VertConnector" Property="Background"
+                                    Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </MultiDataTrigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

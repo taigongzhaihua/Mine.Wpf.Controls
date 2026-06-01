@@ -75,6 +75,22 @@ public sealed class ThemeDictionary : ResourceDictionary
         MergedDictionaries.Add(Load("Themes/Controls/SearchBox.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Snackbar.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Dialog.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Switch.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Chip.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Flyout.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/SplitView.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/NavigationView.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Badge.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Avatar.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Drawer.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/SegmentedControl.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/NumericUpDown.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Rating.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/RangeSlider.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/DatePicker.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/TimePicker.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/ColorPicker.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Stepper.xaml"));
 
         // 动画画笔字典：最后添加，查找优先级最高，覆盖 ColorBrushes.xaml 中的静态画笔
         MergedDictionaries.Add(AnimatedBrushes);

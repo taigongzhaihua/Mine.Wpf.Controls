@@ -181,14 +181,36 @@
                             <Setter TargetName="PART_DeleteButton" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="DeleteCol"         Property="Width"      Value="Auto"/>
                             <Setter Property="Padding" Value="12,0,8,0"/>
-                        </DataTrigger>
+                                </DataTrigger>
 
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-</ResourceDictionary>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                            <!-- ── 专用子类样式（BasedOn 基类，仅预设 Variant）────────────── -->
+                            <Style TargetType="{x:Type controls:AssistChip}"
+                                   BasedOn="{StaticResource {x:Type controls:Chip}}">
+                                <Setter Property="Variant" Value="Assist"/>
+                            </Style>
+
+                            <Style TargetType="{x:Type controls:FilterChip}"
+                                   BasedOn="{StaticResource {x:Type controls:Chip}}">
+                                <Setter Property="Variant" Value="Filter"/>
+                            </Style>
+
+                            <Style TargetType="{x:Type controls:InputChip}"
+                                   BasedOn="{StaticResource {x:Type controls:Chip}}">
+                                <Setter Property="Variant" Value="Input"/>
+                            </Style>
+
+                            <Style TargetType="{x:Type controls:SuggestionChip}"
+                                   BasedOn="{StaticResource {x:Type controls:Chip}}">
+                                <Setter Property="Variant" Value="Suggestion"/>
+                            </Style>
+
+                        </ResourceDictionary>
 
 
 

@@ -13,6 +13,8 @@
         <PackageId>Mine.Wpf.Controls</PackageId>
         <Version>0.1.0</Version>
         <Description>A Material Design 3 WPF control library with theming, animations and glass effects.</Description>
+        <!-- 排除 obj 目录，防止 VS 设计时临时项目重复包含 WPF 生成文件（NETSDK1022 / RG1000） -->
+        <DefaultItemExcludes>$(DefaultItemExcludes);obj\**</DefaultItemExcludes>
     </PropertyGroup>
 
     <ItemGroup>

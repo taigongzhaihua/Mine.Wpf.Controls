@@ -29,46 +29,47 @@
 
     <ResourceDictionary.MergedDictionaries>
         <!-- ── 设计令牌 ──────────────────────────────────────────── -->
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Colors.Light.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Typography.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Shape.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Elevation.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Motion.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Resources/Colors.Light.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Resources/Typography.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Resources/Shape.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Resources/Elevation.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Resources/Motion.xaml"/>
         <!-- ── 共享转换器 ────────────────────────────────────────── -->
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Resources/Converters.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Resources/Converters.xaml"/>
         <!-- ── 控件样式 ──────────────────────────────────────────── -->
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Button.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Card.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Window.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/TextBox.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/CheckBox.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Switch.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Chip.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/RadioButton.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Slider.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Progress.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/ComboBox.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/ScrollBar.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Frame.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Page.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/ToolTip.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Flyout.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/TabControl.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/ListView.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Snackbar.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Dialog.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/SearchBox.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/SplitView.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/NavigationView.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Badge.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Avatar.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Drawer.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/SegmentedControl.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/NumericUpDown.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/Rating.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/RangeSlider.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/DatePicker.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/TimePicker.xaml"/>
-        <ResourceDictionary Source="/Mine.Wpf.Controls;component/Themes/Controls/ColorPicker.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Button.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Card.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Window.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/TextBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/CheckBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Switch.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Chip.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/RadioButton.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Slider.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Progress.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ComboBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ScrollBar.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Frame.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Page.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ToolTip.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Flyout.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/TabControl.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ListView.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Snackbar.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Dialog.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SearchBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SplitView.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/NavigationView.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Badge.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Avatar.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Drawer.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SegmentedControl.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/NumericUpDown.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Rating.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/RangeSlider.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/DatePicker.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/TimePicker.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ColorPicker.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Stepper.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

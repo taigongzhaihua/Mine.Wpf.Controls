@@ -218,8 +218,80 @@
                     </WrapPanel>
                 </StackPanel>
             </mine:Card>
+
+            <!-- ── AvatarGroup ────────────────────────────────────────── -->
+            <TextBlock Text="AvatarGroup"
+                       Style="{DynamicResource Mine.Typography.TitleMedium}"
+                       Margin="0,0,0,12"/>
+            <mine:Card Padding="24" Margin="0,0,0,24">
+                <StackPanel>
+                    <!-- 基础重叠 -->
+                    <TextBlock Text="基础重叠（默认 MaxCount=5，Spacing=-8）"
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               Margin="0,0,0,12"/>
+                    <mine:AvatarGroup Margin="0,0,0,20">
+                        <mine:Avatar Initials="JD"/>
+                        <mine:Avatar Initials="李" Background="#6750A4" Foreground="White"/>
+                        <mine:Avatar Icon="&#xE7FE;"
+                                     Background="{DynamicResource Mine.Brush.PrimaryContainer}"
+                                     Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+                        <mine:Avatar Initials="WK" Background="#0078D4" Foreground="White"/>
+                        <mine:Avatar Initials="MK" Background="{DynamicResource Mine.Brush.TertiaryContainer}"
+                                     Foreground="{DynamicResource Mine.Brush.OnTertiaryContainer}"/>
+                    </mine:AvatarGroup>
+
+                    <!-- 溢出气泡 -->
+                    <TextBlock Text="溢出气泡（MaxCount=4，共 7 个）"
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               Margin="0,0,0,12"/>
+                    <mine:AvatarGroup MaxCount="4" Margin="0,0,0,20">
+                        <mine:Avatar Initials="A"  Background="#E53935" Foreground="White"/>
+                        <mine:Avatar Initials="B"  Background="#8E24AA" Foreground="White"/>
+                        <mine:Avatar Initials="C"  Background="#1E88E5" Foreground="White"/>
+                        <mine:Avatar Initials="D"  Background="#00897B" Foreground="White"/>
+                        <mine:Avatar Initials="E"  Background="#F4511E" Foreground="White"/>
+                        <mine:Avatar Initials="F"  Background="#0B8043" Foreground="White"/>
+                        <mine:Avatar Initials="G"  Background="#3949AB" Foreground="White"/>
+                    </mine:AvatarGroup>
+
+                    <!-- 大尺寸 / 宽间距 -->
+                    <TextBlock Text="大尺寸（AvatarSize=56，Spacing=-12）"
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               Margin="0,0,0,12"/>
+                    <mine:AvatarGroup AvatarSize="56" Spacing="-12" Margin="0,0,0,20">
+                        <mine:Avatar Initials="张" Background="#6750A4" Foreground="White"/>
+                        <mine:Avatar Initials="李" Background="#E53935" Foreground="White"/>
+                        <mine:Avatar Initials="王" Background="#0078D4" Foreground="White"/>
+                        <mine:Avatar Icon="&#xE7FE;"
+                                     Background="{DynamicResource Mine.Brush.PrimaryContainer}"
+                                     Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+                    </mine:AvatarGroup>
+
+                    <!-- 与文字组合 -->
+                    <TextBlock Text="与文字组合"
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               Margin="0,0,0,12"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <mine:AvatarGroup MaxCount="3" VerticalAlignment="Center">
+                            <mine:Avatar Initials="JD"/>
+                            <mine:Avatar Initials="李" Background="#6750A4" Foreground="White"/>
+                            <mine:Avatar Icon="&#xE7FE;"
+                                         Background="{DynamicResource Mine.Brush.PrimaryContainer}"
+                                         Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
+                            <mine:Avatar Initials="WK" Background="#0078D4" Foreground="White"/>
+                            <mine:Avatar Initials="MK"/>
+                        </mine:AvatarGroup>
+                        <TextBlock Text="5 名成员"
+                                   Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                   VerticalAlignment="Center"
+                                   Margin="12,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </mine:Card>
     </StackPanel>
 </mine:Page>
-
-
-

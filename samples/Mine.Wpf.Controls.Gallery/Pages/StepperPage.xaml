@@ -1,0 +1,130 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.StepperPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Stepper"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="760">
+        <TextBlock Text="Stepper"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="A step-by-step progress indicator. Use ActiveIndex to control the current step."
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,28"/>
+
+        <!-- 水平步骤条 -->
+        <TextBlock Text="水平步骤条（Horizontal）"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:Stepper x:Name="HorzStepper" ActiveIndex="1" Margin="0,0,0,20">
+                    <mine:StepperItem Label="账户信息"/>
+                    <mine:StepperItem Label="收货地址"/>
+                    <mine:StepperItem Label="支付方式"/>
+                    <mine:StepperItem Label="确认订单"/>
+                </mine:Stepper>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <mine:Button Variant="Outlined" Content="上一步"
+                                 Margin="0,0,8,0"
+                                 Click="OnHorzPrev"/>
+                    <mine:Button Content="下一步"
+                                 Click="OnHorzNext"/>
+                </StackPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- 垂直步骤条 -->
+        <TextBlock Text="垂直步骤条（Vertical）"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:Stepper x:Name="VertStepper"
+                              Orientation="Vertical"
+                              ActiveIndex="1"
+                              Margin="0,0,0,20">
+                    <mine:StepperItem Label="选择套餐"
+                                      Description="根据需求选择合适的服务套餐">
+                        <mine:StepperItem.Content>
+                            <TextBlock Text="步骤内容区域：可在此放置表单、说明或操作按钮。"
+                                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       TextWrapping="Wrap"/>
+                        </mine:StepperItem.Content>
+                    </mine:StepperItem>
+                    <mine:StepperItem Label="填写信息"
+                                      Description="提供必要的个人或企业信息">
+                        <mine:StepperItem.Content>
+                            <mine:Card Padding="16" Margin="0,0,0,0">
+                                <TextBlock Text="当前活跃步骤：此处可放置输入表单等交互控件。"
+                                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                           Foreground="{DynamicResource Mine.Brush.OnSurface}"
+                                           TextWrapping="Wrap"/>
+                            </mine:Card>
+                        </mine:StepperItem.Content>
+                    </mine:StepperItem>
+                    <mine:StepperItem Label="确认并提交"
+                                      Description="核对信息后提交申请">
+                        <mine:StepperItem.Content>
+                            <TextBlock Text="步骤内容区域：可在此展示汇总信息。"
+                                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       TextWrapping="Wrap"/>
+                        </mine:StepperItem.Content>
+                    </mine:StepperItem>
+                </mine:Stepper>
+
+                <StackPanel Orientation="Horizontal">
+                    <mine:Button Variant="Outlined" Content="上一步"
+                                 Margin="0,0,8,0"
+                                 Click="OnVertPrev"/>
+                    <mine:Button Content="下一步"
+                                 Click="OnVertNext"/>
+                </StackPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- 不同 ActiveIndex 对比 -->
+        <TextBlock Text="状态对比"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <TextBlock Text="ActiveIndex = 0（第一步）"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,10"/>
+                <mine:Stepper ActiveIndex="0" Margin="0,0,0,20">
+                    <mine:StepperItem Label="开始"/>
+                    <mine:StepperItem Label="进行中"/>
+                    <mine:StepperItem Label="完成"/>
+                </mine:Stepper>
+
+                <TextBlock Text="ActiveIndex = 1（第二步）"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,10"/>
+                <mine:Stepper ActiveIndex="1" Margin="0,0,0,20">
+                    <mine:StepperItem Label="开始"/>
+                    <mine:StepperItem Label="进行中"/>
+                    <mine:StepperItem Label="完成"/>
+                </mine:Stepper>
+
+                <TextBlock Text="ActiveIndex = 3（全部完成）"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,10"/>
+                <mine:Stepper ActiveIndex="3" Margin="0,0,0,0">
+                    <mine:StepperItem Label="开始"/>
+                    <mine:StepperItem Label="进行中"/>
+                    <mine:StepperItem Label="完成"/>
+                </mine:Stepper>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>

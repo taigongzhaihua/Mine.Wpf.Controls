@@ -41,7 +41,7 @@
                                      Click="OnGoBack">
                             <mine:Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <mine:MaterialIcon Kind="&#xE5C4;" Size="18" Margin="0,0,4,0"/>
+                                    <mine:MaterialIcon Kind="ArrowBack" Size="18" Margin="0,0,4,0"/>
                                     <TextBlock Text="后退" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </mine:Button.Content>
@@ -54,7 +54,7 @@
                             <mine:Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="前进" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                                    <mine:MaterialIcon Kind="&#xE5C8;" Size="18"/>
+                                    <mine:MaterialIcon Kind="ArrowForward" Size="18"/>
                                 </StackPanel>
                             </mine:Button.Content>
                         </mine:Button>
@@ -91,7 +91,7 @@
             <!-- 导航栈状态 -->
             <mine:Card Padding="16,12" Margin="0,0,0,16">
                 <StackPanel Orientation="Horizontal">
-                    <mine:MaterialIcon Kind="&#xE88A;" Size="18" Margin="0,0,8,0"
+                    <mine:MaterialIcon Kind="Home" Size="18" Margin="0,0,8,0"
                                        Foreground="{DynamicResource Mine.Brush.Primary}"/>
                     <TextBlock Style="{DynamicResource Mine.Typography.LabelMedium}"
                                Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}">

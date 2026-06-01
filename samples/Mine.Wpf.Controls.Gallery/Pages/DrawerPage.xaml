@@ -46,25 +46,25 @@
 
                         <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}" IsChecked="True">
                             <StackPanel Orientation="Horizontal">
-                                <mine:MaterialIcon Kind="&#xE88A;" Margin="0,0,12,0"/>
+                                <mine:MaterialIcon Kind="Home" Margin="0,0,12,0"/>
                                 <TextBlock Text="首页" VerticalAlignment="Center"/>
                             </StackPanel>
                         </mine:RadioButton>
                         <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
                             <StackPanel Orientation="Horizontal">
-                                <mine:MaterialIcon Kind="&#xE8B6;" Margin="0,0,12,0"/>
+                                <mine:MaterialIcon Kind="Search" Margin="0,0,12,0"/>
                                 <TextBlock Text="搜索" VerticalAlignment="Center"/>
                             </StackPanel>
                         </mine:RadioButton>
                         <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
                             <StackPanel Orientation="Horizontal">
-                                <mine:MaterialIcon Kind="&#xE7F4;" Margin="0,0,12,0"/>
+                                <mine:MaterialIcon Kind="Notifications" Margin="0,0,12,0"/>
                                 <TextBlock Text="通知" VerticalAlignment="Center"/>
                             </StackPanel>
                         </mine:RadioButton>
                         <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
                             <StackPanel Orientation="Horizontal">
-                                <mine:MaterialIcon Kind="&#xE8E9;" Margin="0,0,12,0"/>
+                                <mine:MaterialIcon Kind="ViewAgenda" Margin="0,0,12,0"/>
                                 <TextBlock Text="收藏" VerticalAlignment="Center"/>
                             </StackPanel>
                         </mine:RadioButton>
@@ -78,13 +78,13 @@
 
                         <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
                             <StackPanel Orientation="Horizontal">
-                                <mine:MaterialIcon Kind="&#xE8B8;" Margin="0,0,12,0"/>
+                                <mine:MaterialIcon Kind="Settings" Margin="0,0,12,0"/>
                                 <TextBlock Text="设置" VerticalAlignment="Center"/>
                             </StackPanel>
                         </mine:RadioButton>
                         <mine:RadioButton Style="{DynamicResource Mine.Style.NavItem}">
                             <StackPanel Orientation="Horizontal">
-                                <mine:MaterialIcon Kind="&#xE8FD;" Margin="0,0,12,0"/>
+                                <mine:MaterialIcon Kind="Help" Margin="0,0,12,0"/>
                                 <TextBlock Text="帮助与反馈" VerticalAlignment="Center"/>
                             </StackPanel>
                         </mine:RadioButton>

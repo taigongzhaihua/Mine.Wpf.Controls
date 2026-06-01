@@ -88,19 +88,19 @@
                                     <Button x:Name="PART_Minimize"
                                             Style="{StaticResource Mine.Internal.CaptionButton}"
                                             ToolTip="最小化">
-                                        <controls:MaterialIcon Kind="&#xE15B;" Size="16"
+                                        <controls:MaterialIcon Kind="Minimize" Size="16"
                                                                Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
                                     </Button>
                                     <Button x:Name="PART_Maximize"
                                             Style="{StaticResource Mine.Internal.CaptionButton}"
                                             ToolTip="最大化">
-                                        <controls:MaterialIcon x:Name="MaxIcon" Kind="&#xE40F;" Size="16"
+                                        <controls:MaterialIcon x:Name="MaxIcon" Kind="PanoramaWideAngle" Size="16"
                                                                Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
                                     </Button>
                                     <Button x:Name="PART_Close"
                                             Style="{StaticResource Mine.Internal.CloseButton}"
                                             ToolTip="关闭">
-                                        <controls:MaterialIcon Kind="&#xE5CD;" Size="16"
+                                        <controls:MaterialIcon Kind="Clear" Size="16"
                                                                Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
                                     </Button>
                                 </StackPanel>
@@ -121,7 +121,7 @@
                         <Trigger Property="WindowState" Value="Maximized">
                             <Setter TargetName="WindowRoot" Property="CornerRadius" Value="0"/>
                             <Setter TargetName="WindowRoot" Property="Padding" Value="8"/>
-                            <Setter TargetName="MaxIcon" Property="Kind" Value="&#xE3FA;"/>
+                            <Setter TargetName="MaxIcon" Property="Kind" Value="Lens"/>
                             <Setter TargetName="PART_Maximize" Property="ToolTip" Value="还原"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

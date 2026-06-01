@@ -46,19 +46,19 @@
                 <WrapPanel>
                     <mine:Button Content="新建文档" Variant="Filled" Margin="0,0,8,8">
                         <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="&#xE145;" Size="18"
+                            <mine:MaterialIcon Kind="Add" Size="18"
                                               Foreground="{DynamicResource Mine.Brush.OnPrimary}"/>
                         </mine:Button.Icon>
                     </mine:Button>
                     <mine:Button Content="上传" Variant="Tonal" Margin="0,0,8,8">
                         <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="&#xF09B;" Size="18"
+                            <mine:MaterialIcon Kind="FileUpload" Size="18"
                                               Foreground="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
                         </mine:Button.Icon>
                     </mine:Button>
                     <mine:Button Content="删除" Variant="Outlined" Margin="0,0,8,8">
                         <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="&#xE872;" Size="18"
+                            <mine:MaterialIcon Kind="Delete" Size="18"
                                               Foreground="{DynamicResource Mine.Brush.Primary}"/>
                         </mine:Button.Icon>
                     </mine:Button>
@@ -77,13 +77,13 @@
                 <WrapPanel VerticalAlignment="Center">
                     <mine:Button Variant="Fab" Margin="0,0,16,0" ToolTip="FAB">
                         <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="&#xE145;" Size="24"
+                            <mine:MaterialIcon Kind="Add" Size="24"
                                               Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
                         </mine:Button.Icon>
                     </mine:Button>
                     <mine:Button Variant="ExtendedFab" Content="新建文档" Margin="0,0,16,0">
                         <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="&#xE145;" Size="20"
+                            <mine:MaterialIcon Kind="Add" Size="20"
                                               Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}"/>
                         </mine:Button.Icon>
                     </mine:Button>

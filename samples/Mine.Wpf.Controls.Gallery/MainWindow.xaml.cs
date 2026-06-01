@@ -22,6 +22,7 @@ public partial class MainWindow
         ("\uE399", "Badge",                typeof(BadgePage)),
         ("\uE7FD", "Avatar",               typeof(AvatarPage)),
         ("\uE8FE", "Segmented",            typeof(SegmentedPage)),
+        ("\uF73C", "Stepper",              typeof(StepperPage)),
         ("\uE262", "Text Field",           typeof(TextFieldPage)),
         ("\uE8B6", "Search Box",           typeof(SearchBoxPage)),
         ("\uE834", "Selection",            typeof(SelectionPage)),

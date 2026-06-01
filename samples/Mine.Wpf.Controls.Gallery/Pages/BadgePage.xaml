@@ -22,13 +22,13 @@
                 <WrapPanel>
                     <!-- 图标 + 小圆点 -->
                     <mine:Badge BadgeText="" Margin="16">
-                        <mine:MaterialIcon Kind="&#xE88A;" Size="28"/>
+                        <mine:MaterialIcon Kind="Home" Size="28"/>
                     </mine:Badge>
                     <mine:Badge BadgeText="" BadgePlacement="TopLeft" Margin="16">
-                        <mine:MaterialIcon Kind="&#xE8F4;" Size="28"/>
+                        <mine:MaterialIcon Kind="RemoveRedEye" Size="28"/>
                     </mine:Badge>
                     <mine:Badge BadgeText="" BadgePlacement="BottomRight" Margin="16">
-                        <mine:MaterialIcon Kind="&#xE8B8;" Size="28"/>
+                        <mine:MaterialIcon Kind="Settings" Size="28"/>
                     </mine:Badge>
                 </WrapPanel>
             </mine:Card>
@@ -40,16 +40,16 @@
             <mine:Card Padding="24" Margin="0,0,0,24">
                 <WrapPanel>
                     <mine:Badge BadgeText="3" Margin="16">
-                        <mine:MaterialIcon Kind="&#xE88A;" Size="28"/>
+                        <mine:MaterialIcon Kind="Home" Size="28"/>
                     </mine:Badge>
                     <mine:Badge BadgeText="12" Margin="16">
-                        <mine:MaterialIcon Kind="&#xE8F4;" Size="28"/>
+                        <mine:MaterialIcon Kind="RemoveRedEye" Size="28"/>
                     </mine:Badge>
                     <mine:Badge BadgeText="99+" Margin="16">
-                        <mine:MaterialIcon Kind="&#xE7F4;" Size="28"/>
+                        <mine:MaterialIcon Kind="Notifications" Size="28"/>
                     </mine:Badge>
                     <mine:Badge BadgeText="New" Margin="16">
-                        <mine:MaterialIcon Kind="&#xE8B8;" Size="28"/>
+                        <mine:MaterialIcon Kind="Settings" Size="28"/>
                     </mine:Badge>
                 </WrapPanel>
             </mine:Card>
@@ -61,7 +61,7 @@
             <mine:Card Padding="24" Margin="0,0,0,24">
                 <WrapPanel>
                     <mine:Badge BadgeText="{x:Null}" Margin="16">
-                        <mine:MaterialIcon Kind="&#xE88A;" Size="28"/>
+                        <mine:MaterialIcon Kind="Home" Size="28"/>
                     </mine:Badge>
                     <TextBlock Text="BadgeText=null → 无徽标"
                                VerticalAlignment="Center"
@@ -78,7 +78,7 @@
                 <StackPanel>
                     <WrapPanel Margin="0,0,0,16">
                         <mine:Badge x:Name="DemoBadge" BadgeText="5" Margin="16">
-                            <mine:MaterialIcon Kind="&#xE7F4;" Size="28"/>
+                            <mine:MaterialIcon Kind="Notifications" Size="28"/>
                         </mine:Badge>
                     </WrapPanel>
                     <WrapPanel>
@@ -111,7 +111,7 @@
                         <mine:Button Variant="Tonal"
                                      Padding="16,10">
                             <StackPanel Orientation="Horizontal">
-                                <mine:MaterialIcon Kind="&#xE879;" Size="20" Margin="0,0,8,0"/>
+                                <mine:MaterialIcon Kind="ExitToApp" Size="20" Margin="0,0,8,0"/>
                                 <TextBlock Text="Notifications" VerticalAlignment="Center"/>
                             </StackPanel>
                         </mine:Button>

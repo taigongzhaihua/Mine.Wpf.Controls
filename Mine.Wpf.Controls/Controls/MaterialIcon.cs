@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -22,11 +23,25 @@ public class MaterialIcon : Control
         new Uri("pack://application:,,,/Mine.Wpf.Controls;component/Fonts/"),
         "./#Material Symbols Rounded Filled");
 
+    // 字段名 -> Unicode 字符的缓存
+    private static readonly Dictionary<string, string> IconCache = new();
+
     static MaterialIcon()
     {
         DefaultStyleKeyProperty.OverrideMetadata(typeof(MaterialIcon), new FrameworkPropertyMetadata(typeof(MaterialIcon)));
         IsTabStopProperty.OverrideMetadata(typeof(MaterialIcon), new FrameworkPropertyMetadata(false));
         FocusableProperty.OverrideMetadata(typeof(MaterialIcon),  new FrameworkPropertyMetadata(false));
+
+        // 初始化图标缓存
+        var iconType = typeof(Icons.MaterialIcons);
+        foreach (var field in iconType.GetFields(BindingFlags.Public | BindingFlags.Static))
+        {
+            if (field.IsLiteral && field.FieldType == typeof(string))
+            {
+                var unicode = (string)field.GetRawConstantValue()!;
+                IconCache[field.Name] = unicode;
+            }
+        }
     }
 
     // ── Kind ─────────────────────────────────────────────────────────────
@@ -97,7 +112,12 @@ public class MaterialIcon : Control
     private void UpdateText()
     {
         if (_text == null) return;
-        _text.Text       = Kind;
+
+        // 解析 Kind：如果是字段名，则从缓存中获取 Unicode 字符；否则直接使用
+        var unicode = string.IsNullOrEmpty(Kind) ? string.Empty :
+                      IconCache.TryGetValue(Kind, out var cached) ? cached : Kind;
+
+        _text.Text       = unicode;
         _text.FontSize   = Size;
         _text.FontWeight = Weight;
         _text.FontFamily = Fill ? FilledFont : OutlineFont;

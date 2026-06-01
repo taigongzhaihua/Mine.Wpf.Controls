@@ -293,7 +293,7 @@
                                                IsHitTestVisible="False"/>
 
                                     <controls:MaterialIcon Grid.Column="1"
-                                                           Kind="&#xE192;"
+                                                           Kind="Schedule"
                                                            Size="20"
                                                            Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                                            VerticalAlignment="Center"
@@ -333,7 +333,7 @@
                                     </Grid>
 
                                     <controls:MaterialIcon Grid.Column="1"
-                                                           Kind="&#xE192;"
+                                                           Kind="Schedule"
                                                            Size="20"
                                                            Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                                            VerticalAlignment="Center"

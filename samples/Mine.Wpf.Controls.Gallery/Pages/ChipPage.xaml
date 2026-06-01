@@ -6,66 +6,114 @@
            Padding="28,24,28,32">
     <StackPanel MaxWidth="860">
 
-        <!-- ── Assist Chip ───────────────────────────────────────────── -->
+        <!-- ── 专用类型 ─────────────────────────────────────────────── -->
+        <TextBlock Text="专用类型"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="使用语义化子类直接声明，无需设置 Variant 属性。"
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   Margin="0,0,0,24"/>
+
+        <!-- AssistChip -->
+        <TextBlock Text="AssistChip" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <WrapPanel>
+                <mine:AssistChip Content="收藏"     Margin="0,0,8,8"/>
+                <mine:AssistChip Content="分享"     Icon="&#xE80D;" Margin="0,0,8,8"/>
+                <mine:AssistChip Content="添加日历" Icon="&#xE916;" Margin="0,0,8,8"/>
+                <mine:AssistChip Content="禁用"     IsEnabled="False" Margin="0,0,8,8"/>
+            </WrapPanel>
+        </mine:Card>
+
+        <!-- FilterChip -->
+        <TextBlock Text="FilterChip" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <WrapPanel>
+                <mine:FilterChip Content="全部"   IsChecked="True" Margin="0,0,8,8"/>
+                <mine:FilterChip Content="未读"   Margin="0,0,8,8"/>
+                <mine:FilterChip Content="重要"   Margin="0,0,8,8"/>
+                <mine:FilterChip Content="已归档" Margin="0,0,8,8"/>
+                <mine:FilterChip Content="带图标" Icon="&#xE838;" Margin="0,0,8,8"/>
+                <mine:FilterChip Content="禁用"   IsEnabled="False" Margin="0,0,8,8"/>
+            </WrapPanel>
+        </mine:Card>
+
+        <!-- InputChip -->
+        <TextBlock Text="InputChip" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <WrapPanel x:Name="InputChipPanel2">
+                <mine:InputChip Content="设计" Icon="&#xE41B;" Margin="0,0,8,8" Deleted="OnChipDeleted2"/>
+                <mine:InputChip Content="开发" Icon="&#xE86F;" Margin="0,0,8,8" Deleted="OnChipDeleted2"/>
+                <mine:InputChip Content="测试"               Margin="0,0,8,8" Deleted="OnChipDeleted2"/>
+                <mine:InputChip Content="禁用" IsEnabled="False" Margin="0,0,8,8"/>
+            </WrapPanel>
+        </mine:Card>
+
+        <!-- SuggestionChip -->
+        <TextBlock Text="SuggestionChip" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,32">
+            <WrapPanel>
+                <mine:SuggestionChip Content="下午好，有什么需要帮助的？" Margin="0,0,8,8"/>
+                <mine:SuggestionChip Content="查看天气"                  Margin="0,0,8,8"/>
+                <mine:SuggestionChip Content="设置提醒"                  Margin="0,0,8,8"/>
+                <mine:SuggestionChip Content="发送邮件"                  Margin="0,0,8,8"/>
+            </WrapPanel>
+        </mine:Card>
+
+        <!-- ── 通用 Chip（Variant 属性）────────────────────────────── -->
+        <TextBlock Text="通用 Chip（Variant 属性）"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="通过 Variant 属性切换四种外观，适合数据绑定驱动的场景。"
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   Margin="0,0,0,24"/>
+
+        <!-- Assist -->
         <TextBlock Text="Assist Chip" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
         <mine:Card Padding="24" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="基础 / 带图标" Style="{DynamicResource Mine.Typography.LabelLarge}"
-                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
-                <WrapPanel>
-                    <mine:Chip Content="收藏"   Margin="0,0,8,8"/>
-                    <mine:Chip Content="分享"   Icon="&#xE80D;" Margin="0,0,8,8"/>
-                    <mine:Chip Content="添加日历" Icon="&#xE916;" Margin="0,0,8,8"/>
-                    <mine:Chip Content="禁用"   IsEnabled="False" Margin="0,0,8,8"/>
-                </WrapPanel>
-            </StackPanel>
+            <WrapPanel>
+                <mine:Chip Content="收藏"     Margin="0,0,8,8"/>
+                <mine:Chip Content="分享"     Icon="&#xE80D;" Margin="0,0,8,8"/>
+                <mine:Chip Content="添加日历" Icon="&#xE916;" Margin="0,0,8,8"/>
+                <mine:Chip Content="禁用"     IsEnabled="False" Margin="0,0,8,8"/>
+            </WrapPanel>
         </mine:Card>
 
-        <!-- ── Filter Chip ───────────────────────────────────────────── -->
+        <!-- Filter -->
         <TextBlock Text="Filter Chip" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
         <mine:Card Padding="24" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="单选 / 多选过滤器" Style="{DynamicResource Mine.Typography.LabelLarge}"
-                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
-                <WrapPanel>
-                    <mine:Chip Content="全部"     Variant="Filter" IsChecked="True"  Margin="0,0,8,8"/>
-                    <mine:Chip Content="未读"     Variant="Filter" Margin="0,0,8,8"/>
-                    <mine:Chip Content="重要"     Variant="Filter" Margin="0,0,8,8"/>
-                    <mine:Chip Content="已归档"   Variant="Filter" Margin="0,0,8,8"/>
-                    <mine:Chip Content="带图标"   Variant="Filter" Icon="&#xE838;" Margin="0,0,8,8"/>
-                    <mine:Chip Content="禁用"     Variant="Filter" IsEnabled="False" Margin="0,0,8,8"/>
-                </WrapPanel>
-            </StackPanel>
+            <WrapPanel>
+                <mine:Chip Content="全部"   Variant="Filter" IsChecked="True" Margin="0,0,8,8"/>
+                <mine:Chip Content="未读"   Variant="Filter" Margin="0,0,8,8"/>
+                <mine:Chip Content="重要"   Variant="Filter" Margin="0,0,8,8"/>
+                <mine:Chip Content="已归档" Variant="Filter" Margin="0,0,8,8"/>
+                <mine:Chip Content="带图标" Variant="Filter" Icon="&#xE838;" Margin="0,0,8,8"/>
+                <mine:Chip Content="禁用"   Variant="Filter" IsEnabled="False" Margin="0,0,8,8"/>
+            </WrapPanel>
         </mine:Card>
 
-        <!-- ── Input Chip ────────────────────────────────────────────── -->
+        <!-- Input -->
         <TextBlock Text="Input Chip" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
         <mine:Card Padding="24" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="标签 / 可删除" Style="{DynamicResource Mine.Typography.LabelLarge}"
-                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
-                <WrapPanel x:Name="InputChipPanel">
-                    <mine:Chip Content="设计"   Variant="Input" Icon="&#xE41B;" Margin="0,0,8,8" Deleted="OnChipDeleted"/>
-                    <mine:Chip Content="开发"   Variant="Input" Icon="&#xE86F;" Margin="0,0,8,8" Deleted="OnChipDeleted"/>
-                    <mine:Chip Content="测试"   Variant="Input"                 Margin="0,0,8,8" Deleted="OnChipDeleted"/>
-                    <mine:Chip Content="禁用"   Variant="Input" IsEnabled="False" Margin="0,0,8,8"/>
-                </WrapPanel>
-            </StackPanel>
+            <WrapPanel x:Name="InputChipPanel">
+                <mine:Chip Content="设计" Variant="Input" Icon="&#xE41B;" Margin="0,0,8,8" Deleted="OnChipDeleted"/>
+                <mine:Chip Content="开发" Variant="Input" Icon="&#xE86F;" Margin="0,0,8,8" Deleted="OnChipDeleted"/>
+                <mine:Chip Content="测试" Variant="Input"                 Margin="0,0,8,8" Deleted="OnChipDeleted"/>
+                <mine:Chip Content="禁用" Variant="Input" IsEnabled="False" Margin="0,0,8,8"/>
+            </WrapPanel>
         </mine:Card>
 
-        <!-- ── Suggestion Chip ───────────────────────────────────────── -->
+        <!-- Suggestion -->
         <TextBlock Text="Suggestion Chip" Style="{DynamicResource Mine.Typography.TitleMedium}" Margin="0,0,0,12"/>
         <mine:Card Padding="24" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="智能建议" Style="{DynamicResource Mine.Typography.LabelLarge}"
-                           Foreground="{DynamicResource Mine.Brush.Primary}" Margin="0,0,0,12"/>
-                <WrapPanel>
-                    <mine:Chip Content="下午好，有什么需要帮助的？" Variant="Suggestion" Margin="0,0,8,8"/>
-                    <mine:Chip Content="查看天气"                  Variant="Suggestion" Margin="0,0,8,8"/>
-                    <mine:Chip Content="设置提醒"                  Variant="Suggestion" Margin="0,0,8,8"/>
-                    <mine:Chip Content="发送邮件"                  Variant="Suggestion" Margin="0,0,8,8"/>
-                </WrapPanel>
-            </StackPanel>
+            <WrapPanel>
+                <mine:Chip Content="下午好，有什么需要帮助的？" Variant="Suggestion" Margin="0,0,8,8"/>
+                <mine:Chip Content="查看天气"                  Variant="Suggestion" Margin="0,0,8,8"/>
+                <mine:Chip Content="设置提醒"                  Variant="Suggestion" Margin="0,0,8,8"/>
+                <mine:Chip Content="发送邮件"                  Variant="Suggestion" Margin="0,0,8,8"/>
+            </WrapPanel>
         </mine:Card>
 
     </StackPanel>

@@ -36,28 +36,28 @@
                     <Border Padding="12,0" Cursor="Hand" Background="Transparent" MouseLeftButtonDown="OnNavClick">
                         <Grid Height="56">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <mine:MaterialIcon Grid.Column="0" Kind="&#xE88A;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <mine:MaterialIcon Grid.Column="0" Kind="Home" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
                             <TextBlock Grid.Column="1" Text="Home" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
                         </Grid>
                     </Border>
                     <Border Padding="12,0" Cursor="Hand" Background="Transparent" MouseLeftButtonDown="OnNavClick">
                         <Grid Height="56">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <mine:MaterialIcon Grid.Column="0" Kind="&#xE8F4;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <mine:MaterialIcon Grid.Column="0" Kind="RemoveRedEye" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
                             <TextBlock Grid.Column="1" Text="Favorites" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
                         </Grid>
                     </Border>
                     <Border Padding="12,0" Cursor="Hand" Background="Transparent" MouseLeftButtonDown="OnNavClick">
                         <Grid Height="56">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <mine:MaterialIcon Grid.Column="0" Kind="&#xE8B8;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <mine:MaterialIcon Grid.Column="0" Kind="Settings" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
                             <TextBlock Grid.Column="1" Text="History" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
                         </Grid>
                     </Border>
                     <Border Padding="12,0" Cursor="Hand" Background="Transparent" MouseLeftButtonDown="OnNavClick">
                         <Grid Height="56">
                             <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <mine:MaterialIcon Grid.Column="0" Kind="&#xE8B6;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                            <mine:MaterialIcon Grid.Column="0" Kind="Search" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
                             <TextBlock Grid.Column="1" Text="Search" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
                         </Grid>
                     </Border>
@@ -66,7 +66,7 @@
                         BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}" Background="Transparent">
                     <Grid Height="56">
                         <Grid.ColumnDefinitions><ColumnDefinition Width="40"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <mine:MaterialIcon Grid.Column="0" Kind="&#xE8B8;" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                        <mine:MaterialIcon Grid.Column="0" Kind="Settings" Size="22" HorizontalAlignment="Center" Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
                         <TextBlock Grid.Column="1" Text="Settings" VerticalAlignment="Center" Margin="12,0,0,0" Style="{DynamicResource Mine.Typography.LabelLarge}"/>
                     </Grid>
                 </Border>
@@ -120,7 +120,7 @@
                      Padding="8"
                      HorizontalAlignment="Left"
                      Click="OnTogglePane" >
-            <mine:MaterialIcon Kind="&#xE5D2;"
+            <mine:MaterialIcon Kind="Menu"
                                Size="24" />
         </mine:Button>
     </Grid>

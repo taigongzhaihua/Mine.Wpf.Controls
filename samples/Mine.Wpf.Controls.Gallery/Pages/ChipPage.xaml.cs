@@ -12,6 +12,12 @@ public partial class ChipPage
         if (sender is Chip chip)
             InputChipPanel.Children.Remove(chip);
     }
+
+    private void OnChipDeleted2(object sender, RoutedEventArgs e)
+    {
+        if (sender is Chip chip)
+            InputChipPanel2.Children.Remove(chip);
+    }
 }
 
 

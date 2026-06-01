@@ -235,7 +235,7 @@
                                          Margin="4,0,0,0"
                                          VerticalAlignment="Center"
                                          Visibility="Collapsed">
-                            <controls:MaterialIcon Kind="&#xE5CD;" Size="16"
+                            <controls:MaterialIcon Kind="Clear" Size="16"
                                                    Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
                         </controls:Button>
                     </Grid>
@@ -453,7 +453,7 @@
                                          Margin="4,0,0,0"
                                          VerticalAlignment="Center"
                                          Visibility="Collapsed">
-                            <controls:MaterialIcon Kind="&#xE5CD;" Size="16"
+                            <controls:MaterialIcon Kind="Clear" Size="16"
                                                    Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
                         </controls:Button>
                     </Grid>

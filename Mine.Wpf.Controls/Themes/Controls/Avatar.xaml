@@ -18,44 +18,52 @@
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Background" Value="{DynamicResource Mine.Brush.SecondaryContainer}"/>
         <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:Avatar}">
-                    <Border x:Name="Root"
+                    <!-- 外描边环：用于 AvatarGroup 中分隔重叠头像 -->
+                    <Border x:Name="BorderRing"
                             Width="{TemplateBinding Width}"
                             Height="{TemplateBinding Height}"
                             CornerRadius="9999"
-                            ClipToBounds="True"
-                            Background="{TemplateBinding Background}">
-                        <Border.Clip>
-                            <MultiBinding Converter="{StaticResource Local.AvatarClipConv}">
-                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}"/>
-                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
-                                <Binding Path="CornerRadius" RelativeSource="{RelativeSource Self}"/>
-                            </MultiBinding>
-                        </Border.Clip>
-                        <Grid>
-                            <Image x:Name="PART_Image"
-                                   Source="{TemplateBinding ImageSource}"
-                                   Stretch="UniformToFill"
-                                   Visibility="Collapsed"/>
-                            <TextBlock x:Name="PART_IconText"
-                                       Text="{TemplateBinding Icon}"
-                                       FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
-                                       FontSize="{Binding Size, RelativeSource={RelativeSource TemplatedParent},
-                                                  Converter={StaticResource Local.HalfConv}}"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       Foreground="{TemplateBinding Foreground}"
+                            Background="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding BorderThickness}">
+                        <Border x:Name="Root"
+                                CornerRadius="9999"
+                                ClipToBounds="True"
+                                Background="{TemplateBinding Background}">
+                            <Border.Clip>
+                                <MultiBinding Converter="{StaticResource Local.AvatarClipConv}">
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}"/>
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
+                                    <Binding Path="CornerRadius" RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </Border.Clip>
+                            <Grid>
+                                <Image x:Name="PART_Image"
+                                       Source="{TemplateBinding ImageSource}"
+                                       Stretch="UniformToFill"
                                        Visibility="Collapsed"/>
-                            <!-- 默认：人形图标；Initials 变体时切换为文字 -->
-                            <TextBlock x:Name="PART_Initials"
-                                       Text="&#xE7FD;"
-                                       FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
-                                       FontSize="{Binding Size, RelativeSource={RelativeSource TemplatedParent},
-                                                  Converter={StaticResource Local.HalfConv}}"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       Foreground="{TemplateBinding Foreground}"/>
-                        </Grid>
+                                <TextBlock x:Name="PART_IconText"
+                                           Text="{TemplateBinding Icon}"
+                                           FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
+                                           FontSize="{Binding Size, RelativeSource={RelativeSource TemplatedParent},
+                                                      Converter={StaticResource Local.HalfConv}}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{TemplateBinding Foreground}"
+                                           Visibility="Collapsed"/>
+                                <!-- 默认：人形图标；Initials 变体时切换为文字 -->
+                                <TextBlock x:Name="PART_Initials"
+                                           Text="&#xE7FD;"
+                                           FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
+                                           FontSize="{Binding Size, RelativeSource={RelativeSource TemplatedParent},
+                                                      Converter={StaticResource Local.HalfConv}}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{TemplateBinding Foreground}"/>
+                            </Grid>
+                        </Border>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="AvatarVariant" Value="Image">
@@ -78,5 +86,59 @@
             </Setter.Value>
         </Setter>
     </Style>
-</ResourceDictionary>
 
+    <!--
+    ══════════════════════════════════════════════════════════════
+     AvatarGroup — 水平重叠头像组
+     · AvatarGroupPanel 负责重叠 Arrange
+     · PART_Overflow 显示 "+N" 溢出气泡
+    ══════════════════════════════════════════════════════════════
+    -->
+    <Style TargetType="{x:Type controls:AvatarGroup}">
+        <Setter Property="Focusable"  Value="False"/>
+        <Setter Property="AvatarSize" Value="40"/>
+        <Setter Property="Spacing"    Value="-8"/>
+        <Setter Property="AvatarBorderBrush"
+                Value="{DynamicResource Mine.Brush.SurfaceContainerLow}"/>
+        <Setter Property="AvatarBorderThickness" Value="3"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <controls:AvatarGroupPanel
+                        Spacing="{Binding Spacing, RelativeSource={RelativeSource AncestorType=controls:AvatarGroup}}"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:AvatarGroup}">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ItemsPresenter/>
+                        <!-- "+N" 溢出气泡，与其他头像相同重叠间距 -->
+                        <Border x:Name="PART_Overflow"
+                                Visibility="Collapsed"
+                                Width="{TemplateBinding AvatarSize}"
+                                Height="{TemplateBinding AvatarSize}"
+                                CornerRadius="9999"
+                                Background="{TemplateBinding AvatarBorderBrush}">
+                            <Border CornerRadius="9999"
+                                    ClipToBounds="True"
+                                    Background="{DynamicResource Mine.Brush.SecondaryContainer}"
+                                    Margin="3">
+                                <TextBlock Text="{TemplateBinding OverflowText}"
+                                           FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                           FontSize="{Binding AvatarSize, RelativeSource={RelativeSource TemplatedParent},
+                                                      Converter={StaticResource Local.HalfConv}}"
+                                           FontWeight="Medium"
+                                           Foreground="{DynamicResource Mine.Brush.OnSecondaryContainer}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                        </Border>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

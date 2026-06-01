@@ -274,7 +274,7 @@
                                                IsHitTestVisible="False"/>
 
                                     <controls:MaterialIcon Grid.Column="1"
-                                                           Kind="&#xE916;"
+                                                           Kind="DateRange"
                                                            Size="20"
                                                            Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                                            VerticalAlignment="Center"
@@ -314,7 +314,7 @@
                                     </Grid>
 
                                     <controls:MaterialIcon Grid.Column="1"
-                                                           Kind="&#xE916;"
+                                                           Kind="DateRange"
                                                            Size="20"
                                                            Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
                                                            VerticalAlignment="Center"
@@ -388,7 +388,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
                                         <Button x:Name="PART_PrevMonth" Grid.Column="0" Style="{StaticResource Mine.DatePicker.IconButton}">
-                                            <controls:MaterialIcon Kind="&#xE5CB;" Size="22" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                            <controls:MaterialIcon Kind="ChevronLeft" Size="22" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
                                         </Button>
                                         <TextBlock Grid.Column="1"
                                                    Text="{Binding ViewMonthYear}"
@@ -398,7 +398,7 @@
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>
                                         <Button x:Name="PART_NextMonth" Grid.Column="2" Style="{StaticResource Mine.DatePicker.IconButton}">
-                                            <controls:MaterialIcon Kind="&#xE5CC;" Size="22" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                            <controls:MaterialIcon Kind="ChevronRight" Size="22" Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
                                         </Button>
                                     </Grid>
 

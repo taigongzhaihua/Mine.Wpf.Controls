@@ -120,7 +120,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Border.Style>
-                                <controls:MaterialIcon Kind="&#xE5CD;" Size="18"
+                                <controls:MaterialIcon Kind="Clear" Size="18"
                                                        Foreground="{DynamicResource Mine.Brush.InverseOnSurface}"
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
