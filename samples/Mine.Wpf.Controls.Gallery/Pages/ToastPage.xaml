@@ -1,0 +1,88 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.ToastPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Toast / Notification"
+           Padding="28,24,28,32">
+
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Toast ─────────────────────────────────────────── -->
+        <TextBlock Text="Toast"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="Toast 从右上角滑入，5 秒后自动消失。支持 Info / Success / Warning / Error 四种级别，可携带标题和可选正文。通过 ToastService 静态 API 从任意位置弹出。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,16"/>
+                <WrapPanel>
+                    <mine:Button Content="Info"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnToastInfo"/>
+                    <mine:Button Content="Success"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnToastSuccess"/>
+                    <mine:Button Content="Warning"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnToastWarning"/>
+                    <mine:Button Content="Error"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnToastError"/>
+                    <mine:Button Content="带正文"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnToastWithMessage"/>
+                    <mine:Button Content="持久 Toast"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,0,8"
+                                 Click="OnToastPersist"/>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── NotificationCenter ────────────────────────────── -->
+        <TextBlock Text="NotificationCenter"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,24,0,12"/>
+        <mine:Card Padding="24">
+            <StackPanel>
+                <TextBlock Text="NotificationCenter 是铃铛图标 + Popup 历史面板的组合控件，自动绑定到 ToastService.Notifications 列表。打开面板时所有通知标记为已读，徽标自动消失。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,16"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                    <TextBlock Text="控件预览（铃铛 + 徽标 + 历史面板）："
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,12,0"/>
+                    <mine:NotificationCenter/>
+                </StackPanel>
+
+                <WrapPanel>
+                    <mine:Button Content="发送通知 × 3"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnSendMultiple"/>
+                    <mine:Button Content="全部已读"
+                                 Style="{DynamicResource Mine.Style.Button.FilledTonal}"
+                                 Margin="0,0,12,8"
+                                 Click="OnMarkAllRead"/>
+                    <mine:Button Content="清空历史"
+                                 Style="{DynamicResource Mine.Style.Button.Outlined}"
+                                 Margin="0,0,0,8"
+                                 Click="OnClearAll"/>
+                </WrapPanel>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>

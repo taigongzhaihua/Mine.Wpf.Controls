@@ -1,5 +1,10 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    
+    
+    
+    <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:mine="https://schemas.mine.io/wpf"
                     xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
                     xmlns:primitives="clr-namespace:Mine.Wpf.Controls.Primitives">
@@ -113,18 +118,10 @@
             <Trigger Property="Icon" Value="{x:Null}">
                 <Setter TargetName="IconPresenter" Property="Visibility" Value="Collapsed"/>
             </Trigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Value="">
-                <Setter TargetName="IconPresenter" Property="Visibility" Value="Collapsed"/>
-            </DataTrigger>
             <Trigger Property="Content" Value="{x:Null}">
                 <Setter TargetName="PART_Content" Property="Visibility" Value="Collapsed"/>
                 <Setter TargetName="IconPresenter" Property="Margin" Value="0"/>
             </Trigger>
-            <!-- Hide icon margin if content is empty string too -->
-            <DataTrigger Binding="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" Value="">
-                <Setter TargetName="IconPresenter" Property="Margin" Value="0"/>
-                <Setter TargetName="PART_Content" Property="Visibility" Value="Collapsed"/>
-            </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter TargetName="StateLayer" Property="Background">
                     <Setter.Value><SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.08"/></Setter.Value>
@@ -215,9 +212,26 @@
            BasedOn="{StaticResource Mine.Style.Button.Filled}">
         <Setter Property="Background"      Value="Transparent"/>
         <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
-        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Padding"         Value="12,10"/>
-        <Setter Property="Effect"          Value="{DynamicResource Mine.Elevation.0}"/>
+    </Style>
+
+    <!-- ICON BUTTON -->
+    <Style x:Key="Mine.Style.Button.Icon" TargetType="{x:Type controls:Button}"
+           BasedOn="{StaticResource Mine.Style.Button.Filled}">
+        <Setter Property="Background"      Value="Transparent"/>
+        <Setter Property="Foreground"      Value="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+        <Setter Property="Width"           Value="40"/>
+        <Setter Property="Padding"         Value="0"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Mine.Brush.SurfaceContainerHighest}"/>
+                <Setter Property="Effect"     Value="{DynamicResource Mine.Elevation.0}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Mine.Brush.SurfaceContainerHighest}"/>
+                <Setter Property="Effect"     Value="{DynamicResource Mine.Elevation.0}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- FAB -->

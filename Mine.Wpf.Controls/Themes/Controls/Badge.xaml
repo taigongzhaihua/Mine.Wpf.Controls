@@ -25,7 +25,10 @@
                         ClipToBounds=False：徽标要溢出宿主控件边界显示在右上角，
                         不能裁剪。
                     -->
-                    <Grid ClipToBounds="False">
+
+                    <Grid ClipToBounds="False"
+                          HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                          VerticalAlignment="{TemplateBinding VerticalAlignment}">
                         <!-- 宿主内容 -->
                         <ContentPresenter x:Name="Content"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"

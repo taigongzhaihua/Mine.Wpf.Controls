@@ -71,5 +71,6 @@
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/TimePicker.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ColorPicker.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Stepper.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Toast.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

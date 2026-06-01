@@ -34,6 +34,7 @@ public partial class MainWindow
         ("\uE192", "TimePicker",           typeof(TimePickerPage)),
         ("\uE8D2", "Tab / List",           typeof(TabPage)),
         ("\uE85A", "Snackbar / Dialog",    typeof(FeedbackPage)),
+        ("\uEA22", "Toast / Notification", typeof(ToastPage)),
         ("\uE9D0", "Progress",             typeof(ProgressPage)),
         ("\uE8D2", "ToolTip",              typeof(TooltipPage)),
         ("\uE8CB", "Flyout",               typeof(FlyoutPage)),

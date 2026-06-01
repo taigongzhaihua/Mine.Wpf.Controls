@@ -91,6 +91,7 @@ public sealed class ThemeDictionary : ResourceDictionary
         MergedDictionaries.Add(Load("Themes/Controls/TimePicker.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/ColorPicker.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Stepper.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Toast.xaml"));
 
         // 动画画笔字典：最后添加，查找优先级最高，覆盖 ColorBrushes.xaml 中的静态画笔
         MergedDictionaries.Add(AnimatedBrushes);

@@ -132,7 +132,16 @@ public sealed class NullToBoolConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotImplementedException();
 }
-/// <summary>将 double 值除以 2，用于 Avatar 图标 FontSize = Size / 2。</summary>
+/// <summary>
+/// 将 int 转换为 Badge 文字：0 → null（隐藏徽标），其他 → 数字字符串。
+/// 供 NotificationCenter 铃铛的 BadgeText 绑定使用。
+/// </summary>
+public sealed class ZeroToNullStringConverter : IValueConverter
+{
+    public object? Convert(object value, Type t, object p, CultureInfo c)
+        => value is int i && i > 0 ? i.ToString() : null;
+    public object ConvertBack(object value, Type t, object p, CultureInfo c) => Binding.DoNothing;
+}
 public sealed class HalfValueConverter : IValueConverter
 {
     public static readonly HalfValueConverter Instance = new();
