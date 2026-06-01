@@ -6,4 +6,11 @@ riderModule.iml
 .idea/
 .vs/
 .tmp/
+**/bin/
+**/obj/
+*_wpftmp.csproj
+*.wpftmp
+Screen/
+*.png
+.github/upgrades/
 
