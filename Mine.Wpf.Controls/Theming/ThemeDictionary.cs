@@ -82,7 +82,9 @@ public sealed class ThemeDictionary : ResourceDictionary
         MergedDictionaries.Add(Load("Themes/Controls/NavigationView.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Badge.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Avatar.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/BreadcrumbBar.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Drawer.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/Expander.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/SegmentedControl.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/NumericUpDown.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Rating.xaml"));
@@ -92,8 +94,12 @@ public sealed class ThemeDictionary : ResourceDictionary
         MergedDictionaries.Add(Load("Themes/Controls/ColorPicker.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Stepper.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/Toast.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/BottomSheet.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/SideSheet.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/TagBox.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/AutoCompleteBox.xaml"));
 
-        // 动画画笔字典：最后添加，查找优先级最高，覆盖 ColorBrushes.xaml 中的静态画笔
+        // 动画画笔字典
         MergedDictionaries.Add(AnimatedBrushes);
 
         // 注册到 ThemeManager，用 Send（最高优先级）确保在第一帧渲染前完成主题初始化

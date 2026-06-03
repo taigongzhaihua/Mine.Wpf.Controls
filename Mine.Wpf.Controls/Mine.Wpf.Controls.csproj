@@ -21,6 +21,9 @@
         <!-- Material Symbols 字体，嵌入为程序集资源 -->
         <Resource Include="Fonts\MaterialSymbols.ttf"/>
         <Resource Include="Fonts\MaterialSymbolsFilled.ttf"/>
+        <!-- 拖拽手形光标（由 Tools/ConvertCursors.ps1 从 PNG 生成，随源码提交） -->
+        <Resource Include="Assets\Cursors\grab.cur"/>
+        <Resource Include="Assets\Cursors\grabbing.cur"/>
     </ItemGroup>
 
 </Project>

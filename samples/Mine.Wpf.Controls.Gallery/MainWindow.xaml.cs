@@ -18,6 +18,7 @@ public partial class MainWindow
         ("\uE8A0", "Frame / Page",        typeof(FramePage)),
         ("\uE762", "SplitView",            typeof(SplitViewPage)),
         ("\uE762", "NavigationView",       typeof(NavigationViewPage)),
+        ("\uE8A0", "BreadcrumbBar",        typeof(BreadcrumbBarPage)),
         ("\uF1C1", "Button",               typeof(ButtonPage)),
         ("\uE399", "Badge",                typeof(BadgePage)),
         ("\uE7FD", "Avatar",               typeof(AvatarPage)),
@@ -25,10 +26,14 @@ public partial class MainWindow
         ("\uF73C", "Stepper",              typeof(StepperPage)),
         ("\uE262", "Text Field",           typeof(TextFieldPage)),
         ("\uE8B6", "Search Box",           typeof(SearchBoxPage)),
+        ("\uE262", "AutoCompleteBox",      typeof(AutoCompleteBoxPage)),
         ("\uE834", "Selection",            typeof(SelectionPage)),
         ("\uE5C6", "ComboBox",             typeof(ComboBoxPage)),
         ("\uEF4F", "Chip",                 typeof(ChipPage)),
+        ("\uE893", "TagBox",               typeof(TagBoxPage)),
         ("\uE5D2", "Drawer",               typeof(DrawerPage)),
+        ("\uE5D0", "Bottom Sheet",         typeof(BottomSheetPage)),
+        ("\uE5D2", "Side Sheet",           typeof(SideSheetPage)),
         ("\uE262", "Inputs",               typeof(InputsPage)),
         ("\uE916", "DatePicker",           typeof(DatePickerPage)),
         ("\uE192", "TimePicker",           typeof(TimePickerPage)),
@@ -39,6 +44,7 @@ public partial class MainWindow
         ("\uE8D2", "ToolTip",              typeof(TooltipPage)),
         ("\uE8CB", "Flyout",               typeof(FlyoutPage)),
         ("\uE8E9", "Card",                 typeof(CardPage)),
+        ("\uE5CF", "Expander",             typeof(ExpanderPage)),
         ("\uE245", "Typography",           typeof(TypographyPage)),
         ("\uE40A", "Color",                typeof(ColorPage)),
         ("\uE9B0", "Icons",                typeof(IconPage)),
@@ -55,7 +61,7 @@ public partial class MainWindow
         // 默认选中第一项
         Loaded += (_, _) =>
         {
-            if (MainNav.MenuItemsSource is NavigationViewItem[] items && items.Length > 0)
+            if (MainNav.MenuItemsSource is NavigationViewItem[] { Length: > 0 } items)
                 MainNav.SelectedItem = items[0];
 
             // 启动时同步 Switch 状态（ThemeManager.Initialize 可能已跟随系统切换）

@@ -16,6 +16,7 @@
 
     <conv:NullToBoolConverter  x:Key="Mine.Internal.NullToBoolConv"/>
     <conv:HalfValueConverter   x:Key="Mine.Internal.HalfConv"/>
+    <conv:CornerRadiusTopOnlyConverter x:Key="Mine.Converter.CornerRadiusTopOnly"/>
 
 </ResourceDictionary>
 

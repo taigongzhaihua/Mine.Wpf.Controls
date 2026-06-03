@@ -258,9 +258,9 @@ public static class TonalPaletteGenerator
         double b    = C * Math.Sin(hRad);
         OklabToLinear(L, a, b, out var r, out var g, out var bl);
         const double eps = 1e-6;
-        return r >= -eps && r <= 1 + eps &&
-               g >= -eps && g <= 1 + eps &&
-               bl >= -eps && bl <= 1 + eps;
+        return r is >= -eps and <= 1 + eps &&
+               g is >= -eps and <= 1 + eps &&
+               bl is >= -eps and <= 1 + eps;
     }
 
     // ── 低级色彩空间转换 ──────────────────────────────────────────

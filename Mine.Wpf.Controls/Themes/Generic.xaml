@@ -62,6 +62,7 @@
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/NavigationView.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Badge.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Avatar.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/BreadcrumbBar.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Drawer.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SegmentedControl.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/NumericUpDown.xaml"/>
@@ -72,5 +73,10 @@
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ColorPicker.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Stepper.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Toast.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/BottomSheet.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SideSheet.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/TagBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/AutoCompleteBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Expander.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

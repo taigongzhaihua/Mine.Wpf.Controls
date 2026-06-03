@@ -1,0 +1,405 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:primitives="clr-namespace:Mine.Wpf.Controls.Primitives"
+                    xmlns:helpers="clr-namespace:Mine.Wpf.Controls.Helpers">
+
+    <!--
+    ══════════════════════════════════════════════════════════════
+     AutoCompleteBox — Material Design 3
+     自动完成输入框控件,支持自动过滤建议列表和键盘导航
+     - 支持 Outlined / Filled 变体
+     - 浮动标签
+     - 自动过滤建议列表
+     - 键盘导航支持
+    ══════════════════════════════════════════════════════════════
+    -->
+
+    <!-- ═══════════════════════════════════════════════════════════
+         建议列表项样式
+         ═══════════════════════════════════════════════════════════ -->
+    <Style x:Key="Mine.Style.AutoCompleteBox.ListBoxItem" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Padding"                Value="16,0"/>
+        <Setter Property="Height"                 Value="48"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+        <Setter Property="FontFamily"             Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"               Value="{DynamicResource Mine.FontSize.BodyLarge}"/>
+        <Setter Property="Foreground"             Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="Background"             Value="Transparent"/>
+        <Setter Property="Cursor"                 Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Grid ClipToBounds="True">
+                        <Border x:Name="StateLayer" Background="Transparent" CornerRadius="0"/>
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.12"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected"  Value="True"/>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.Primary}" Opacity="0.20"/>
+                                </Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         AutoCompleteBox — Outlined 变体模板
+         ═══════════════════════════════════════════════════════════ -->
+    <ControlTemplate x:Key="Mine.Template.AutoCompleteBox.Outlined" TargetType="{x:Type controls:AutoCompleteBox}">
+        <Grid x:Name="Root">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 外层 Grid：NotchedOutlineBorder + PART_Hint 同层叠放 -->
+            <Grid Grid.Row="0">
+                <!-- 缺口边框 -->
+                <primitives:NotchedOutlineBorder x:Name="Container"
+                        BorderBrush="{DynamicResource Mine.Brush.Outline}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        NotchStart="12"
+                        NotchWidth="0"
+                        MinHeight="56">
+
+                    <!-- Hover 层 -->
+                    <Border x:Name="HoverLayer"
+                            CornerRadius="4"
+                            Background="Transparent"
+                            Padding="16,8">
+                        <!-- TextBox 内容宿主 -->
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Focusable="False"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility="Hidden"
+                                      VerticalAlignment="Center"/>
+                    </Border>
+                </primitives:NotchedOutlineBorder>
+
+                <!-- 浮动标签 -->
+                <TextBlock x:Name="PART_Hint"
+                           Text="{TemplateBinding Hint}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                           FontSize="{DynamicResource Mine.FontSize.BodyLarge}"
+                           IsHitTestVisible="False"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="16,0,0,0"
+                           RenderTransformOrigin="0,0.5">
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="HintScale" ScaleX="1" ScaleY="1"/>
+                            <TranslateTransform x:Name="HintTranslate" Y="0"/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+
+            <!-- 辅助文本 -->
+            <TextBlock x:Name="HelperText"
+                       Grid.Row="1"
+                       Text="{TemplateBinding HelperText}"
+                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                       FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="16,4,16,0"
+                       Visibility="Collapsed"/>
+
+            <!-- 建议下拉列表 -->
+            <Popup x:Name="PART_SuggestionsPopup"
+                   Grid.Row="0"
+                   IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                   Placement="Bottom"
+                   PlacementTarget="{Binding ElementName=Container}"
+                   AllowsTransparency="True"
+                   Focusable="False"
+                   PopupAnimation="None"
+                   StaysOpen="False">
+                <Grid Margin="12,4,30,30"
+                      MinWidth="{Binding ActualWidth, ElementName=Container}"
+                      MaxWidth="{Binding ActualWidth, ElementName=Container}"
+                      MaxHeight="320"
+                      Effect="{DynamicResource Mine.Elevation.3}">
+                    <Border Background="{DynamicResource Mine.Brush.SurfaceContainerHigh}"
+                            CornerRadius="8"
+                            helpers:ClipHelper.CornerRadius="8">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto">
+                            <ListBox x:Name="PART_SuggestionsList"
+                                     ItemsSource="{TemplateBinding FilteredSuggestions}"
+                                     ItemTemplate="{TemplateBinding SuggestionItemTemplate}"
+                                     ItemContainerStyle="{StaticResource Mine.Style.AutoCompleteBox.ListBoxItem}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Focusable="True"
+                                     KeyboardNavigation.DirectionalNavigation="Contained"/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Popup>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <!-- 聚焦 -->
+            <Trigger Property="IsFocused" Value="True">
+                <Setter TargetName="Container"   Property="BorderBrush"     Value="{DynamicResource Mine.Brush.Primary}"/>
+                <Setter TargetName="Container"   Property="BorderThickness" Value="2"/>
+                <Setter TargetName="PART_Hint"   Property="Foreground"      Value="{DynamicResource Mine.Brush.Primary}"/>
+            </Trigger>
+
+            <!-- Hover -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="HoverLayer" Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="Container" Property="BorderBrush" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+            </Trigger>
+
+            <!-- Disabled -->
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Root" Property="Opacity" Value="0.38"/>
+            </Trigger>
+
+            <!-- 错误状态 -->
+            <Trigger Property="HasError" Value="True">
+                <Setter TargetName="Container"   Property="BorderBrush" Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="PART_Hint"   Property="Foreground"  Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="HelperText"  Property="Foreground"  Value="{DynamicResource Mine.Brush.Error}"/>
+            </Trigger>
+
+            <!-- 辅助文本可见性 -->
+            <Trigger Property="HelperText" Value="{x:Null}">
+                <Setter TargetName="HelperText" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="HelperText" Value="">
+                <Setter TargetName="HelperText" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         AutoCompleteBox — Filled 变体模板
+         ═══════════════════════════════════════════════════════════ -->
+    <ControlTemplate x:Key="Mine.Template.AutoCompleteBox.Filled" TargetType="{x:Type controls:AutoCompleteBox}">
+        <Grid x:Name="Root">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="IndicatorScale"
+                                             Storyboard.TargetProperty="ScaleX" To="0" Duration="0"/>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
+                                                           Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="IndicatorScale"
+                                             Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2">
+                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Indicator"
+                                                           Storyboard.TargetProperty="Background">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Hint"
+                                                           Storyboard.TargetProperty="Foreground">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{DynamicResource Mine.Brush.Primary}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Root"
+                                             Storyboard.TargetProperty="Opacity"
+                                             To="0.38" Duration="0"/>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" MinHeight="56"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="FilledBg"
+                    Grid.Row="0"
+                    Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                    CornerRadius="4,4,0,0">
+                <Grid>
+                    <Border x:Name="HoverLayer" CornerRadius="4,4,0,0" Background="Transparent"/>
+                    <Grid Margin="16,8">
+                        <TextBlock x:Name="PART_Hint"
+                                   Text="{TemplateBinding Hint}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                   FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                   FontSize="{DynamicResource Mine.FontSize.BodyLarge}"
+                                   VerticalAlignment="Center"
+                                   RenderTransformOrigin="0,0.5">
+                            <TextBlock.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="0,12,0,0"
+                                      Focusable="False"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility="Hidden"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border x:Name="Indicator"
+                    Grid.Row="0" Height="1"
+                    Background="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                    VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0"/>
+            <Border x:Name="ActiveIndicator"
+                    Grid.Row="0" Height="2"
+                    Background="{DynamicResource Mine.Brush.Primary}"
+                    VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0">
+                <Border.RenderTransform>
+                    <ScaleTransform x:Name="IndicatorScale" ScaleX="0"/>
+                </Border.RenderTransform>
+            </Border>
+
+            <TextBlock x:Name="HelperText"
+                       Grid.Row="1"
+                       Text="{TemplateBinding HelperText}"
+                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                       FontSize="{DynamicResource Mine.FontSize.BodySmall}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="16,4,16,0"
+                       Visibility="Collapsed"/>
+
+            <!-- 建议下拉列表 -->
+            <Popup x:Name="PART_SuggestionsPopup"
+                   Grid.Row="0"
+                   IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                   Placement="Bottom"
+                   PlacementTarget="{Binding ElementName=FilledBg}"
+                   AllowsTransparency="True"
+                   Focusable="False"
+                   PopupAnimation="None"
+                   StaysOpen="False">
+                <Grid Margin="12,4,30,30"
+                      MinWidth="{Binding ActualWidth, ElementName=FilledBg}"
+                      MaxWidth="{Binding ActualWidth, ElementName=FilledBg}"
+                      MaxHeight="320"
+                      Effect="{DynamicResource Mine.Elevation.3}">
+                    <Border Background="{DynamicResource Mine.Brush.SurfaceContainerHigh}"
+                            CornerRadius="8"
+                            helpers:ClipHelper.CornerRadius="8">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto">
+                            <ListBox x:Name="PART_SuggestionsList"
+                                     ItemsSource="{TemplateBinding FilteredSuggestions}"
+                                     ItemTemplate="{TemplateBinding SuggestionItemTemplate}"
+                                     ItemContainerStyle="{StaticResource Mine.Style.AutoCompleteBox.ListBoxItem}"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Focusable="True"
+                                     KeyboardNavigation.DirectionalNavigation="Contained"/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Popup>
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="HoverLayer" Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
+            <!-- 错误状态 -->
+            <Trigger Property="HasError" Value="True">
+                <Setter TargetName="Indicator"       Property="Background" Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="ActiveIndicator" Property="Background" Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="PART_Hint"       Property="Foreground" Value="{DynamicResource Mine.Brush.Error}"/>
+                <Setter TargetName="HelperText"      Property="Foreground" Value="{DynamicResource Mine.Brush.Error}"/>
+            </Trigger>
+
+            <!-- 辅助文本可见性 -->
+            <Trigger Property="HelperText" Value="{x:Null}">
+                <Setter TargetName="HelperText" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="HelperText" Value="">
+                <Setter TargetName="HelperText" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         AutoCompleteBox 主样式
+         ═══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:AutoCompleteBox}">
+        <Setter Property="Variant"                     Value="Outlined"/>
+        <Setter Property="FontFamily"                  Value="{DynamicResource Mine.FontFamily.Default}"/>
+        <Setter Property="FontSize"                    Value="{DynamicResource Mine.FontSize.BodyLarge}"/>
+        <Setter Property="Foreground"                  Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="MinWidth"                    Value="160"/>
+        <Setter Property="FocusVisualStyle"            Value="{x:Null}"/>
+        <Setter Property="AcceptsReturn"               Value="False"/>
+        <Setter Property="TextWrapping"                Value="NoWrap"/>
+        <Setter Property="VerticalContentAlignment"    Value="Center"/>
+        <Setter Property="CaretBrush"                  Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="SelectionBrush"              Value="{DynamicResource Mine.Brush.Primary}"/>
+        <Setter Property="SelectionOpacity"            Value="0.4"/>
+        <Setter Property="SelectionTextBrush"          Value="{DynamicResource Mine.Brush.OnPrimary}"/>
+        <Setter Property="Template"
+                Value="{StaticResource Mine.Template.AutoCompleteBox.Outlined}"/>
+        <Style.Triggers>
+            <Trigger Property="Variant" Value="Filled">
+                <Setter Property="Template"
+                        Value="{StaticResource Mine.Template.AutoCompleteBox.Filled}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,234 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:helpers="clr-namespace:Mine.Wpf.Controls.Helpers"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <!--
+    ══════════════════════════════════════════════════════════════
+     Expander — Material Design 3
+     可展开控件,支持流畅的展开/收起动画
+     - 符合 MD3 设计规范
+     - 平滑展开动画
+     - 支持阴影效果
+     - 可自定义圆角和动画时长
+    ══════════════════════════════════════════════════════════════
+    -->
+
+    <!-- ═══════════════════════════════════════════════════════════
+         Expander 默认样式
+         ═══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:Expander}">
+        <Setter Property="Background"          Value="{DynamicResource Mine.Brush.SurfaceContainerLow}"/>
+        <Setter Property="Foreground"          Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="BorderBrush"         Value="{DynamicResource Mine.Brush.OutlineVariant}"/>
+        <Setter Property="BorderThickness"     Value="0"/>
+        <Setter Property="CornerRadius"        Value="12"/>
+        <Setter Property="Padding"             Value="0"/>
+        <Setter Property="FocusVisualStyle"    Value="{x:Null}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="AnimationDuration"   Value="{StaticResource Mine.Motion.Medium2}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:Expander}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <VisualStateManager.VisualStateGroups>
+                            <!-- 展开状态组 -->
+                            <VisualStateGroup x:Name="ExpansionStates">
+                                <VisualState x:Name="Expanded">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ContentSite"
+                                                         Storyboard.TargetProperty="(FrameworkElement.LayoutTransform).(ScaleTransform.ScaleY)"
+                                                         From="0" To="1"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="ContentPresenter"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="ExpandIcon"
+                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                                         To="180"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Collapsed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ContentSite"
+                                                         Storyboard.TargetProperty="(FrameworkElement.LayoutTransform).(ScaleTransform.ScaleY)"
+                                                         To="0"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="ContentPresenter"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimation Storyboard.TargetName="ExpandIcon"
+                                                         Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                                                         To="0"
+                                                         Duration="0:0:0.3">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                       Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+
+                            <!-- 交互状态组 -->
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="StateLayerBorder"
+                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                        To="{DynamicResource Mine.Color.OnSurface}"
+                                                        Duration="0:0:0.1"/>
+                                        <DoubleAnimation Storyboard.TargetName="StateLayerBorder"
+                                                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Opacity)"
+                                                         To="0.08"
+                                                         Duration="0:0:0.1"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="StateLayerBorder"
+                                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                        To="{DynamicResource Mine.Color.Primary}"
+                                                        Duration="0:0:0.05"/>
+                                        <DoubleAnimation Storyboard.TargetName="StateLayerBorder"
+                                                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Opacity)"
+                                                         To="0.12"
+                                                         Duration="0:0:0.05"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- 标题区域 -->
+                            <Border x:Name="PART_HeaderSite"
+                                    Grid.Row="0"
+                                    Background="Transparent"
+                                    Cursor="Hand"
+                                    MinHeight="56">
+                                <Grid>
+                                    <!-- 状态层 -->
+                                    <Border x:Name="StateLayerBorder"
+                                            CornerRadius="{TemplateBinding CornerRadius}">
+                                        <Border.Background>
+                                            <SolidColorBrush Color="Transparent" Opacity="0"/>
+                                        </Border.Background>
+                                    </Border>
+
+                                    <Grid Margin="16,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- 标题内容 -->
+                                        <ContentPresenter x:Name="HeaderContent"
+                                                          Grid.Column="0"
+                                                          ContentSource="Header"
+                                                          RecognizesAccessKey="True"
+                                                          VerticalAlignment="Center"
+                                                          HorizontalAlignment="Left"
+                                                          Margin="0,16"/>
+
+                                        <!-- 展开图标 -->
+                                        <controls:MaterialIcon x:Name="ExpandIcon"
+                                                               Grid.Column="1"
+                                                               Kind="ExpandMore"
+                                                               Width="24" Height="24"
+                                                               Margin="16,0,0,0"
+                                                               Foreground="{TemplateBinding Foreground}"
+                                                               VerticalAlignment="Center"
+                                                               RenderTransformOrigin="0.5,0.5">
+                                            <controls:MaterialIcon.RenderTransform>
+                                                <RotateTransform Angle="0"/>
+                                            </controls:MaterialIcon.RenderTransform>
+                                        </controls:MaterialIcon>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+
+                            <!-- 分隔线 -->
+                            <Border x:Name="Divider"
+                                    Grid.Row="1"
+                                    Height="1"
+                                    Background="{DynamicResource Mine.Brush.OutlineVariant}"
+                                    Margin="0"
+                                    Visibility="Collapsed"/>
+
+                            <!-- 内容区域 -->
+                            <Border x:Name="ContentSite"
+                                    Grid.Row="2"
+                                    ClipToBounds="True">
+                                <Border.LayoutTransform>
+                                    <ScaleTransform ScaleY="0"/>
+                                </Border.LayoutTransform>
+                                <ContentPresenter x:Name="ContentPresenter"
+                                                  ContentSource="Content"
+                                                  Margin="16"
+                                                  Opacity="0"
+                                                  Visibility="Collapsed"
+                                                  VerticalAlignment="Top"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- 展开时显示分隔线 -->
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="Divider" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+
+                        <!-- 禁用状态 -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Root" Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,190 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.ExpanderPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Expander"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── 基础用法 ──────────────────────────────────────── -->
+        <TextBlock Text="基础用法"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Expander Header="基本展开控件" Margin="0,0,0,16">
+            <TextBlock Text="这是可展开的内容区域。点击标题栏可以展开或收起内容。"
+                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                       TextWrapping="Wrap"/>
+        </mine:Expander>
+
+        <mine:Expander Header="默认展开" IsExpanded="True" Margin="0,0,0,24">
+            <StackPanel>
+                <TextBlock Text="这个 Expander 默认是展开状态。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           TextWrapping="Wrap" Margin="0,0,0,8"/>
+                <TextBlock Text="可以通过设置 IsExpanded=&quot;True&quot; 属性来实现。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </mine:Expander>
+
+        <!-- ── 带边框样式 ──────────────────────────────────────── -->
+        <TextBlock Text="带边框样式"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Expander Header="带边框的 Expander"
+                       BorderThickness="1"
+                       BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}"
+                       Margin="0,0,0,24">
+            <TextBlock Text="添加 BorderThickness 和 BorderBrush 属性可以为 Expander 添加边框。"
+                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                       TextWrapping="Wrap"/>
+        </mine:Expander>
+
+        <!-- ── 自定义标题 ──────────────────────────────────────── -->
+        <TextBlock Text="自定义标题内容"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Expander Margin="0,0,0,16">
+            <mine:Expander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <mine:MaterialIcon Kind="Info" Size="20" Margin="0,0,12,0"
+                                       Foreground="{DynamicResource Mine.Brush.Primary}"/>
+                    <StackPanel>
+                        <TextBlock Text="自定义标题" 
+                                   Style="{DynamicResource Mine.Typography.TitleSmall}"/>
+                        <TextBlock Text="可以在标题中放置任何内容" 
+                                   Style="{DynamicResource Mine.Typography.BodySmall}"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                    </StackPanel>
+                </StackPanel>
+            </mine:Expander.Header>
+            <TextBlock Text="Header 属性支持任何 UIElement，您可以创建丰富的标题布局。"
+                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                       TextWrapping="Wrap"/>
+        </mine:Expander>
+
+        <!-- ── 复杂内容示例 ──────────────────────────────────────── -->
+        <TextBlock Text="复杂内容示例"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Expander Header="常见问题 (FAQ)" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="Q: 如何自定义动画时长？"
+                           Style="{DynamicResource Mine.Typography.TitleSmall}"
+                           Margin="0,0,0,8"/>
+                <TextBlock Text="A: 使用 AnimationDuration 属性可以自定义展开/收起动画的时长。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           TextWrapping="Wrap" Margin="0,0,0,12"/>
+                <TextBlock Text="Q: 可以嵌套使用吗？"
+                           Style="{DynamicResource Mine.Typography.TitleSmall}"
+                           Margin="0,0,0,8"/>
+                <TextBlock Text="A: 可以。Expander 支持嵌套使用，可以创建多级展开结构。"
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </mine:Expander>
+
+        <mine:Expander Header="设置与配置" Margin="0,0,0,8">
+            <StackPanel>
+                <mine:CheckBox Content="启用自动保存" IsChecked="True" Margin="0,0,0,8"/>
+                <mine:CheckBox Content="启用通知" IsChecked="False" Margin="0,0,0,8"/>
+                <mine:CheckBox Content="深色模式" IsChecked="False" Margin="0,0,0,12"/>
+                <mine:Button Content="保存设置" Variant="Filled" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </mine:Expander>
+
+        <mine:Expander Header="详细信息" Margin="0,0,0,24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="版本：" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Margin="0,0,0,8"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="1.0.0" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,0,0,8"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="最后更新：" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Margin="0,0,0,8"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="2024年12月" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,0,0,8"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="作者：" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Margin="0,0,0,8"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="Mine WPF Controls" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,0,0,8"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="许可证：" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="MIT License" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+            </Grid>
+        </mine:Expander>
+
+        <!-- ── 嵌套示例 ──────────────────────────────────────── -->
+        <TextBlock Text="嵌套 Expander"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Expander Header="一级菜单" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Text="一级菜单内容" 
+                           Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           Margin="0,0,0,12"/>
+
+                <mine:Expander Header="二级菜单 A" 
+                               Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                               Margin="0,0,0,8">
+                    <TextBlock Text="二级菜单 A 的内容。嵌套的 Expander 可以使用不同的背景色来区分层级。"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               TextWrapping="Wrap"/>
+                </mine:Expander>
+
+                <mine:Expander Header="二级菜单 B"
+                               Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}">
+                    <TextBlock Text="二级菜单 B 的内容。"
+                               Style="{DynamicResource Mine.Typography.BodyMedium}"
+                               TextWrapping="Wrap"/>
+                </mine:Expander>
+            </StackPanel>
+        </mine:Expander>
+
+        <!-- ── 快速动画示例 ──────────────────────────────────────── -->
+        <TextBlock Text="自定义动画速度"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,24,0,12"/>
+        <mine:Expander Header="快速动画 (150ms)" 
+                       AnimationDuration="0:0:0.15"
+                       Margin="0,0,0,8">
+            <TextBlock Text="这个 Expander 使用较快的动画速度（150ms）。"
+                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                       TextWrapping="Wrap"/>
+        </mine:Expander>
+
+        <mine:Expander Header="慢速动画 (500ms)" 
+                       AnimationDuration="0:0:0.5"
+                       Margin="0,0,0,24">
+            <TextBlock Text="这个 Expander 使用较慢的动画速度（500ms），动画效果更加平滑。"
+                       Style="{DynamicResource Mine.Typography.BodyMedium}"
+                       TextWrapping="Wrap"/>
+        </mine:Expander>
+
+    </StackPanel>
+</mine:Page>

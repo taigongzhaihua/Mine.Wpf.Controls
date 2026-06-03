@@ -1,0 +1,122 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.BreadcrumbBarPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           xmlns:local="clr-namespace:Mine.Wpf.Controls.Gallery.Pages"
+           Title="BreadcrumbBar"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="760">
+        <TextBlock Text="BreadcrumbBar"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="A navigation control that displays the current location within a hierarchy."
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,28"/>
+
+        <!-- Basic Usage -->
+        <TextBlock Text="Basic Usage"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:BreadcrumbBar ItemsSource="{Binding BasicItems}"
+                                    ItemClicked="OnBreadcrumbItemClicked"/>
+                <TextBlock Text="Simple breadcrumb with string items"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- MaxItems (Collapsed) -->
+        <TextBlock Text="MaxItems (Collapsed)"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:BreadcrumbBar ItemsSource="{Binding LongPathItems}"
+                                    MaxItems="5"
+                                    ItemClicked="OnBreadcrumbItemClicked"/>
+                <TextBlock Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0">
+                    <Run Text="Long path with MaxItems=5, middle items collapsed to '...'"/>
+                </TextBlock>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- Custom Template (暂时不可用) -->
+        <!--
+        <TextBlock Text="Custom Template"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:BreadcrumbBar ItemsSource="{Binding CustomItems}"
+                                    ItemClicked="OnBreadcrumbItemClicked">
+                    <mine:BreadcrumbBar.ItemTemplate>
+                        <DataTemplate DataType="{x:Type local:CustomBreadcrumbItem}">
+                            <StackPanel Orientation="Horizontal">
+                                <mine:MaterialIcon Kind="{Binding Icon}" 
+                                                   Size="18" 
+                                                   Margin="0,0,6,0"/>
+                                <TextBlock Text="{Binding Label}" 
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </mine:BreadcrumbBar.ItemTemplate>
+                </mine:BreadcrumbBar>
+                <TextBlock Text="Custom item template with icons"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0"/>
+            </StackPanel>
+        </mine:Card>
+        -->
+
+        <!-- Dynamic Control -->
+        <TextBlock Text="Dynamic Control"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:BreadcrumbBar ItemsSource="{Binding BasicItems}"
+                                    ItemClicked="OnBreadcrumbItemClicked"
+                                    Margin="0,0,0,16"/>
+                <StackPanel Orientation="Horizontal">
+                    <mine:Button Content="Add Item" 
+                                 Click="OnAddItem" 
+                                 Margin="0,0,8,0"/>
+                    <mine:Button Content="Remove Item" 
+                                 Click="OnRemoveItem"
+                                 Variant="Outlined"/>
+                </StackPanel>
+                <TextBlock Text="Add or remove items dynamically"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- Usage Notes -->
+        <TextBlock Text="Usage Notes"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24">
+            <StackPanel>
+                <TextBlock Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           TextWrapping="Wrap">
+                    <Run Text="• Use ItemsSource to bind navigation path items" FontWeight="Medium"/>
+                    <LineBreak/>
+                    <Run Text="• Set MaxItems to collapse middle items when path is too long"/>
+                    <LineBreak/>
+                    <Run Text="• Handle ItemClicked event to navigate to selected level"/>
+                    <LineBreak/>
+                    <Run Text="• Last item is automatically styled as current location"/>
+                </TextBlock>
+            </StackPanel>
+        </mine:Card>
+    </StackPanel>
+</mine:Page>

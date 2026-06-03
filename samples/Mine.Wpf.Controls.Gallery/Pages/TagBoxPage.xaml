@@ -1,0 +1,125 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.TagBoxPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           xmlns:local="clr-namespace:Mine.Wpf.Controls.Gallery.Pages"
+           Title="TagBox"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="760">
+        <TextBlock Text="TagBox"
+                   Style="{DynamicResource Mine.Typography.HeadlineMedium}"
+                   Margin="0,0,0,8"/>
+        <TextBlock Text="A tag input control that allows users to add, remove, and display multiple tags."
+                   Style="{DynamicResource Mine.Typography.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,28"/>
+
+        <!-- Basic Usage -->
+        <TextBlock Text="Basic Usage"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:TagBox x:Name="BasicTagBox"
+                             Tags="{Binding BasicTags}"
+                             Placeholder="Type and press Enter to add tags..."/>
+                <TextBlock Text="Press Enter to add a tag, Backspace to remove the last one"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- Max Tags -->
+        <TextBlock Text="Max Tags (5)"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:TagBox Tags="{Binding MaxTagsList}"
+                             MaxTags="5"
+                             Placeholder="Limited to 5 tags..."/>
+                <TextBlock Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0">
+                    <Run Text="Limited to maximum 5 tags"/>
+                </TextBlock>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- No Duplicates -->
+        <TextBlock Text="No Duplicates"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:TagBox Tags="{Binding NoDuplicatesTags}"
+                             AllowDuplicates="False"
+                             Placeholder="Duplicate tags are not allowed..."/>
+                <TextBlock Text="Try adding the same tag twice - it will be ignored"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- Predefined Tags -->
+        <TextBlock Text="Predefined Tags"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:TagBox Tags="{Binding PredefinedTags}"
+                             Placeholder="Add more tags..."/>
+                <TextBlock Text="Control with predefined tags"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- Event Handling -->
+        <TextBlock Text="Event Handling"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <StackPanel>
+                <mine:TagBox Tags="{Binding EventTags}"
+                             TagAdded="OnTagAdded"
+                             TagRemoved="OnTagRemoved"
+                             Placeholder="Add or remove tags to see events..."/>
+                <TextBlock x:Name="EventLogTextBlock"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Margin="0,16,0,0"
+                           Text="No events yet"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- Usage Notes -->
+        <TextBlock Text="Usage Notes"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="24">
+            <StackPanel>
+                <TextBlock Style="{DynamicResource Mine.Typography.BodyMedium}"
+                           TextWrapping="Wrap">
+                    <Run Text="• Use Tags property to bind tag collection (ObservableCollection recommended)" FontWeight="Medium"/>
+                    <LineBreak/>
+                    <Run Text="• Press Enter to add a tag from the input"/>
+                    <LineBreak/>
+                    <Run Text="• Press Backspace (when input is empty) to remove the last tag"/>
+                    <LineBreak/>
+                    <Run Text="• Click the × button on any tag to remove it"/>
+                    <LineBreak/>
+                    <Run Text="• Set MaxTags to limit the number of tags (0 = unlimited)"/>
+                    <LineBreak/>
+                    <Run Text="• Set AllowDuplicates to false to prevent duplicate tags"/>
+                    <LineBreak/>
+                    <Run Text="• Handle TagAdded and TagRemoved events for custom logic"/>
+                </TextBlock>
+            </StackPanel>
+        </mine:Card>
+    </StackPanel>
+</mine:Page>

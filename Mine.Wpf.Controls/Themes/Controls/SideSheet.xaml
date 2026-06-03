@@ -1,0 +1,82 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+    <!--
+    ══════════════════════════════════════════════════════════════
+     SideSheet — Material Design 3 Side Sheet
+     模板结构：
+       Grid（填满父容器，ClipToBounds）
+       ├─ ContentPresenter              ← 主体内容（始终可见）
+       ├─ Border PART_Scrim             ← 半透明遮罩（Modal 变体，Opacity 动画）
+       └─ Border PART_SheetPanel        ← 面板（TranslateTransform X 轴动画）
+            └─ ContentPresenter         ← SheetContent
+     面板默认 HorizontalAlignment="Right"；Left 方向由 Placement 触发器切换。
+     IsOpen/Variant 由 SideSheet.cs 代码驱动动画，模板只提供结构。
+    ══════════════════════════════════════════════════════════════
+    -->
+    <Style TargetType="{x:Type controls:SideSheet}">
+        <Setter Property="Focusable"                  Value="False"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment"   Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:SideSheet}">
+                    <Grid ClipToBounds="True">
+
+                        <!-- 主体内容 -->
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                        <!-- 遮罩层（Modal 变体使用）。Opacity 由代码驱动，初始 Collapsed -->
+                        <Border x:Name="PART_Scrim"
+                                Background="{DynamicResource Mine.Brush.Scrim}"
+                                Opacity="0"
+                                Visibility="Collapsed"/>
+
+                        <!-- 面板：默认右侧对齐，TranslateTransform 由代码驱动 -->
+                        <Border x:Name="PART_SheetPanel"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                Width="{TemplateBinding SheetWidth}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Background="{DynamicResource Mine.Brush.SurfaceContainerLow}"
+                                Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform/>
+                            </Border.RenderTransform>
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="32" ShadowDepth="0"
+                                                  Opacity="0.2"
+                                                  Color="{DynamicResource Mine.Color.Shadow}"/>
+                            </Border.Effect>
+                            <ContentPresenter Content="{TemplateBinding SheetContent}"
+                                              ContentTemplate="{TemplateBinding SheetContentTemplate}"/>
+                        </Border>
+
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Left 方向：面板左侧对齐 -->
+                        <Trigger Property="Placement" Value="Left">
+                            <Setter TargetName="PART_SheetPanel" Property="HorizontalAlignment" Value="Left"/>
+                        </Trigger>
+                        <!-- Standard 变体：遮罩始终不显示 -->
+                        <Trigger Property="Variant" Value="Standard">
+                            <Setter TargetName="PART_Scrim" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <!-- Modal 变体：为面板添加左侧圆角（Right 放置时） -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Variant"   Value="Modal"/>
+                                <Condition Property="Placement" Value="Right"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_SheetPanel" Property="CornerRadius"
+                                    Value="{Binding CornerRadius, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,113 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls">
+    <!--
+    ┌──────────────────────────────────────────────────────────────────┐
+    │  BreadcrumbBar 模板结构                                           │
+    │                                                                  │
+    │  ItemsControl（水平排列）                                         │
+    │  └─ StackPanel (Horizontal)                                      │
+    │      └─ 每项包含：                                                │
+    │          ├─ Button（面包屑项）                                    │
+    │          └─ TextBlock（分隔符 chevron_right）                     │
+    │                                                                  │
+    │  特性：                                                           │
+    │  - 支持 MaxItems 自动省略中间项为 "..."                           │
+    │  - 最后一项不显示分隔符                                           │
+    │  - 使用 Material Symbols 图标作为分隔符                           │
+    └──────────────────────────────────────────────────────────────────┘
+    -->
+
+    <!-- BreadcrumbBar 默认样式 -->
+    <Style TargetType="{x:Type controls:BreadcrumbBar}">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:BreadcrumbBar}">
+                    <ItemsControl x:Name="PART_ItemsControl">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <!-- 面包屑项按钮 -->
+                                    <Button x:Name="ItemButton"
+                                            Command="{x:Static controls:BreadcrumbBar.NavigateCommand}"
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="8,4"
+                                            Cursor="Hand"
+                                            Focusable="False">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="Border"
+                                                                    Background="{TemplateBinding Background}"
+                                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                                    Padding="{TemplateBinding Padding}"
+                                                                    CornerRadius="4">
+                                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                                  VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" 
+                                                                            Value="{DynamicResource Mine.Brush.SurfaceContainerHighest}"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsPressed" Value="True">
+                                                                    <Setter TargetName="Border" Property="Background" 
+                                                                            Value="{DynamicResource Mine.Brush.SurfaceContainerHigh}"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                        <Button.Content>
+                                            <TextBlock x:Name="ItemText"
+                                                       Text="{Binding Data}"
+                                                       FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                       FontSize="14"
+                                                       Foreground="{DynamicResource Mine.Brush.OnSurface}"/>
+                                        </Button.Content>
+                                    </Button>
+
+                                    <!-- 分隔符 -->
+                                    <TextBlock x:Name="Separator"
+                                               Text="/"
+                                               FontSize="14"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                               VerticalAlignment="Center"
+                                               Margin="8,0"/>
+                                </StackPanel>
+                                <DataTemplate.Triggers>
+                                    <!-- 省略号项 -->
+                                    <DataTrigger Binding="{Binding IsEllipsis}" Value="True">
+                                        <Setter TargetName="ItemText" Property="Text" Value="..."/>
+                                        <Setter TargetName="ItemButton" Property="IsEnabled" Value="False"/>
+                                        <Setter TargetName="ItemButton" Property="Cursor" Value="Arrow"/>
+                                    </DataTrigger>
+
+                                    <!-- 最后一项不显示分隔符 -->
+                                    <DataTrigger Binding="{Binding IsLast}" Value="True">
+                                        <Setter TargetName="Separator" Property="Visibility" Value="Collapsed"/>
+                                        <Setter TargetName="ItemButton" Property="IsEnabled" Value="False"/>
+                                        <Setter TargetName="ItemButton" Property="Cursor" Value="Arrow"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

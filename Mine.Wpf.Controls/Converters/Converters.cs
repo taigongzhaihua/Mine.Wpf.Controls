@@ -139,7 +139,7 @@ public sealed class NullToBoolConverter : IValueConverter
 public sealed class ZeroToNullStringConverter : IValueConverter
 {
     public object? Convert(object value, Type t, object p, CultureInfo c)
-        => value is int i && i > 0 ? i.ToString() : null;
+        => value is int i and > 0 ? i.ToString() : null;
     public object ConvertBack(object value, Type t, object p, CultureInfo c) => Binding.DoNothing;
 }
 public sealed class HalfValueConverter : IValueConverter
@@ -149,6 +149,25 @@ public sealed class HalfValueConverter : IValueConverter
         => value is double d ? d / 2.0 : 20.0;
     public object ConvertBack(object value, Type t, object p, CultureInfo c) => Binding.DoNothing;
 }
+/// <summary>
+/// 将 CornerRadius 转换为仅保留顶部圆角的 CornerRadius（底部圆角设为 0）。
+/// 用于 Expander 展开时调整 StateLayerBorder 的圆角。
+/// </summary>
+public sealed class CornerRadiusTopOnlyConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is CornerRadius cr)
+        {
+            return new CornerRadius(cr.TopLeft, cr.TopRight, 0, 0);
+        }
+        return new CornerRadius(0);
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        => Binding.DoNothing;
+}
+
 /// <summary>
 /// 使用 CSS border-radius 比例压缩算法限制 CornerRadius，防止超大圆角值导致渲染变形。
 /// 对每个角分别计算水平压缩比和垂直压缩比，取两者之小作为该角的最终缩放系数。

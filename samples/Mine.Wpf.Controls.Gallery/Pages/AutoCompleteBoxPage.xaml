@@ -1,0 +1,175 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.AutoCompleteBoxPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="AutoCompleteBox"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── Outlined（默认）────────────────────────────────────── -->
+        <TextBlock Text="AutoCompleteBox — Outlined"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,4"/>
+        <TextBlock Text="Material Design 3 自动完成输入框，支持浮动标签、自动过滤建议列表、键盘导航。"
+                   Style="{DynamicResource Mine.Typography.BodyMedium}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   Margin="0,0,0,16"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="基础示例"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <mine:AutoCompleteBox x:Name="BasicAutoComplete"
+                                      Hint="选择城市"
+                                      Width="320"
+                                      HorizontalAlignment="Left"
+                                      SuggestionsSource="{Binding Cities, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                      AutoFilter="True"
+                                      MaxSuggestions="6"
+                                      SuggestionSelected="OnSuggestionSelected"/>
+                <TextBlock x:Name="BasicResult"
+                           Margin="0,12,0,0"
+                           Style="{DynamicResource Mine.Typography.BodySmall}"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           Text="开始输入以查看建议..."/>
+            </StackPanel>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="带辅助文本"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <mine:AutoCompleteBox Hint="输入国家名称"
+                                      HelperText="从列表中选择或输入自定义内容"
+                                      Width="320"
+                                      HorizontalAlignment="Left"
+                                      SuggestionsSource="{Binding Countries, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                      AutoFilter="True"/>
+            </StackPanel>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="最小前缀长度"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <mine:AutoCompleteBox Hint="搜索产品"
+                                      HelperText="至少输入 2 个字符才会显示建议"
+                                      Width="320"
+                                      HorizontalAlignment="Left"
+                                      MinimumPrefixLength="2"
+                                      SuggestionsSource="{Binding Products, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                      AutoFilter="True"/>
+            </StackPanel>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="错误状态"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <mine:AutoCompleteBox Hint="电子邮件"
+                                      HelperText="请输入有效的电子邮件地址"
+                                      HasError="True"
+                                      Width="320"
+                                      HorizontalAlignment="Left"
+                                      SuggestionsSource="{Binding EmailDomains, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                      AutoFilter="True"/>
+            </StackPanel>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,24" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="禁用状态"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <mine:AutoCompleteBox Hint="已禁用"
+                                      IsEnabled="False"
+                                      Width="320"
+                                      HorizontalAlignment="Left"
+                                      Text="不可编辑的内容"/>
+            </StackPanel>
+        </mine:Card>
+
+        <!-- ── Filled 变体 ───────────────────────────────────────── -->
+        <TextBlock Text="AutoCompleteBox — Filled"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,4"/>
+        <TextBlock Text="紧凑型填充变体，适合密集的表单场景。"
+                   Style="{DynamicResource Mine.Typography.BodyMedium}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   Margin="0,0,0,16"/>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="基础 Filled 样式"
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               Margin="0,0,0,12"/>
+                    <mine:AutoCompleteBox Variant="Filled"
+                                          Hint="选择城市"
+                                          SuggestionsSource="{Binding Cities, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                          AutoFilter="True"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="带辅助文本"
+                               Style="{DynamicResource Mine.Typography.LabelLarge}"
+                               Foreground="{DynamicResource Mine.Brush.Primary}"
+                               Margin="0,0,0,12"/>
+                    <mine:AutoCompleteBox Variant="Filled"
+                                          Hint="输入标签"
+                                          HelperText="按 Enter 选择建议"
+                                          SuggestionsSource="{Binding Tags, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                          AutoFilter="True"/>
+                </StackPanel>
+            </Grid>
+        </mine:Card>
+
+        <mine:Card Padding="24" Margin="0,0,0,8" Variant="Outlined">
+            <StackPanel>
+                <TextBlock Text="自定义建议项模板"
+                           Style="{DynamicResource Mine.Typography.LabelLarge}"
+                           Foreground="{DynamicResource Mine.Brush.Primary}"
+                           Margin="0,0,0,16"/>
+                <mine:AutoCompleteBox Variant="Filled"
+                                      Hint="选择用户"
+                                      Width="320"
+                                      HorizontalAlignment="Left"
+                                      SuggestionsSource="{Binding Users, RelativeSource={RelativeSource AncestorType=mine:Page}}"
+                                      SuggestionDisplayMemberPath="Name"
+                                      AutoFilter="True">
+                    <mine:AutoCompleteBox.SuggestionItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <mine:Avatar Width="32" Height="32"
+                                             Initials="{Binding Name}"
+                                             Margin="0,0,12,0"/>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}"
+                                               Style="{DynamicResource Mine.Typography.BodyLarge}"/>
+                                    <TextBlock Text="{Binding Email}"
+                                               Style="{DynamicResource Mine.Typography.BodySmall}"
+                                               Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </mine:AutoCompleteBox.SuggestionItemTemplate>
+                </mine:AutoCompleteBox>
+            </StackPanel>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>
