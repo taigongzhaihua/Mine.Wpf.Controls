@@ -281,7 +281,7 @@ public class ColorPicker : Control
         var p  = v * (1 - s);
         var q  = v * (1 - f * s);
         var t  = v * (1 - (1 - f) * s);
-        (double r, double g, double b) = hi switch
+        (var r, var g, var b) = hi switch
         {
             0 => (v, t, p),
             1 => (q, v, p),

@@ -203,7 +203,7 @@ public class SideSheet : ContentControl
         var duration   = new Duration(TimeSpan.FromMilliseconds(animate ? 300 : 0));
         var ease       = new CubicEase { EasingMode = EasingMode.EaseOut };
 
-        bool isModal = Variant == SideSheetVariant.Modal;
+        var isModal = Variant == SideSheetVariant.Modal;
 
         if (IsOpen)
         {
@@ -251,14 +251,14 @@ public class SideSheet : ContentControl
 
         var transform = EnsureTransform();
 
-        double panelW = _sheetPanel.ActualWidth > 0 ? _sheetPanel.ActualWidth : SheetWidth;
+        var panelW = _sheetPanel.ActualWidth > 0 ? _sheetPanel.ActualWidth : SheetWidth;
 
-        double closedOffset = Placement == SideSheetPlacement.Right
+        var closedOffset = Placement == SideSheetPlacement.Right
             ? panelW + 8
             : -(panelW + 8);
 
-        double from = closing ? 0            : closedOffset;
-        double to   = closing ? closedOffset : 0;
+        var from = closing ? 0            : closedOffset;
+        var to   = closing ? closedOffset : 0;
 
         var anim = new DoubleAnimation(from, to, duration) { EasingFunction = ease };
         if (completed != null) anim.Completed += (_, _) => completed();

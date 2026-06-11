@@ -275,8 +275,8 @@ public class BottomSheet : ContentControl
     {
         if (!_isDragging || _sheetPanel == null || e.LeftButton != MouseButtonState.Pressed) return;
 
-        double deltaY    = e.GetPosition(this).Y - _dragStartY;
-        double translateY = _dragStartTranslateY + deltaY;
+        var deltaY    = e.GetPosition(this).Y - _dragStartY;
+        var translateY = _dragStartTranslateY + deltaY;
         // 只允许向下拖（正方向）
         if (translateY < 0) translateY = 0;
         SetTranslateY(translateY);
@@ -289,8 +289,8 @@ public class BottomSheet : ContentControl
         _sheetPanel.ReleaseMouseCapture();
         Mouse.OverrideCursor = null; // 恢复光标
 
-        double threshold = (_sheetPanel.ActualHeight > 0 ? _sheetPanel.ActualHeight : 200) * 0.35;
-        double current   = GetTranslateY();
+        var threshold = (_sheetPanel.ActualHeight > 0 ? _sheetPanel.ActualHeight : 200) * 0.35;
+        var current   = GetTranslateY();
 
         if (current > threshold)
             IsOpen = false;
@@ -323,7 +323,7 @@ public class BottomSheet : ContentControl
         var duration   = new Duration(TimeSpan.FromMilliseconds(animate ? 300 : 0));
         var ease       = new CubicEase { EasingMode = EasingMode.EaseOut };
 
-        bool isModal = Variant == BottomSheetVariant.Modal;
+        var isModal = Variant == BottomSheetVariant.Modal;
 
         if (IsOpen)
         {
@@ -370,12 +370,12 @@ public class BottomSheet : ContentControl
         if (_sheetPanel == null) return;
 
         var transform = EnsureTransform();
-        double panelH  = _sheetPanel.ActualHeight > 0 ? _sheetPanel.ActualHeight : 400;
-        double closedY = panelH + 8;
+        var panelH  = _sheetPanel.ActualHeight > 0 ? _sheetPanel.ActualHeight : 400;
+        var closedY = panelH + 8;
 
         // 关闭时从当前实际位置出发（拖拽后面板可能已有偏移），避免先跳回 0 再收缩
-        double from = closing ? transform.Y : closedY;
-        double to   = closing ? closedY     : 0;
+        var from = closing ? transform.Y : closedY;
+        var to   = closing ? closedY     : 0;
 
         var anim = new DoubleAnimation(from, to, duration) { EasingFunction = ease };
         if (completed != null) anim.Completed += (_, _) => completed();

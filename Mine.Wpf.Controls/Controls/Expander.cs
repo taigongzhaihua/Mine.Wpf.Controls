@@ -12,13 +12,10 @@ namespace Mine.Wpf.Controls.Controls;
 [TemplateVisualState(Name = "Expanded",  GroupName = "ExpansionStates")]
 [TemplateVisualState(Name = "Collapsed", GroupName = "ExpansionStates")]
 [TemplatePart(Name = PartHeaderSite, Type = typeof(FrameworkElement))]
-[TemplatePart(Name = PartStateLayerBorder, Type = typeof(Border))]
 public class Expander : HeaderedContentControl
 {
     private const string PartHeaderSite = "PART_HeaderSite";
-    private const string PartStateLayerBorder = "StateLayerBorder";
     private FrameworkElement? _headerSite;
-    private Border? _stateLayerBorder;
     private bool _isHeaderPressed;
 
     static Expander()
@@ -56,7 +53,6 @@ public class Expander : HeaderedContentControl
     protected virtual void OnIsExpandedChanged(bool oldValue, bool newValue)
     {
         UpdateVisualState(true);
-        UpdateStateLayerCornerRadius();
 
         if (newValue)
         {
@@ -175,11 +171,7 @@ public class Expander : HeaderedContentControl
             _headerSite.MouseLeftButtonUp += OnHeaderMouseLeftButtonUp;
         }
 
-        // 获取状态层边框
-        _stateLayerBorder = GetTemplateChild(PartStateLayerBorder) as Border;
-
         UpdateVisualState(false);
-        UpdateStateLayerCornerRadius();
     }
 
     // ── Header Mouse Events ────────────────────────────────────────
@@ -224,17 +216,7 @@ public class Expander : HeaderedContentControl
     // ── Visual State Management ────────────────────────────────────
     private void UpdateVisualState(bool useTransitions)
     {
-        string expansionState = IsExpanded ? "Expanded" : "Collapsed";
+        var expansionState = IsExpanded ? "Expanded" : "Collapsed";
         VisualStateManager.GoToState(this, expansionState, useTransitions);
-    }
-
-    private void UpdateStateLayerCornerRadius()
-    {
-        if (_stateLayerBorder == null) return;
-
-        var cr = CornerRadius;
-        _stateLayerBorder.CornerRadius = IsExpanded
-            ? new CornerRadius(cr.TopLeft, cr.TopRight, 0, 0)
-            : cr;
     }
 }

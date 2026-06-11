@@ -78,5 +78,12 @@
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/TagBox.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/AutoCompleteBox.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Expander.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Pagination.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/TreeListView.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Carousel.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/FlipView.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ImageViewer.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Shield.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/GlassCard.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

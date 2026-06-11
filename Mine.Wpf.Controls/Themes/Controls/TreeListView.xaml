@@ -1,0 +1,229 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--
+    ══════════════════════════════════════════════════════════════
+     TreeListView — Material Design 3
+     树形列表视图,结合TreeView的层级和ListView的多列
+     - 符合 MD3 设计规范
+     - 支持多列显示
+     - 可展开/折叠的层级结构
+     - 流畅的交互动画
+    ══════════════════════════════════════════════════════════════
+    -->
+
+    <!-- 转换器 -->
+    <conv:LevelToIndentConverter x:Key="LevelToIndentConverter" IndentSize="20"/>
+
+    <!-- 缩进宽度 -->
+    <sys:Double x:Key="TreeListView.IndentSize">20</sys:Double>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TreeListViewItem 默认样式
+         ═══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:TreeListViewItem}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="4,8"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:TreeListViewItem}">
+                    <StackPanel>
+                        <!-- 当前项 -->
+                        <Border x:Name="ItemBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                CornerRadius="8"
+                                Margin="4,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <!-- 缩进空间 -->
+                                    <ColumnDefinition Width="Auto"/>
+                                    <!-- 展开/折叠按钮 -->
+                                    <ColumnDefinition Width="Auto"/>
+                                    <!-- 内容 -->
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!--缩进 -->
+                                <Rectangle Grid.Column="0" Fill="Transparent">
+                                    <Rectangle.Width>
+                                        <MultiBinding Converter="{StaticResource LevelToIndentConverter}">
+                                            <Binding Path="Level" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                        </MultiBinding>
+                                    </Rectangle.Width>
+                                </Rectangle>
+
+                                <!-- 展开/折叠按钮 -->
+                                <ToggleButton x:Name="Expander"
+                                              Grid.Column="1"
+                                              Width="20"
+                                              Height="20"
+                                              Margin="0,0,4,0"
+                                              IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                              ClickMode="Press"
+                                              Background="Transparent"
+                                              BorderThickness="0"
+                                              VerticalAlignment="Center">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                CornerRadius="10">
+                                                            <controls:MaterialIcon x:Name="ExpandIcon"
+                                                                                   Kind="ChevronRight"
+                                                                                   Size="20"
+                                                                                   HorizontalAlignment="Center"
+                                                                                   VerticalAlignment="Center"
+                                                                                   RenderTransformOrigin="0.5,0.5">
+                                                                <controls:MaterialIcon.RenderTransform>
+                                                                    <RotateTransform x:Name="IconRotation" Angle="0"/>
+                                                                </controls:MaterialIcon.RenderTransform>
+                                                            </controls:MaterialIcon>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsChecked" Value="True">
+                                                                <Trigger.EnterActions>
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="IconRotation"
+                                                                                             Storyboard.TargetProperty="Angle"
+                                                                                             To="90"
+                                                                                             Duration="0:0:0.2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <CubicEase EasingMode="EaseOut"/>
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </Trigger.EnterActions>
+                                                                <Trigger.ExitActions>
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="IconRotation"
+                                                                                             Storyboard.TargetProperty="Angle"
+                                                                                             To="0"
+                                                                                             Duration="0:0:0.2">
+                                                                                <DoubleAnimation.EasingFunction>
+                                                                                    <CubicEase EasingMode="EaseOut"/>
+                                                                                </DoubleAnimation.EasingFunction>
+                                                                            </DoubleAnimation>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </Trigger.ExitActions>
+                                                            </Trigger>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="ExpandIcon" Property="Foreground" Value="{DynamicResource Mine.Brush.Primary}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+
+                                <!-- 内容 -->
+                                <ContentPresenter Grid.Column="2"
+                                                  x:Name="PART_Header"
+                                                  ContentSource="Header"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- 子项容器 -->
+                        <ItemsPresenter x:Name="ItemsHost"
+                                        Visibility="Collapsed"/>
+                    </StackPanel>
+
+                    <ControlTemplate.Triggers>
+                        <!-- 无子项时隐藏展开按钮 -->
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+
+                        <!-- 展开时显示子项 -->
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+
+                        <!-- 鼠标悬停 -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+
+                        <!-- 选中 -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.SecondaryContainer}" Opacity="1"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSecondaryContainer}"/>
+                        </Trigger>
+
+                        <!-- 禁用 -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TreeListView 默认样式
+         ═══════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type controls:TreeListView}">
+        <Setter Property="Background" Value="{DynamicResource Mine.Brush.Surface}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Mine.Brush.Outline}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:TreeListView}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="12"
+                            SnapsToDevicePixels="True">
+                        <ScrollViewer x:Name="PART_ScrollViewer"
+                                      Padding="{TemplateBinding Padding}"
+                                      Focusable="False"
+                                      HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                      VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                      CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}">
+                            <ItemsPresenter/>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Level to Indent Converter (需要在 Converters 中实现) -->
+    <sys:Double x:Key="TreeListView.DefaultIndent">20</sys:Double>
+
+</ResourceDictionary>

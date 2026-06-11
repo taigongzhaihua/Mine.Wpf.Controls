@@ -1,0 +1,95 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.TreeListViewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mine="clr-namespace:Mine.Wpf.Controls.Controls;assembly=Mine.Wpf.Controls"
+      Title="TreeListView">
+    <StackPanel Margin="24" MaxWidth="1200">
+
+            <!-- 标题 -->
+            <TextBlock Text="TreeListView"
+                       Style="{DynamicResource Mine.TextBlock.DisplayLarge}"
+                       Margin="0,0,0,16"/>
+
+            <TextBlock Text="树形列表视图,结合TreeView的层级展示和ListView的列表功能"
+                       Style="{DynamicResource Mine.TextBlock.BodyLarge}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="0,0,0,32"/>
+
+            <!-- 基础示例 -->
+            <TextBlock Text="基础示例"
+                       Style="{DynamicResource Mine.TextBlock.TitleLarge}"
+                       Margin="0,0,0,16"/>
+
+            <mine:Card Padding="16" Margin="0,0,0,32">
+                <mine:TreeListView x:Name="BasicTreeListView"
+                                   Height="400">
+                    <mine:TreeListViewItem Header="文档">
+                        <mine:TreeListViewItem Header="项目A">
+                            <mine:TreeListViewItem Header="文件1.txt"/>
+                            <mine:TreeListViewItem Header="文件2.docx"/>
+                        </mine:TreeListViewItem>
+                        <mine:TreeListViewItem Header="项目B">
+                            <mine:TreeListViewItem Header="子项目B1">
+                                <mine:TreeListViewItem Header="深层文件.pdf"/>
+                            </mine:TreeListViewItem>
+                            <mine:TreeListViewItem Header="README.md"/>
+                        </mine:TreeListViewItem>
+                    </mine:TreeListViewItem>
+                    <mine:TreeListViewItem Header="图片">
+                        <mine:TreeListViewItem Header="照片1.jpg"/>
+                        <mine:TreeListViewItem Header="照片2.png"/>
+                    </mine:TreeListViewItem>
+                </mine:TreeListView>
+            </mine:Card>
+
+            <!-- 展开的树 -->
+            <TextBlock Text="默认展开"
+                       Style="{DynamicResource Mine.TextBlock.TitleLarge}"
+                       Margin="0,0,0,16"/>
+
+            <mine:Card Padding="16" Margin="0,0,0,32">
+                <mine:TreeListView Height="300">
+                    <mine:TreeListViewItem Header="根节点" IsExpanded="True">
+                        <mine:TreeListViewItem Header="子节点1" IsExpanded="True">
+                            <mine:TreeListViewItem Header="子子节点1"/>
+                            <mine:TreeListViewItem Header="子子节点2"/>
+                        </mine:TreeListViewItem>
+                        <mine:TreeListViewItem Header="子节点2"/>
+                        <mine:TreeListViewItem Header="子节点3"/>
+                    </mine:TreeListViewItem>
+                </mine:TreeListView>
+            </mine:Card>
+
+            <!-- 说明 -->
+            <TextBlock Text="特性"
+                       Style="{DynamicResource Mine.TextBlock.TitleLarge}"
+                       Margin="0,0,0,16"/>
+
+            <mine:Card Padding="24" Margin="0,0,0,32">
+                <StackPanel>
+                    <TextBlock Text="• 支持无限层级嵌套" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
+                    <TextBlock Text="• 流畅的展开/折叠动画" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
+                    <TextBlock Text="• 自动计算层级缩进" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
+                    <TextBlock Text="• 符合 Material Design 3 规范" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
+                    <TextBlock Text="• 支持虚拟化提升性能" Style="{DynamicResource Mine.TextBlock.BodyLarge}"/>
+                </StackPanel>
+            </mine:Card>
+
+            <!-- XAML 示例 -->
+            <TextBlock Text="使用方法"
+                       Style="{DynamicResource Mine.TextBlock.TitleLarge}"
+                       Margin="0,0,0,16"/>
+
+            <mine:Card Padding="24">
+                <TextBlock FontFamily="Consolas" TextWrapping="Wrap"><![CDATA[<mine:TreeListView>
+    <mine:TreeListViewItem Header="文件夹1" IsExpanded="True">
+        <mine:TreeListViewItem Header="文件1.txt"/>
+        <mine:TreeListViewItem Header="子文件夹">
+            <mine:TreeListViewItem Header="文件2.docx"/>
+        </mine:TreeListViewItem>
+    </mine:TreeListViewItem>
+</mine:TreeListView>]]></TextBlock>
+                    </mine:Card>
+
+                </StackPanel>
+            </mine:Page>

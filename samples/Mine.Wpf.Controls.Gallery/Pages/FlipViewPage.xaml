@@ -1,0 +1,31 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.FlipViewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mine="https://schemas.mine.io/wpf"
+      Title="FlipView">
+    <StackPanel Margin="24" MaxWidth="1200">
+        <TextBlock Text="FlipView"
+                   Style="{DynamicResource Mine.TextBlock.DisplayLarge}"
+                   Margin="0,0,0,16"/>
+
+        <TextBlock Text="FlipView 示例：带转场动画的卡片切换。"
+                   Style="{DynamicResource Mine.TextBlock.BodyLarge}"
+                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                   Margin="0,0,0,24"/>
+
+        <mine:Card Padding="16">
+            <mine:FlipView Height="320">
+                <mine:FlipViewItem Background="Lavender">
+                    <TextBlock Text="Flip A" Style="{DynamicResource Mine.TextBlock.DisplayMedium}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </mine:FlipViewItem>
+                <mine:FlipViewItem Background="LightSalmon">
+                    <TextBlock Text="Flip B" Style="{DynamicResource Mine.TextBlock.DisplayMedium}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </mine:FlipViewItem>
+                <mine:FlipViewItem Background="LightSkyBlue">
+                    <TextBlock Text="Flip C" Style="{DynamicResource Mine.TextBlock.DisplayMedium}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </mine:FlipViewItem>
+            </mine:FlipView>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>

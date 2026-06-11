@@ -261,10 +261,10 @@ public class Drawer : ContentControl
                 break;
         }
 
-        double fromX = closed ? 0      : closedX;
-        double toX   = closed ? closedX : 0;
-        double fromY = closed ? 0      : closedY;
-        double toY   = closed ? closedY : 0;
+        var fromX = closed ? 0      : closedX;
+        var toX   = closed ? closedX : 0;
+        var fromY = closed ? 0      : closedY;
+        var toY   = closed ? closedY : 0;
 
         var animX = new DoubleAnimation(fromX, toX, duration) { EasingFunction = ease };
         var animY = new DoubleAnimation(fromY, toY, duration) { EasingFunction = ease };

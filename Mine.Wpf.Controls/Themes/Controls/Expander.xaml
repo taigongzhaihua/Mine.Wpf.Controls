@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
                     xmlns:helpers="clr-namespace:Mine.Wpf.Controls.Helpers"
+                    xmlns:animations="clr-namespace:Mine.Wpf.Controls.Animations"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
     <!--
@@ -216,9 +217,47 @@
                     </Border>
 
                     <ControlTemplate.Triggers>
-                        <!-- 展开时显示分隔线 -->
+                        <!-- 展开时显示分隔线并调整圆角 -->
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="Divider" Property="Visibility" Value="Visible"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <animations:CornerRadiusAnimation Storyboard.TargetName="StateLayerBorder"
+                                                                          Storyboard.TargetProperty="CornerRadius"
+                                                                          Duration="0:0:0.4">
+                                            <animations:CornerRadiusAnimation.From>
+                                                <CornerRadius>12</CornerRadius>
+                                            </animations:CornerRadiusAnimation.From>
+                                            <animations:CornerRadiusAnimation.To>
+                                                <CornerRadius TopLeft="12" TopRight="12" BottomLeft="0" BottomRight="0"/>
+                                            </animations:CornerRadiusAnimation.To>
+                                            <animations:CornerRadiusAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </animations:CornerRadiusAnimation.EasingFunction>
+                                        </animations:CornerRadiusAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <animations:CornerRadiusAnimation Storyboard.TargetName="StateLayerBorder"
+                                                                          Storyboard.TargetProperty="CornerRadius"
+                                                                          Duration="0:0:0.3">
+                                            <animations:CornerRadiusAnimation.From>
+                                                <CornerRadius TopLeft="12" TopRight="12" BottomLeft="0" BottomRight="0"/>
+                                            </animations:CornerRadiusAnimation.From>
+                                            <animations:CornerRadiusAnimation.To>
+                                                <CornerRadius>12</CornerRadius>
+                                            </animations:CornerRadiusAnimation.To>
+                                            <animations:CornerRadiusAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </animations:CornerRadiusAnimation.EasingFunction>
+                                        </animations:CornerRadiusAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
 
                         <!-- 禁用状态 -->

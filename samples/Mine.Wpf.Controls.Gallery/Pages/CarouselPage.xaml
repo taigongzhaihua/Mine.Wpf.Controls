@@ -1,0 +1,54 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.CarouselPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mine="https://schemas.mine.io/wpf"
+      Title="Carousel">
+    <StackPanel Margin="24" MaxWidth="1200">
+
+            <!-- 标题 -->
+            <TextBlock Text="Carousel"
+                       Style="{DynamicResource Mine.TextBlock.DisplayLarge}"
+                       Margin="0,0,0,16"/>
+
+            <TextBlock Text="轮播控件,符合 Material Design 3 规范,支持指示器、手动导航和自动播放。"
+                       Style="{DynamicResource Mine.TextBlock.BodyLarge}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="0,0,0,32"/>
+
+            <!-- 基础示例 -->
+            <TextBlock Text="基础示例"
+                       Style="{DynamicResource Mine.TextBlock.TitleLarge}"
+                       Margin="0,0,0,16"/>
+
+            <mine:Card Padding="16" Margin="0,0,0,32">
+                <mine:Carousel Height="400">
+                    <mine:CarouselItem Background="LightBlue">
+                        <TextBlock Text="Slide 1" Style="{DynamicResource Mine.TextBlock.DisplayMedium}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </mine:CarouselItem>
+                    <mine:CarouselItem Background="LightGreen">
+                        <TextBlock Text="Slide 2" Style="{DynamicResource Mine.TextBlock.DisplayMedium}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </mine:CarouselItem>
+                    <mine:CarouselItem Background="LightPink">
+                        <TextBlock Text="Slide 3" Style="{DynamicResource Mine.TextBlock.DisplayMedium}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </mine:CarouselItem>
+                </mine:Carousel>
+            </mine:Card>
+
+            <!-- 自动播放 -->
+            <TextBlock Text="自动播放"
+                       Style="{DynamicResource Mine.TextBlock.TitleLarge}"
+                       Margin="0,0,0,16"/>
+
+            <mine:Card Padding="16" Margin="0,0,0,32">
+                <mine:Carousel Height="300" IsAutoPlay="True" AutoPlayInterval="0:0:3">
+                    <mine:CarouselItem Background="{DynamicResource Mine.Brush.PrimaryContainer}">
+                        <TextBlock Text="自动轮播 1" Foreground="{DynamicResource Mine.Brush.OnPrimaryContainer}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </mine:CarouselItem>
+                    <mine:CarouselItem Background="{DynamicResource Mine.Brush.SecondaryContainer}">
+                        <TextBlock Text="自动轮播 2" Foreground="{DynamicResource Mine.Brush.OnSecondaryContainer}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </mine:CarouselItem>
+                </mine:Carousel>
+            </mine:Card>
+
+    </StackPanel>
+</mine:Page>

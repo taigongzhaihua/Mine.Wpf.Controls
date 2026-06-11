@@ -43,7 +43,7 @@ public class AvatarGroupPanel : Panel
     protected override Size ArrangeOverride(Size finalSize)
     {
         double x = 0;
-        int zIndex = 0;
+        var zIndex = 0;
 
         foreach (UIElement child in InternalChildren)
         {
@@ -53,9 +53,9 @@ public class AvatarGroupPanel : Panel
                 continue;
             }
 
-            double w = child.DesiredSize.Width;
-            double h = child.DesiredSize.Height;
-            double y = (finalSize.Height - h) / 2;
+            var w = child.DesiredSize.Width;
+            var h = child.DesiredSize.Height;
+            var y = (finalSize.Height - h) / 2;
 
             child.Arrange(new Rect(x, y, w, h));
             Panel.SetZIndex(child, zIndex++);
@@ -199,15 +199,15 @@ public class AvatarGroup : ItemsControl
 
     private void RefreshItems()
     {
-        int total  = Items.Count;
-        int max    = MaxCount < 0 ? total : MaxCount;
-        int hidden = Math.Max(0, total - max);
+        var total  = Items.Count;
+        var max    = MaxCount < 0 ? total : MaxCount;
+        var hidden = Math.Max(0, total - max);
 
         OverflowCount = hidden;
         OverflowText  = hidden > 0 ? $"+{hidden}" : string.Empty;
 
         // IsItemItsOwnContainerOverride 返回 true，Items[i] 本身就是 Avatar 容器
-        for (int i = 0; i < total; i++)
+        for (var i = 0; i < total; i++)
         {
             if (Items[i] is Avatar avatar)
                 avatar.Visibility = i < max ? Visibility.Visible : Visibility.Collapsed;

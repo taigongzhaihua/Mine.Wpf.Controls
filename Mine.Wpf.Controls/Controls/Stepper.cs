@@ -82,8 +82,8 @@ public class Stepper : ItemsControl
     /// <summary>根据 <see cref="ActiveIndex"/> 刷新所有子项的状态和连接线可见性。</summary>
     private void RefreshItemStatuses()
     {
-        int total = Items.Count;
-        for (int i = 0; i < total; i++)
+        var total = Items.Count;
+        for (var i = 0; i < total; i++)
         {
             var container = ItemContainerGenerator.ContainerFromIndex(i) as StepperItem
                             ?? Items[i] as StepperItem;

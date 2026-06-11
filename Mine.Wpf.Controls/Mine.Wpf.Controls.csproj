@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
     <PropertyGroup>
-        <TargetFramework>net8.0-windows</TargetFramework>
+        <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -13,17 +13,19 @@
         <PackageId>Mine.Wpf.Controls</PackageId>
         <Version>0.1.0</Version>
         <Description>A Material Design 3 WPF control library with theming, animations and glass effects.</Description>
-        <!-- 排除 obj 目录，防止 VS 设计时临时项目重复包含 WPF 生成文件（NETSDK1022 / RG1000） -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);obj\**</DefaultItemExcludes>
     </PropertyGroup>
 
     <ItemGroup>
         <!-- Material Symbols 字体，嵌入为程序集资源 -->
-        <Resource Include="Fonts\MaterialSymbols.ttf"/>
-        <Resource Include="Fonts\MaterialSymbolsFilled.ttf"/>
+        <Resource Include="Fonts\MaterialSymbols.ttf" />
+        <Resource Include="Fonts\MaterialSymbolsFilled.ttf" />
         <!-- 拖拽手形光标（由 Tools/ConvertCursors.ps1 从 PNG 生成，随源码提交） -->
-        <Resource Include="Assets\Cursors\grab.cur"/>
-        <Resource Include="Assets\Cursors\grabbing.cur"/>
+        <Resource Include="Assets\Cursors\grab.cur" />
+        <Resource Include="Assets\Cursors\grabbing.cur" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Composition\" />
     </ItemGroup>
 
 </Project>

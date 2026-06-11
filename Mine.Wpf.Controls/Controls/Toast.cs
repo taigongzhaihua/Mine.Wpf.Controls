@@ -263,7 +263,7 @@ public static class ToastService
         // 写入历史（UI 线程）
         var item = new NotificationItem { Level = level, Title = title, Message = message };
 
-        SWWindow? window = Helpers.WindowOverlay.GetActiveWindow();
+        var window = Helpers.WindowOverlay.GetActiveWindow();
         if (window == null) return;
 
         window.Dispatcher.BeginInvoke(() =>
@@ -548,7 +548,7 @@ public class NotificationCenter : Control
 
     private static T? FindNamedChild<T>(DependencyObject parent, string name) where T : FrameworkElement
     {
-        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
             var child = VisualTreeHelper.GetChild(parent, i);
             if (child is T fe && fe.Name == name) return fe;
