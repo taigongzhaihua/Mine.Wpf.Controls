@@ -1,0 +1,65 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:Mine.Wpf.Controls.Controls">
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         CommandBar 样式
+         ════════════════════════════════════════════════════════════════ -->
+    <Style TargetType="{x:Type c:CommandBar}">
+        <Setter Property="Background" Value="{DynamicResource Mine.Brush.SurfaceContainer}" />
+        <Setter Property="Height" Value="48" />
+        <Setter Property="Padding" Value="8,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:CommandBar}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}"
+                            BorderThickness="0,0,0,1"
+                            Height="{TemplateBinding Height}">
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 主要命令面板 -->
+                            <StackPanel x:Name="PART_PrimaryPanel"
+                                      Grid.Column="0"
+                                      Orientation="Horizontal"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center" />
+
+                            <!-- 更多按钮 -->
+                            <c:Button x:Name="PART_MoreButton"
+                                     Grid.Column="1"
+                                     Variant="Text"
+                                     Icon="more_vert"
+                                     Width="40"
+                                     Height="40"
+                                     Visibility="Collapsed"
+                                     Margin="4,0,0,0" />
+
+                            <!-- 次要命令面板（隐藏，用于弹出菜单） -->
+                            <StackPanel x:Name="PART_SecondaryPanel"
+                                      Visibility="Collapsed" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         CommandBar 应用按钮样式
+         ════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="Mine.CommandBarAppButton" TargetType="{x:Type c:Button}">
+        <Setter Property="Variant" Value="Text" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Padding" Value="12,0" />
+        <Setter Property="Margin" Value="2,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+</ResourceDictionary>

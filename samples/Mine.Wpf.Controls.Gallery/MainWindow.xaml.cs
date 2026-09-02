@@ -20,6 +20,7 @@ public partial class MainWindow
         ("\uE762", "NavigationView",       typeof(NavigationViewPage)),
         ("\uE8A0", "BreadcrumbBar",        typeof(BreadcrumbBarPage)),
         ("\uF1C1", "Button",               typeof(ButtonPage)),
+        ("\uE8CB", "CommandBar",           typeof(CommandBarPage)),
         ("\uE399", "Badge",                typeof(BadgePage)),
         ("\uE7FD", "Avatar",               typeof(AvatarPage)),
         ("\uE8FE", "Segmented",            typeof(SegmentedPage)),
@@ -45,13 +46,14 @@ public partial class MainWindow
         ("\uE8CB", "Flyout",               typeof(FlyoutPage)),
         ("\uE8E9", "Card",                 typeof(CardPage)),
         ("\uE5CF", "Expander",             typeof(ExpanderPage)),
+        ("\uE8B8", "Settings",             typeof(SettingsPage)),
+        ("\uE88E", "InfoBar",              typeof(InfoBarPage)),
         ("\uE8D2", "Pagination",           typeof(PaginationPage)),
         ("\uE8EF", "TreeListView",         typeof(TreeListViewPage)),
         ("\uE423", "Carousel",             typeof(CarouselPage)),
         ("\uE423", "FlipView",             typeof(FlipViewPage)),
         ("\uE3F4", "ImageViewer",          typeof(ImageViewerPage)),
         ("\uE85D", "Shield",               typeof(ShieldPage)),
-        ("\uE8E9", "GlassCard",            typeof(GlassCardPage)),
         ("\uE245", "Typography",           typeof(TypographyPage)),
         ("\uE40A", "Color",                typeof(ColorPage)),
         ("\uE9B0", "Icons",                typeof(IconPage)),
@@ -145,7 +147,7 @@ public partial class MainWindow
         // 同步 Switch 状态（避免递归：暂时解绑再绑）
         DarkModeSwitch.Checked   -= OnToggleTheme;
         DarkModeSwitch.Unchecked -= OnToggleTheme;
-        DarkModeSwitch.IsChecked  = ThemeManager.Mode == ThemeMode.Dark;
+        DarkModeSwitch.IsChecked  = ThemeManager.IsEffectiveDark();
         DarkModeSwitch.Checked   += OnToggleTheme;
         DarkModeSwitch.Unchecked += OnToggleTheme;
     }

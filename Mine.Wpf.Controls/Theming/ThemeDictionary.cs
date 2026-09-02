@@ -99,6 +99,14 @@ public sealed class ThemeDictionary : ResourceDictionary
         MergedDictionaries.Add(Load("Themes/Controls/TagBox.xaml"));
         MergedDictionaries.Add(Load("Themes/Controls/AutoCompleteBox.xaml"));
 
+        // Settings 组件
+        MergedDictionaries.Add(Load("Themes/Controls/SettingsCard.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/SettingsGroup.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/SettingsExpander.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/InfoBar.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/SettingsCardButton.xaml"));
+        MergedDictionaries.Add(Load("Themes/Controls/SettingsColorItem.xaml"));
+
         // 动画画笔字典
         MergedDictionaries.Add(AnimatedBrushes);
 

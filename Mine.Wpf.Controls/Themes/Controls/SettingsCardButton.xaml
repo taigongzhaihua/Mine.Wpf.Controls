@@ -1,0 +1,128 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Mine.Wpf.Controls.Controls"
+                    xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters">
+
+    <conv:RoundedRectClipConverter x:Key="Local.SettingsCardButtonClipConv"/>
+
+    <!-- SettingsCardButton 默认样式 -->
+    <Style TargetType="{x:Type controls:SettingsCardButton}">
+        <Setter Property="Background"          Value="{DynamicResource Mine.Brush.SurfaceContainerLow}"/>
+        <Setter Property="Foreground"          Value="{DynamicResource Mine.Brush.OnSurface}"/>
+        <Setter Property="BorderThickness"     Value="0"/>
+        <Setter Property="CornerRadius"        Value="{DynamicResource Mine.Shape.Medium}"/>
+        <Setter Property="Padding"             Value="16,12"/>
+        <Setter Property="MinHeight"           Value="56"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment"   Value="Center"/>
+        <Setter Property="Cursor"              Value="Hand"/>
+        <Setter Property="FocusVisualStyle"    Value="{x:Null}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:SettingsCardButton}">
+                    <Border x:Name="Root"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            MinHeight="{TemplateBinding MinHeight}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                        <Border.Clip>
+                            <MultiBinding Converter="{StaticResource Local.SettingsCardButtonClipConv}">
+                                <Binding Path="ActualWidth"  RelativeSource="{RelativeSource Self}"/>
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
+                                <Binding Path="CornerRadius" RelativeSource="{RelativeSource Self}"/>
+                            </MultiBinding>
+                        </Border.Clip>
+                        <Grid>
+                            <!-- 交互状态叠加层 -->
+                            <Border x:Name="StateLayer"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    Background="Transparent"
+                                    IsHitTestVisible="False"/>
+                            <Grid Margin="{TemplateBinding Padding}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- 前置图标 -->
+                                <ContentControl x:Name="IconPresenter"
+                                                Grid.Column="0"
+                                                Content="{TemplateBinding HeaderIcon}"
+                                                FontFamily="{DynamicResource Mine.Font.MaterialSymbols}"
+                                                FontSize="20"
+                                                Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Margin="0,0,16,0"/>
+
+                                <!-- 标题 + 描述 -->
+                                <StackPanel Grid.Column="1"
+                                            VerticalAlignment="Center">
+                                    <ContentPresenter x:Name="HeaderPresenter"
+                                                      Content="{TemplateBinding Header}"
+                                                      TextBlock.FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                      TextBlock.FontSize="{DynamicResource Mine.FontSize.BodyLarge}"
+                                                      TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                                    <ContentPresenter x:Name="DescriptionPresenter"
+                                                      Content="{TemplateBinding Description}"
+                                                      Margin="0,2,0,0"
+                                                      TextBlock.FontFamily="{DynamicResource Mine.FontFamily.Default}"
+                                                      TextBlock.FontSize="{DynamicResource Mine.FontSize.BodyMedium}"
+                                                      TextBlock.Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                </StackPanel>
+
+                                <!-- 右侧操作区（默认显示前进箭头） -->
+                                <Grid Grid.Column="2" Margin="16,0,0,0">
+                                    <ContentPresenter x:Name="ActionPresenter"
+                                                      Content="{TemplateBinding ActionContent}"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Right"/>
+                                    <controls:MaterialIcon x:Name="DefaultChevron"
+                                                            Kind="ChevronRight"
+                                                            Size="20"
+                                                            Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                                            VerticalAlignment="Center"
+                                                            HorizontalAlignment="Right"
+                                                            Visibility="Collapsed"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HeaderIcon" Value="{x:Null}">
+                            <Setter TargetName="IconPresenter" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="Description" Value="{x:Null}">
+                            <Setter TargetName="DescriptionPresenter" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="ActionContent" Value="{x:Null}">
+                            <Setter TargetName="DefaultChevron" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.08"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="StateLayer" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource Mine.Color.OnSurface}" Opacity="0.12"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.38"/>
+                            <Setter Property="Cursor"  Value="Arrow"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

@@ -1,0 +1,143 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.SettingsPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="Settings"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── SettingsCard 基础用法 ──────────────────────────────── -->
+        <TextBlock Text="SettingsCard"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+
+        <mine:SettingsCard Header="飞行模式"
+                           Description="关闭所有无线连接"
+                           HeaderIcon="&#xe539;"
+                           Margin="0,0,0,16">
+            <mine:SettingsCard.ActionContent>
+                <mine:Switch/>
+            </mine:SettingsCard.ActionContent>
+        </mine:SettingsCard>
+
+        <mine:SettingsCard Header="账户信息"
+                           Description="点击查看或编辑账户详情"
+                           HeaderIcon="&#xe7fd;"
+                           IsClickable="True"
+                           Margin="0,0,0,24">
+            <mine:SettingsCard.ActionContent>
+                <mine:MaterialIcon Kind="ChevronRight" Size="20"
+                                   Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+            </mine:SettingsCard.ActionContent>
+        </mine:SettingsCard>
+
+        <!-- ── SettingsGroup ──────────────────────────────────────── -->
+        <TextBlock Text="SettingsGroup"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+
+        <mine:SettingsGroup Header="通用" Margin="0,0,0,24">
+            <mine:SettingsCard Header="深色模式"
+                               HeaderIcon="&#xe51c;">
+                <mine:SettingsCard.ActionContent>
+                    <mine:Switch/>
+                </mine:SettingsCard.ActionContent>
+            </mine:SettingsCard>
+            <mine:SettingsCard Header="语言"
+                               Description="简体中文"
+                               HeaderIcon="&#xe8e2;"
+                               IsClickable="True">
+                <mine:SettingsCard.ActionContent>
+                    <mine:MaterialIcon Kind="ChevronRight" Size="20"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                </mine:SettingsCard.ActionContent>
+            </mine:SettingsCard>
+            <mine:SettingsCard Header="通知"
+                               Description="允许应用发送通知"
+                               HeaderIcon="&#xe7f4;">
+                <mine:SettingsCard.ActionContent>
+                    <mine:Switch IsChecked="True"/>
+                </mine:SettingsCard.ActionContent>
+            </mine:SettingsCard>
+        </mine:SettingsGroup>
+
+        <!-- ── SettingsExpander ───────────────────────────────────── -->
+        <TextBlock Text="SettingsExpander"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+
+        <mine:SettingsExpander Header="网络与连接"
+                               Description="展开查看更多网络相关设置"
+                               HeaderIcon="&#xe63e;"
+                               Margin="0,0,0,24">
+            <mine:SettingsCard Header="Wi-Fi" HeaderIcon="&#xe63e;">
+                <mine:SettingsCard.ActionContent>
+                    <mine:Switch IsChecked="True"/>
+                </mine:SettingsCard.ActionContent>
+            </mine:SettingsCard>
+            <mine:SettingsCard Header="蓝牙" HeaderIcon="&#xe1a7;">
+                <mine:SettingsCard.ActionContent>
+                    <mine:Switch/>
+                </mine:SettingsCard.ActionContent>
+            </mine:SettingsCard>
+            <mine:SettingsCard Header="移动热点"
+                               Description="与其他设备共享网络连接"
+                               HeaderIcon="&#xe1b8;">
+                <mine:SettingsCard.ActionContent>
+                    <mine:Switch/>
+                </mine:SettingsCard.ActionContent>
+            </mine:SettingsCard>
+        </mine:SettingsExpander>
+
+        <mine:SettingsExpander Header="默认展开示例"
+                               Description="IsExpanded=&quot;True&quot;"
+                               HeaderIcon="&#xe8b8;"
+                               IsExpanded="True"
+                               Margin="0,0,0,24">
+            <mine:SettingsCard Header="子项 1" HeaderIcon="&#xe88f;"/>
+            <mine:SettingsCard Header="子项 2" HeaderIcon="&#xe88f;"/>
+        </mine:SettingsExpander>
+
+        <!-- ── SettingsCardButton ─────────────────────────────────── -->
+        <TextBlock Text="SettingsCardButton"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+
+        <mine:SettingsCardButton Header="隐私声明"
+                                 Description="查看应用如何收集和使用您的数据"
+                                 HeaderIcon="&#xe897;"
+                                 Click="OnSettingsCardButtonClick"
+                                 Margin="0,0,0,12"/>
+
+        <mine:SettingsCardButton Header="关于"
+                                 Description="版本、许可协议与开源声明"
+                                 HeaderIcon="&#xe88e;"
+                                 Margin="0,0,0,24">
+            <mine:SettingsCardButton.ActionContent>
+                <TextBlock Text="1.0.0"
+                           Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                           VerticalAlignment="Center"/>
+            </mine:SettingsCardButton.ActionContent>
+        </mine:SettingsCardButton>
+
+        <!-- ── SettingsColorItem ──────────────────────────────────── -->
+        <TextBlock Text="SettingsColorItem"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+
+        <mine:SettingsColorItem x:Name="AccentColorItem"
+                                Header="强调色"
+                                Description="点击选择应用的主题强调色"
+                                HeaderIcon="&#xe40a;"
+                                SelectedColor="#6750A4"
+                                Click="OnAccentColorItemClick"
+                                Margin="0,0,0,12"/>
+
+        <mine:SettingsColorItem Header="标签颜色"
+                                Description="不显示前进箭头"
+                                HeaderIcon="&#xef4f;"
+                                SelectedColor="#C2185B"
+                                ShowChevron="False"/>
+
+    </StackPanel>
+</mine:Page>

@@ -53,6 +53,8 @@
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Page.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ToolTip.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Flyout.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/MenuFlyout.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/CommandBar.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/TabControl.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ListView.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Snackbar.xaml"/>
@@ -84,6 +86,11 @@
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/FlipView.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/ImageViewer.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/Shield.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/GlassCard.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SettingsCard.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SettingsGroup.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SettingsExpander.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/InfoBar.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SettingsCardButton.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SettingsColorItem.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
