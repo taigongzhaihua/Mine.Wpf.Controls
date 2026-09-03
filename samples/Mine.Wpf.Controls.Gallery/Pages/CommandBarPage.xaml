@@ -6,182 +6,80 @@
            Padding="28,24,28,32">
     <StackPanel MaxWidth="860">
 
-        <!-- ── Basic CommandBar ─────────────────────────────────────── -->
+        <!-- ── 基础命令栏 ───────────────────────────────────────────── -->
         <TextBlock Text="基础命令栏"
                    Style="{DynamicResource Mine.Typography.TitleMedium}"
                    Margin="0,0,0,12"/>
-        <mine:Card Padding="0" Margin="0,0,0,24">
-            <mine:CommandBar>
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <mine:CommandBar HorizontalAlignment="Left">
                 <mine:CommandBar.PrimaryCommands>
-                    <mine:Button Content="保存" Icon="Save" Variant="Text" />
-                    <mine:Button Content="撤销" Icon="Undo" Variant="Text" />
-                    <mine:Button Content="重做" Icon="Redo" Variant="Text" />
-                    <mine:Button Content="打印" Icon="Print" Variant="Text" />
+                    <mine:AppBarButton Label="新建">
+                        <mine:AppBarButton.Icon>
+                            <mine:MaterialIcon Kind="Add" Size="20"/>
+                        </mine:AppBarButton.Icon>
+                    </mine:AppBarButton>
+                    <mine:AppBarButton Label="打开">
+                        <mine:AppBarButton.Icon>
+                            <mine:MaterialIcon Kind="FolderOpen" Size="20"/>
+                        </mine:AppBarButton.Icon>
+                    </mine:AppBarButton>
+                    <mine:AppBarButton Label="保存">
+                        <mine:AppBarButton.Icon>
+                            <mine:MaterialIcon Kind="Save" Size="20"/>
+                        </mine:AppBarButton.Icon>
+                    </mine:AppBarButton>
+                    <mine:AppBarSeparator/>
+                    <mine:AppBarToggleButton Label="收藏">
+                        <mine:AppBarToggleButton.Icon>
+                            <mine:MaterialIcon Kind="Star" Size="20"/>
+                        </mine:AppBarToggleButton.Icon>
+                    </mine:AppBarToggleButton>
                 </mine:CommandBar.PrimaryCommands>
                 <mine:CommandBar.SecondaryCommands>
-                    <mine:MenuFlyoutItem Text="设置" Icon="Settings" />
-                    <mine:MenuFlyoutItem Text="帮助" Icon="Help" />
-                    <mine:MenuFlyoutSeparator />
-                    <mine:MenuFlyoutItem Text="关于" Icon="Info" />
+                    <mine:MenuFlyoutItem Text="打印">
+                        <mine:MenuFlyoutItem.Icon>
+                            <mine:MaterialIcon Kind="Print" Size="20"/>
+                        </mine:MenuFlyoutItem.Icon>
+                    </mine:MenuFlyoutItem>
+                    <mine:MenuFlyoutItem Text="分享">
+                        <mine:MenuFlyoutItem.Icon>
+                            <mine:MaterialIcon Kind="Share" Size="20"/>
+                        </mine:MenuFlyoutItem.Icon>
+                    </mine:MenuFlyoutItem>
+                    <mine:MenuFlyoutSeparator/>
+                    <mine:MenuFlyoutItem Text="设置">
+                        <mine:MenuFlyoutItem.Icon>
+                            <mine:MaterialIcon Kind="Settings" Size="20"/>
+                        </mine:MenuFlyoutItem.Icon>
+                    </mine:MenuFlyoutItem>
                 </mine:CommandBar.SecondaryCommands>
             </mine:CommandBar>
         </mine:Card>
 
-        <!-- ── Icon Only CommandBar ──────────────────────────────────── -->
-        <TextBlock Text="仅图标命令栏"
+        <!-- ── 紧凑命令栏（无标签） ─────────────────────────────────── -->
+        <TextBlock Text="紧凑命令栏（仅图标）"
                    Style="{DynamicResource Mine.Typography.TitleMedium}"
                    Margin="0,0,0,12"/>
-        <mine:Card Padding="0" Margin="0,0,0,24">
-            <mine:CommandBar CompactMode="True">
+        <mine:Card Padding="24" Margin="0,0,0,24">
+            <mine:CommandBar HorizontalAlignment="Left">
                 <mine:CommandBar.PrimaryCommands>
-                    <mine:Button Variant="Text" ToolTip="保存">
-                        <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="Save" Size="20" />
-                        </mine:Button.Icon>
-                    </mine:Button>
-                    <mine:Button Variant="Text" ToolTip="撤销">
-                        <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="Undo" Size="20" />
-                        </mine:Button.Icon>
-                    </mine:Button>
-                    <mine:Button Variant="Text" ToolTip="重做">
-                        <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="Redo" Size="20" />
-                        </mine:Button.Icon>
-                    </mine:Button>
-                    <mine:Button Variant="Text" ToolTip="打印">
-                        <mine:Button.Icon>
-                            <mine:MaterialIcon Kind="Print" Size="20" />
-                        </mine:Button.Icon>
-                    </mine:Button>
+                    <mine:AppBarButton IsCompact="True" Label="剪切">
+                        <mine:AppBarButton.Icon>
+                            <mine:MaterialIcon Kind="ContentCut" Size="20"/>
+                        </mine:AppBarButton.Icon>
+                    </mine:AppBarButton>
+                    <mine:AppBarButton IsCompact="True" Label="复制">
+                        <mine:AppBarButton.Icon>
+                            <mine:MaterialIcon Kind="ContentCopy" Size="20"/>
+                        </mine:AppBarButton.Icon>
+                    </mine:AppBarButton>
+                    <mine:AppBarButton IsCompact="True" Label="粘贴">
+                        <mine:AppBarButton.Icon>
+                            <mine:MaterialIcon Kind="ContentPaste" Size="20"/>
+                        </mine:AppBarButton.Icon>
+                    </mine:AppBarButton>
                 </mine:CommandBar.PrimaryCommands>
             </mine:CommandBar>
-        </mine:Card>
-
-        <!-- ── MenuFlyout Standalone ────────────────────────────────── -->
-        <TextBlock Text="独立菜单"
-                   Style="{DynamicResource Mine.Typography.TitleMedium}"
-                   Margin="0,0,0,12"/>
-        <mine:Card Padding="24" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="基础菜单项" 
-                          Style="{DynamicResource Mine.Typography.LabelLarge}"
-                          Foreground="{DynamicResource Mine.Brush.Primary}" 
-                          Margin="0,0,0,12"/>
-
-                <mine:Button Content="打开菜单" 
-                            Variant="Filled" 
-                            Click="OnOpenMenuClick"/>
-
-                <mine:MenuFlyout x:Name="StandaloneMenu">
-                    <mine:MenuFlyout.Items>
-                        <mine:MenuFlyoutItem Text="新建" KeyboardAcceleratorTextOverride="Ctrl+N">
-                            <mine:MenuFlyoutItem.Icon>
-                                <mine:MaterialIcon Kind="Add" Size="20" />
-                            </mine:MenuFlyoutItem.Icon>
-                        </mine:MenuFlyoutItem>
-                        <mine:MenuFlyoutItem Text="打开" KeyboardAcceleratorTextOverride="Ctrl+O">
-                            <mine:MenuFlyoutItem.Icon>
-                                <mine:MaterialIcon Kind="FolderOpen" Size="20" />
-                            </mine:MenuFlyoutItem.Icon>
-                        </mine:MenuFlyoutItem>
-                        <mine:MenuFlyoutItem Text="保存" KeyboardAcceleratorTextOverride="Ctrl+S">
-                            <mine:MenuFlyoutItem.Icon>
-                                <mine:MaterialIcon Kind="Save" Size="20" />
-                            </mine:MenuFlyoutItem.Icon>
-                        </mine:MenuFlyoutItem>
-                        <mine:MenuFlyoutSeparator />
-                        <mine:MenuFlyoutItem Text="退出" KeyboardAcceleratorTextOverride="Alt+F4">
-                            <mine:MenuFlyoutItem.Icon>
-                                <mine:MaterialIcon Kind="Close" Size="20" />
-                            </mine:MenuFlyoutItem.Icon>
-                        </mine:MenuFlyoutItem>
-                    </mine:MenuFlyout.Items>
-                </mine:MenuFlyout>
-            </StackPanel>
-        </mine:Card>
-
-        <!-- ── MenuFlyout with SubMenu ──────────────────────────────── -->
-        <TextBlock Text="带子菜单的菜单"
-                   Style="{DynamicResource Mine.Typography.TitleMedium}"
-                   Margin="0,0,0,12"/>
-        <mine:Card Padding="24" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="子菜单示例" 
-                          Style="{DynamicResource Mine.Typography.LabelLarge}"
-                          Foreground="{DynamicResource Mine.Brush.Primary}" 
-                          Margin="0,0,0,12"/>
-
-                <mine:Button Content="打开菜单" 
-                            Variant="Filled" 
-                            Click="OnOpenSubMenuClick"/>
-
-                <mine:MenuFlyout x:Name="SubMenuFlyout">
-                    <mine:MenuFlyout.Items>
-                        <mine:MenuFlyoutItem Text="复制">
-                            <mine:MenuFlyoutItem.Icon>
-                                <mine:MaterialIcon Kind="ContentCopy" Size="20" />
-                            </mine:MenuFlyoutItem.Icon>
-                        </mine:MenuFlyoutItem>
-                        <mine:MenuFlyoutItem Text="粘贴">
-                            <mine:MenuFlyoutItem.Icon>
-                                <mine:MaterialIcon Kind="ContentPaste" Size="20" />
-                            </mine:MenuFlyoutItem.Icon>
-                        </mine:MenuFlyoutItem>
-                        <mine:MenuFlyoutSeparator />
-                        <mine:MenuFlyoutSubItem Text="导出">
-                            <mine:MenuFlyoutSubItem.Icon>
-                                <mine:MaterialIcon Kind="FileDownload" Size="20" />
-                            </mine:MenuFlyoutSubItem.Icon>
-                            <mine:MenuFlyoutSubItem.Items>
-                                <mine:MenuFlyoutItem Text="导出为 PDF" />
-                                <mine:MenuFlyoutItem Text="导出为 PNG" />
-                                <mine:MenuFlyoutItem Text="导出为 SVG" />
-                            </mine:MenuFlyoutSubItem.Items>
-                        </mine:MenuFlyoutSubItem>
-                        <mine:MenuFlyoutSubItem Text="导入">
-                            <mine:MenuFlyoutSubItem.Icon>
-                                <mine:MaterialIcon Kind="FileUpload" Size="20" />
-                            </mine:MenuFlyoutSubItem.Icon>
-                            <mine:MenuFlyoutSubItem.Items>
-                                <mine:MenuFlyoutItem Text="从文件导入" />
-                                <mine:MenuFlyoutItem Text="从剪贴板导入" />
-                            </mine:MenuFlyoutSubItem.Items>
-                        </mine:MenuFlyoutSubItem>
-                    </mine:MenuFlyout.Items>
-                </mine:MenuFlyout>
-            </StackPanel>
-        </mine:Card>
-
-        <!-- ── MenuFlyout States ─────────────────────────────────────── -->
-        <TextBlock Text="菜单项状态"
-                   Style="{DynamicResource Mine.Typography.TitleMedium}"
-                   Margin="0,0,0,12"/>
-        <mine:Card Padding="24" Margin="0,0,0,24">
-            <StackPanel>
-                <TextBlock Text="禁用状态" 
-                          Style="{DynamicResource Mine.Typography.LabelLarge}"
-                          Foreground="{DynamicResource Mine.Brush.Primary}" 
-                          Margin="0,0,0,12"/>
-
-                <mine:Button Content="打开菜单" 
-                            Variant="Filled" 
-                            Click="OnOpenStatesMenuClick"/>
-
-                <mine:MenuFlyout x:Name="StatesMenu">
-                    <mine:MenuFlyout.Items>
-                        <mine:MenuFlyoutItem Text="正常项" />
-                        <mine:MenuFlyoutItem Text="禁用项" IsEnabled="False" />
-                        <mine:MenuFlyoutItem Text="带图标" IsEnabled="False">
-                            <mine:MenuFlyoutItem.Icon>
-                                <mine:MaterialIcon Kind="Star" Size="20" />
-                            </mine:MenuFlyoutItem.Icon>
-                        </mine:MenuFlyoutItem>
-                        <mine:MenuFlyoutSeparator />
-                        <mine:MenuFlyoutItem Text="另一个正常项" />
-                    </mine:MenuFlyout.Items>
-                </mine:MenuFlyout>
-            </StackPanel>
         </mine:Card>
 
     </StackPanel>

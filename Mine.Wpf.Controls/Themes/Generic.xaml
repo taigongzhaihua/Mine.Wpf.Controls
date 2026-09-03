@@ -92,5 +92,6 @@
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/InfoBar.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SettingsCardButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/SettingsColorItem.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Mine.Wpf.Controls;component/Themes/Controls/MenuBar.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

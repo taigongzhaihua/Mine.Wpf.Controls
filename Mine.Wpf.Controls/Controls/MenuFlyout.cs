@@ -1,15 +1,18 @@
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Collections.ObjectModel;
+using System.Windows.Threading;
 
 namespace Mine.Wpf.Controls.Controls;
 
 /// <summary>
-/// Material 3 MenuFlyout：轻量级上下文菜单，支持图标、快捷键、分隔符和子菜单。
+/// Material 3 菜单：轻量级弹出式菜单，支持图标、快捷键提示、分隔符与子菜单。
+/// 支持鼠标与键盘（方向键/Enter/Esc）操作。
 /// </summary>
 [TemplatePart(Name = PartPopup, Type = typeof(Popup))]
 [TemplatePart(Name = PartContainer, Type = typeof(FrameworkElement))]
@@ -24,6 +27,7 @@ public class MenuFlyout : Control
     private FrameworkElement? _container;
     private Panel? _itemsPanel;
     private bool _isAnimatingClose;
+    private readonly List<MenuFlyoutSubItem> _openSubItems = [];
 
     static MenuFlyout()
     {
@@ -56,11 +60,11 @@ public class MenuFlyout : Control
             oldItems.CollectionChanged -= menu.OnItemsCollectionChanged;
         if (e.NewValue is ObservableCollection<MenuFlyoutItemBase> newItems)
             newItems.CollectionChanged += menu.OnItemsCollectionChanged;
-        menu.UpdateItems();
+        menu.PopulateItems();
     }
 
-    private void OnItemsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        => UpdateItems();
+    private void OnItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        => PopulateItems();
 
     // ── IsOpen ────────────────────────────────────────────────────────
     public static readonly DependencyProperty IsOpenProperty =
@@ -84,10 +88,12 @@ public class MenuFlyout : Control
 
         if ((bool)e.NewValue)
         {
+            menu._isAnimatingClose = false;
             menu._popup.IsOpen = true;
         }
         else
         {
+            menu.CloseAllSubMenus();
             menu.BeginCloseAnimation();
         }
     }
@@ -128,7 +134,7 @@ public class MenuFlyout : Control
             menu._popup.Placement = (PlacementMode)e.NewValue;
     }
 
-    // ── MinWidth ──────────────────────────────────────────────────────
+    // ── MenuMinWidth ──────────────────────────────────────────────────
     public static readonly DependencyProperty MenuMinWidthProperty =
         DependencyProperty.Register(nameof(MenuMinWidth), typeof(double), typeof(MenuFlyout),
             new PropertyMetadata(112.0));
@@ -140,7 +146,29 @@ public class MenuFlyout : Control
         set => SetValue(MenuMinWidthProperty, value);
     }
 
-    // ── MaxWidth ──────────────────────────────────────────────────────
+    // ── StaysOpen ─────────────────────────────────────────────────────
+    public static readonly DependencyProperty StaysOpenProperty =
+        DependencyProperty.Register(nameof(StaysOpen), typeof(bool), typeof(MenuFlyout),
+            new PropertyMetadata(false, OnStaysOpenChanged));
+
+    /// <summary>
+    /// 是否保持打开状态（不随点击外部/失去激活自动关闭）。
+    /// 默认 <see langword="false"/>：点击菜单外部会自动关闭（适用于独立菜单/上下文菜单场景）。
+    /// 设为 <see langword="true"/> 时需要宿主（如 MenuBar）自行处理外部点击关闭逻辑。
+    /// </summary>
+    public bool StaysOpen
+    {
+        get => (bool)GetValue(StaysOpenProperty);
+        set => SetValue(StaysOpenProperty, value);
+    }
+
+    private static void OnStaysOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is MenuFlyout { _popup: not null } menu)
+            menu._popup.StaysOpen = (bool)e.NewValue;
+    }
+
+    // ── MenuMaxWidth ──────────────────────────────────────────────────
     public static readonly DependencyProperty MenuMaxWidthProperty =
         DependencyProperty.Register(nameof(MenuMaxWidth), typeof(double), typeof(MenuFlyout),
             new PropertyMetadata(280.0));
@@ -162,6 +190,8 @@ public class MenuFlyout : Control
             _popup.Opened -= OnPopupOpened;
             _popup.Closed -= OnPopupClosed;
         }
+        if (_container != null)
+            _container.PreviewKeyDown -= OnContainerPreviewKeyDown;
 
         _popup = GetTemplateChild(PartPopup) as Popup;
         _container = GetTemplateChild(PartContainer) as FrameworkElement;
@@ -171,29 +201,40 @@ public class MenuFlyout : Control
         {
             _popup.PlacementTarget = PlacementTarget;
             _popup.Placement = Placement;
-            _popup.StaysOpen = false;
+            _popup.StaysOpen = StaysOpen;
             _popup.AllowsTransparency = true;
             _popup.Opened += OnPopupOpened;
             _popup.Closed += OnPopupClosed;
         }
+        if (_container != null)
+            _container.PreviewKeyDown += OnContainerPreviewKeyDown;
 
-        UpdateItems();
+        PopulateItems();
     }
 
     // ── 内部方法 ──────────────────────────────────────────────────────
-    private void UpdateItems()
+    private void PopulateItems()
     {
         if (_itemsPanel == null) return;
         _itemsPanel.Children.Clear();
 
+        if (Items == null) return;
+
         foreach (var item in Items)
         {
-            item.ParentMenu = this;
+            item.RootMenu = this;
+            item.ParentSubItem = null;
             _itemsPanel.Children.Add(item);
         }
     }
 
     private void OnPopupOpened(object? sender, EventArgs e)
+    {
+        AnimateOpen();
+        FocusFirstItem();
+    }
+
+    private void AnimateOpen()
     {
         if (_container == null) return;
 
@@ -204,14 +245,14 @@ public class MenuFlyout : Control
         var ease = new CubicEase { EasingMode = EasingMode.EaseOut };
         var duration = new Duration(TimeSpan.FromMilliseconds(150));
 
-        _container.BeginAnimation(OpacityProperty, 
+        _container.BeginAnimation(OpacityProperty,
             new DoubleAnimation(0, 1, duration) { EasingFunction = ease });
 
         if (_container.RenderTransform is ScaleTransform scale)
         {
-            scale.BeginAnimation(ScaleTransform.ScaleXProperty, 
+            scale.BeginAnimation(ScaleTransform.ScaleXProperty,
                 new DoubleAnimation(0.9, 1.0, duration) { EasingFunction = ease });
-            scale.BeginAnimation(ScaleTransform.ScaleYProperty, 
+            scale.BeginAnimation(ScaleTransform.ScaleYProperty,
                 new DoubleAnimation(0.9, 1.0, duration) { EasingFunction = ease });
         }
     }
@@ -233,7 +274,8 @@ public class MenuFlyout : Control
         var fadeOut = new DoubleAnimation(1, 0, duration) { EasingFunction = ease };
         fadeOut.Completed += (_, _) =>
         {
-            _popup.IsOpen = false;
+            if (_popup != null)
+                _popup.IsOpen = false;
             _isAnimatingClose = false;
         };
 
@@ -241,26 +283,109 @@ public class MenuFlyout : Control
 
         if (_container.RenderTransform is ScaleTransform scale)
         {
-            scale.BeginAnimation(ScaleTransform.ScaleXProperty, 
+            scale.BeginAnimation(ScaleTransform.ScaleXProperty,
                 new DoubleAnimation(1.0, 0.9, duration) { EasingFunction = ease });
-            scale.BeginAnimation(ScaleTransform.ScaleYProperty, 
+            scale.BeginAnimation(ScaleTransform.ScaleYProperty,
                 new DoubleAnimation(1.0, 0.9, duration) { EasingFunction = ease });
         }
     }
 
     private void OnPopupClosed(object? sender, EventArgs e)
     {
+        CloseAllSubMenus();
         if (_container != null)
         {
             _container.RenderTransform = null;
             _container.Opacity = 1;
         }
         _isAnimatingClose = false;
+
+        if (IsOpen)
+            IsOpen = false;
     }
 
-    internal void CloseMenu()
+    private void OnContainerPreviewKeyDown(object sender, KeyEventArgs e)
     {
-        IsOpen = false;
+        switch (e.Key)
+        {
+            case Key.Escape:
+                CloseMenu();
+                e.Handled = true;
+                break;
+            case Key.Up:
+                MoveFocus(-1);
+                e.Handled = true;
+                break;
+            case Key.Down:
+                MoveFocus(1);
+                e.Handled = true;
+                break;
+        }
+    }
+
+    private void FocusFirstItem()
+    {
+        if (_itemsPanel == null) return;
+        foreach (var child in _itemsPanel.Children)
+        {
+            if (child is MenuFlyoutItemBase { IsEnabled: true, Focusable: true } item and not MenuFlyoutSeparator)
+            {
+                item.Focus();
+                return;
+            }
+        }
+    }
+
+    private void MoveFocus(int direction)
+    {
+        if (_itemsPanel == null) return;
+        var focusable = _itemsPanel.Children.OfType<MenuFlyoutItemBase>()
+            .Where(i => i is not MenuFlyoutSeparator && i.IsEnabled && i.Focusable)
+            .ToList();
+        if (focusable.Count == 0) return;
+
+        var currentIndex = focusable.FindIndex(i => i.IsKeyboardFocusWithin);
+        var nextIndex = currentIndex < 0
+            ? (direction > 0 ? 0 : focusable.Count - 1)
+            : (currentIndex + direction + focusable.Count) % focusable.Count;
+
+        focusable[nextIndex].Focus();
+    }
+
+    internal void RegisterOpenSubItem(MenuFlyoutSubItem subItem)
+    {
+        if (!_openSubItems.Contains(subItem))
+            _openSubItems.Add(subItem);
+    }
+
+    internal void UnregisterOpenSubItem(MenuFlyoutSubItem subItem)
+        => _openSubItems.Remove(subItem);
+
+    private void CloseAllSubMenus()
+    {
+        for (var i = _openSubItems.Count - 1; i >= 0; i--)
+            _openSubItems[i].IsSubMenuOpen = false;
+        _openSubItems.Clear();
+    }
+
+    /// <summary>关闭菜单（含所有已展开的子菜单）。</summary>
+    public void CloseMenu() => IsOpen = false;
+
+    public void Show() => IsOpen = true;
+
+    /// <summary>判断给定元素是否位于本菜单弹出内容的可视化树内（Popup 内容独立于宿主树）。</summary>
+    public bool ContainsElement(DependencyObject? element)
+    {
+        if (element == null || _container == null) return false;
+        var current = element;
+        while (current != null)
+        {
+            if (ReferenceEquals(current, _container))
+                return true;
+            current = System.Windows.Media.VisualTreeHelper.GetParent(current)
+                       ?? (current as FrameworkElement)?.Parent;
+        }
+        return false;
     }
 }
 
@@ -269,7 +394,8 @@ public class MenuFlyout : Control
 /// </summary>
 public abstract class MenuFlyoutItemBase : Control
 {
-    internal MenuFlyout? ParentMenu { get; set; }
+    internal MenuFlyout? RootMenu { get; set; }
+    internal MenuFlyoutSubItem? ParentSubItem { get; set; }
 }
 
 /// <summary>
@@ -286,7 +412,9 @@ public class MenuFlyoutItem : MenuFlyoutItemBase
 
     public MenuFlyoutItem()
     {
+        Focusable = true;
         MouseLeftButtonUp += OnMouseLeftButtonUp;
+        KeyDown += OnKeyDown;
     }
 
     // ── Text ──────────────────────────────────────────────────────────
@@ -337,28 +465,16 @@ public class MenuFlyoutItem : MenuFlyoutItemBase
         set => SetValue(CommandParameterProperty, value);
     }
 
-    // ── KeyboardAcceleratorTextOverride ───────────────────────────────
-    public static readonly DependencyProperty KeyboardAcceleratorTextOverrideProperty =
-        DependencyProperty.Register(nameof(KeyboardAcceleratorTextOverride), typeof(string), typeof(MenuFlyoutItem),
+    // ── InputGestureText ──────────────────────────────────────────────
+    public static readonly DependencyProperty InputGestureTextProperty =
+        DependencyProperty.Register(nameof(InputGestureText), typeof(string), typeof(MenuFlyoutItem),
             new PropertyMetadata(string.Empty));
 
-    /// <summary>快捷键文本（显示用，不执行实际绑定）。</summary>
-    public string KeyboardAcceleratorTextOverride
+    /// <summary>快捷键提示文本（仅展示，不执行实际按键绑定）。</summary>
+    public string InputGestureText
     {
-        get => (string)GetValue(KeyboardAcceleratorTextOverrideProperty);
-        set => SetValue(KeyboardAcceleratorTextOverrideProperty, value);
-    }
-
-    // ── IsEnabled ─────────────────────────────────────────────────────
-    public static new readonly DependencyProperty IsEnabledProperty =
-        DependencyProperty.Register(nameof(IsEnabled), typeof(bool), typeof(MenuFlyoutItem),
-            new PropertyMetadata(true));
-
-    /// <summary>菜单项是否启用。</summary>
-    public new bool IsEnabled
-    {
-        get => (bool)GetValue(IsEnabledProperty);
-        set => SetValue(IsEnabledProperty, value);
+        get => (string)GetValue(InputGestureTextProperty);
+        set => SetValue(InputGestureTextProperty, value);
     }
 
     // ── Click 事件 ────────────────────────────────────────────────────
@@ -375,11 +491,25 @@ public class MenuFlyoutItem : MenuFlyoutItemBase
 
     private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
+        Activate();
+        e.Handled = true;
+    }
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key is not (Key.Enter or Key.Space)) return;
+        Activate();
+        e.Handled = true;
+    }
+
+    private void Activate()
+    {
         if (!IsEnabled) return;
 
         RaiseEvent(new RoutedEventArgs(ClickEvent, this));
-        Command?.Execute(CommandParameter);
-        ParentMenu?.CloseMenu();
+        if (Command?.CanExecute(CommandParameter) == true)
+            Command.Execute(CommandParameter);
+        RootMenu?.CloseMenu();
     }
 }
 
@@ -394,15 +524,31 @@ public class MenuFlyoutSeparator : MenuFlyoutItemBase
             typeof(MenuFlyoutSeparator),
             new FrameworkPropertyMetadata(typeof(MenuFlyoutSeparator)));
     }
+
+    public MenuFlyoutSeparator()
+    {
+        Focusable = false;
+        IsHitTestVisible = false;
+    }
 }
 
 /// <summary>
-/// MenuFlyout 子菜单项。
+/// MenuFlyout 子菜单项，鼠标悬停或按右方向键展开子菜单。
 /// </summary>
+[TemplatePart(Name = PartSubMenuPopup, Type = typeof(Popup))]
+[TemplatePart(Name = PartSubItemsPanel, Type = typeof(Panel))]
 public class MenuFlyoutSubItem : MenuFlyoutItemBase
 {
+    private const string PartSubMenuPopup = "PART_SubMenuPopup";
+    private const string PartSubItemsPanel = "PART_SubItemsPanel";
+
+    private static readonly TimeSpan OpenDelay = TimeSpan.FromMilliseconds(150);
+    private static readonly TimeSpan CloseDelay = TimeSpan.FromMilliseconds(250);
+
     private Popup? _subMenuPopup;
     private Panel? _subItemsPanel;
+    private DispatcherTimer? _openTimer;
+    private DispatcherTimer? _closeTimer;
 
     static MenuFlyoutSubItem()
     {
@@ -413,9 +559,12 @@ public class MenuFlyoutSubItem : MenuFlyoutItemBase
 
     public MenuFlyoutSubItem()
     {
+        Focusable = true;
         Items = [];
-        MouseEnter += OnMouseEnter;
-        MouseLeave += OnMouseLeave;
+        MouseEnter += (_, _) => ScheduleOpen();
+        MouseLeave += (_, _) => ScheduleClose();
+        MouseLeftButtonUp += (_, e) => { OpenSubMenu(); e.Handled = true; };
+        KeyDown += OnKeyDown;
     }
 
     // ── Text ──────────────────────────────────────────────────────────
@@ -461,11 +610,11 @@ public class MenuFlyoutSubItem : MenuFlyoutItemBase
             oldItems.CollectionChanged -= subItem.OnItemsCollectionChanged;
         if (e.NewValue is ObservableCollection<MenuFlyoutItemBase> newItems)
             newItems.CollectionChanged += subItem.OnItemsCollectionChanged;
-        subItem.UpdateItems();
+        subItem.PopulateItems();
     }
 
-    private void OnItemsCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        => UpdateItems();
+    private void OnItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        => PopulateItems();
 
     // ── IsSubMenuOpen ─────────────────────────────────────────────────
     public static readonly DependencyProperty IsSubMenuOpenProperty =
@@ -482,33 +631,104 @@ public class MenuFlyoutSubItem : MenuFlyoutItemBase
     private static void OnIsSubMenuOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var subItem = (MenuFlyoutSubItem)d;
+        var isOpen = (bool)e.NewValue;
         if (subItem._subMenuPopup != null)
-            subItem._subMenuPopup.IsOpen = (bool)e.NewValue;
+            subItem._subMenuPopup.IsOpen = isOpen;
+
+        if (isOpen)
+            subItem.RootMenu?.RegisterOpenSubItem(subItem);
+        else
+            subItem.RootMenu?.UnregisterOpenSubItem(subItem);
     }
 
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-        _subMenuPopup = GetTemplateChild("PART_SubMenuPopup") as Popup;
-        _subItemsPanel = GetTemplateChild("PART_SubItemsPanel") as Panel;
-        UpdateItems();
+        _subMenuPopup = GetTemplateChild(PartSubMenuPopup) as Popup;
+        _subItemsPanel = GetTemplateChild(PartSubItemsPanel) as Panel;
+        PopulateItems();
     }
 
-    private void UpdateItems()
+    private void PopulateItems()
     {
         if (_subItemsPanel == null) return;
         _subItemsPanel.Children.Clear();
 
         foreach (var item in Items)
         {
-            item.ParentMenu = ParentMenu;
+            item.RootMenu = RootMenu;
+            item.ParentSubItem = this;
             _subItemsPanel.Children.Add(item);
         }
     }
 
-    private void OnMouseEnter(object sender, MouseEventArgs e)
-        => IsSubMenuOpen = true;
+    private void ScheduleOpen()
+    {
+        _closeTimer?.Stop();
+        if (IsSubMenuOpen) return;
 
-    private void OnMouseLeave(object sender, MouseEventArgs e)
-        => IsSubMenuOpen = false;
+        _openTimer ??= new DispatcherTimer { Interval = OpenDelay };
+        _openTimer.Tick -= OnOpenTimerTick;
+        _openTimer.Tick += OnOpenTimerTick;
+        _openTimer.Start();
+    }
+
+    private void OnOpenTimerTick(object? sender, EventArgs e)
+    {
+        _openTimer?.Stop();
+        OpenSubMenu();
+    }
+
+    private void ScheduleClose()
+    {
+        _openTimer?.Stop();
+
+        _closeTimer ??= new DispatcherTimer { Interval = CloseDelay };
+        _closeTimer.Tick -= OnCloseTimerTick;
+        _closeTimer.Tick += OnCloseTimerTick;
+        _closeTimer.Start();
+    }
+
+    private void OnCloseTimerTick(object? sender, EventArgs e)
+    {
+        _closeTimer?.Stop();
+        if (!IsMouseOver && (_subMenuPopup?.Child is not { IsMouseOver: true }))
+            IsSubMenuOpen = false;
+    }
+
+    private void OpenSubMenu()
+    {
+        if (Items.Count == 0) return;
+        IsSubMenuOpen = true;
+    }
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Key.Right or Key.Enter:
+                OpenSubMenu();
+                FocusFirstChild();
+                e.Handled = true;
+                break;
+            case Key.Left:
+                IsSubMenuOpen = false;
+                Focus();
+                e.Handled = true;
+                break;
+        }
+    }
+
+    private void FocusFirstChild()
+    {
+        if (_subItemsPanel == null) return;
+        foreach (var child in _subItemsPanel.Children)
+        {
+            if (child is MenuFlyoutItemBase { IsEnabled: true, Focusable: true } item and not MenuFlyoutSeparator)
+            {
+                item.Focus();
+                return;
+            }
+        }
+    }
 }

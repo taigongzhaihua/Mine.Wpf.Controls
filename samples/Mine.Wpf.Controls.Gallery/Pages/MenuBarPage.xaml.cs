@@ -1,8 +1,8 @@
 namespace Mine.Wpf.Controls.Gallery.Pages;
 
-public partial class CommandBarPage
+public partial class MenuBarPage
 {
-    public CommandBarPage()
+    public MenuBarPage()
     {
         InitializeComponent();
     }

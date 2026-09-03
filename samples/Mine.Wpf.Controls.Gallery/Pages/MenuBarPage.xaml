@@ -1,0 +1,91 @@
+<mine:Page x:Class="Mine.Wpf.Controls.Gallery.Pages.MenuBarPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mine="https://schemas.mine.io/wpf"
+           Title="MenuBar"
+           Padding="28,24,28,32">
+    <StackPanel MaxWidth="860">
+
+        <!-- ── 顶部菜单栏 ───────────────────────────────────────────── -->
+        <TextBlock Text="顶部菜单栏"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,0,0,12"/>
+        <mine:Card Padding="0" Margin="0,0,0,24">
+            <mine:MenuBar HorizontalAlignment="Left" Margin="12,4">
+                <mine:MenuBar.Items>
+                    <mine:MenuBarItem Header="文件">
+                        <mine:MenuBarItem.Items>
+                            <mine:MenuFlyoutItem Text="新建">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="Add" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                            <mine:MenuFlyoutItem Text="打开">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="FolderOpen" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                            <mine:MenuFlyoutItem Text="保存">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="Save" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                            <mine:MenuFlyoutSeparator/>
+                            <mine:MenuFlyoutItem Text="退出"/>
+                        </mine:MenuBarItem.Items>
+                    </mine:MenuBarItem>
+                    <mine:MenuBarItem Header="编辑">
+                        <mine:MenuBarItem.Items>
+                            <mine:MenuFlyoutItem Text="撤销">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="Undo" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                            <mine:MenuFlyoutItem Text="重做">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="Redo" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                            <mine:MenuFlyoutSeparator/>
+                            <mine:MenuFlyoutItem Text="剪切">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="ContentCut" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                            <mine:MenuFlyoutItem Text="复制">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="ContentCopy" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                            <mine:MenuFlyoutItem Text="粘贴">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="ContentPaste" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                        </mine:MenuBarItem.Items>
+                    </mine:MenuBarItem>
+                    <mine:MenuBarItem Header="视图">
+                        <mine:MenuBarItem.Items>
+                            <mine:MenuFlyoutItem Text="放大">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="ZoomIn" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                            <mine:MenuFlyoutItem Text="缩小">
+                                <mine:MenuFlyoutItem.Icon>
+                                    <mine:MaterialIcon Kind="ZoomOut" Size="18"/>
+                                </mine:MenuFlyoutItem.Icon>
+                            </mine:MenuFlyoutItem>
+                        </mine:MenuBarItem.Items>
+                    </mine:MenuBarItem>
+                    <mine:MenuBarItem Header="帮助">
+                        <mine:MenuBarItem.Items>
+                            <mine:MenuFlyoutItem Text="关于"/>
+                        </mine:MenuBarItem.Items>
+                    </mine:MenuBarItem>
+                </mine:MenuBar.Items>
+            </mine:MenuBar>
+        </mine:Card>
+
+    </StackPanel>
+</mine:Page>

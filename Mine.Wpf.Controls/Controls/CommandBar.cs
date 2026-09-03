@@ -1,28 +1,29 @@
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Collections;
-using System.Collections.Specialized;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace Mine.Wpf.Controls.Controls;
 
 /// <summary>
-/// Material 3 命令栏：用于显示一组操作按钮的工具栏容器。
-/// 支持主要命令 (PrimaryCommands) 和次要命令 (SecondaryCommands) 的组织管理。
+/// Material 3 命令栏：水平排列一组主要命令（<see cref="AppBarButton"/> / <see cref="AppBarToggleButton"/> / <see cref="AppBarSeparator"/>），
+/// 次要命令通过溢出按钮以 <see cref="MenuFlyout"/> 形式展示。
 /// </summary>
 [TemplatePart(Name = PartPrimaryPanel, Type = typeof(Panel))]
-[TemplatePart(Name = PartSecondaryPanel, Type = typeof(Panel))]
-[TemplatePart(Name = PartMoreButton, Type = typeof(ButtonBase))]
+[TemplatePart(Name = PartOverflowButton, Type = typeof(ButtonBase))]
+[TemplatePart(Name = PartOverflowMenu, Type = typeof(MenuFlyout))]
 public class CommandBar : Control
 {
     private const string PartPrimaryPanel = "PART_PrimaryPanel";
-    private const string PartSecondaryPanel = "PART_SecondaryPanel";
-    private const string PartMoreButton = "PART_MoreButton";
+    private const string PartOverflowButton = "PART_OverflowButton";
+    private const string PartOverflowMenu = "PART_OverflowMenu";
 
     private Panel? _primaryPanel;
-    private Panel? _secondaryPanel;
-    private ButtonBase? _moreButton;
-    private MenuFlyout? _secondaryMenuFlyout;
+    private ButtonBase? _overflowButton;
+    private MenuFlyout? _overflowMenu;
 
     static CommandBar()
     {
@@ -33,204 +34,271 @@ public class CommandBar : Control
 
     public CommandBar()
     {
-        PrimaryCommands = new System.Collections.ObjectModel.ObservableCollection<object>();
-        SecondaryCommands = new System.Collections.ObjectModel.ObservableCollection<MenuFlyoutItemBase>();
-        Loaded += OnLoaded;
+        PrimaryCommands = [];
+        SecondaryCommands = [];
     }
 
-    private void OnLoaded(object sender, RoutedEventArgs e)
-    {
-        UpdateCommandLayout();
-    }
-
-    // ── PrimaryCommands ───────────────────────────────────────────────
+    // ── PrimaryCommands ──────────────────────────────────────────────
     public static readonly DependencyProperty PrimaryCommandsProperty =
-        DependencyProperty.Register(nameof(PrimaryCommands), typeof(IList), typeof(CommandBar),
+        DependencyProperty.Register(nameof(PrimaryCommands), typeof(ObservableCollection<UIElement>), typeof(CommandBar),
             new PropertyMetadata(null, OnPrimaryCommandsChanged));
 
-    /// <summary>主要命令集合（显示在工具栏中）。</summary>
-    public IList PrimaryCommands
+    /// <summary>主命令集合，始终直接显示在命令栏中（<see cref="AppBarButton"/>、<see cref="AppBarToggleButton"/>、<see cref="AppBarSeparator"/> 等）。</summary>
+    public ObservableCollection<UIElement> PrimaryCommands
     {
-        get => (IList)GetValue(PrimaryCommandsProperty);
+        get => (ObservableCollection<UIElement>)GetValue(PrimaryCommandsProperty);
         set => SetValue(PrimaryCommandsProperty, value);
     }
 
     private static void OnPrimaryCommandsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var bar = (CommandBar)d;
-        if (e.OldValue is INotifyCollectionChanged oldCollection)
-            oldCollection.CollectionChanged -= bar.OnPrimaryCommandsCollectionChanged;
-        if (e.NewValue is INotifyCollectionChanged newCollection)
-            newCollection.CollectionChanged += bar.OnPrimaryCommandsCollectionChanged;
-        bar.UpdatePrimaryCommands();
+        if (e.OldValue is ObservableCollection<UIElement> oldItems)
+            oldItems.CollectionChanged -= bar.OnPrimaryCommandsCollectionChanged;
+        if (e.NewValue is ObservableCollection<UIElement> newItems)
+            newItems.CollectionChanged += bar.OnPrimaryCommandsCollectionChanged;
+        bar.PopulatePrimaryCommands();
     }
 
     private void OnPrimaryCommandsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        => UpdatePrimaryCommands();
+        => PopulatePrimaryCommands();
 
-    // ── SecondaryCommands ─────────────────────────────────────────────
+    // ── SecondaryCommands ────────────────────────────────────────────
     public static readonly DependencyProperty SecondaryCommandsProperty =
-        DependencyProperty.Register(nameof(SecondaryCommands), typeof(IList), typeof(CommandBar),
+        DependencyProperty.Register(nameof(SecondaryCommands), typeof(ObservableCollection<MenuFlyoutItemBase>), typeof(CommandBar),
             new PropertyMetadata(null, OnSecondaryCommandsChanged));
 
-    /// <summary>次要命令集合（显示在更多菜单中）。</summary>
-    public IList SecondaryCommands
+    /// <summary>次要命令集合，收纳到溢出菜单（<see cref="MenuFlyoutItem"/>、<see cref="MenuFlyoutSeparator"/> 等）中。</summary>
+    public ObservableCollection<MenuFlyoutItemBase> SecondaryCommands
     {
-        get => (IList)GetValue(SecondaryCommandsProperty);
+        get => (ObservableCollection<MenuFlyoutItemBase>)GetValue(SecondaryCommandsProperty);
         set => SetValue(SecondaryCommandsProperty, value);
     }
 
     private static void OnSecondaryCommandsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var bar = (CommandBar)d;
-        if (e.OldValue is INotifyCollectionChanged oldCollection)
-            oldCollection.CollectionChanged -= bar.OnSecondaryCommandsCollectionChanged;
-        if (e.NewValue is INotifyCollectionChanged newCollection)
-            newCollection.CollectionChanged += bar.OnSecondaryCommandsCollectionChanged;
-        bar.UpdateSecondaryCommands();
+        if (e.OldValue is ObservableCollection<MenuFlyoutItemBase> oldItems)
+            oldItems.CollectionChanged -= bar.OnSecondaryCommandsCollectionChanged;
+        if (e.NewValue is ObservableCollection<MenuFlyoutItemBase> newItems)
+            newItems.CollectionChanged += bar.OnSecondaryCommandsCollectionChanged;
+        bar.SyncOverflowMenuItems();
+        bar.UpdateOverflowButtonVisibility();
     }
 
     private void OnSecondaryCommandsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        => UpdateSecondaryCommands();
-
-    // ── IsSecondaryMenuOpen ───────────────────────────────────────────
-    public static readonly DependencyProperty IsSecondaryMenuOpenProperty =
-        DependencyProperty.Register(nameof(IsSecondaryMenuOpen), typeof(bool), typeof(CommandBar),
-            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-    /// <summary>次要命令菜单是否打开（双向绑定）。</summary>
-    public bool IsSecondaryMenuOpen
     {
-        get => (bool)GetValue(IsSecondaryMenuOpenProperty);
-        set => SetValue(IsSecondaryMenuOpenProperty, value);
+        SyncOverflowMenuItems();
+        UpdateOverflowButtonVisibility();
     }
 
-    // ── DefaultLabelPosition ──────────────────────────────────────────
-    public static readonly DependencyProperty DefaultLabelPositionProperty =
-        DependencyProperty.Register(nameof(DefaultLabelPosition), typeof(CommandBarLabelPosition), typeof(CommandBar),
-            new PropertyMetadata(CommandBarLabelPosition.Right));
+    // ── OverflowButtonVisibility ─────────────────────────────────────
+    public static readonly DependencyProperty OverflowButtonVisibilityProperty =
+        DependencyProperty.Register(nameof(OverflowButtonVisibility), typeof(CommandBarOverflowButtonVisibility), typeof(CommandBar),
+            new PropertyMetadata(CommandBarOverflowButtonVisibility.Auto, OnOverflowButtonVisibilityChanged));
 
-    /// <summary>命令按钮的默认标签位置。</summary>
-    public CommandBarLabelPosition DefaultLabelPosition
+    /// <summary>溢出按钮的可见性策略。</summary>
+    public CommandBarOverflowButtonVisibility OverflowButtonVisibility
     {
-        get => (CommandBarLabelPosition)GetValue(DefaultLabelPositionProperty);
-        set => SetValue(DefaultLabelPositionProperty, value);
+        get => (CommandBarOverflowButtonVisibility)GetValue(OverflowButtonVisibilityProperty);
+        set => SetValue(OverflowButtonVisibilityProperty, value);
     }
 
-    // ── CompactMode ───────────────────────────────────────────────────
-    public static readonly DependencyProperty CompactModeProperty =
-        DependencyProperty.Register(nameof(CompactMode), typeof(bool), typeof(CommandBar),
-            new PropertyMetadata(false, OnCompactModeChanged));
+    private static void OnOverflowButtonVisibilityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        => ((CommandBar)d).UpdateOverflowButtonVisibility();
 
-    /// <summary>紧凑模式：仅显示图标，隐藏标签。</summary>
-    public bool CompactMode
-    {
-        get => (bool)GetValue(CompactModeProperty);
-        set => SetValue(CompactModeProperty, value);
-    }
+    // ── IsOverflowOpen（只读，供模板绑定溢出菜单状态） ──────────────────
+    private static readonly DependencyPropertyKey IsOverflowOpenPropertyKey =
+        DependencyProperty.RegisterReadOnly(nameof(IsOverflowOpen), typeof(bool), typeof(CommandBar),
+            new PropertyMetadata(false));
 
-    private static void OnCompactModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        => ((CommandBar)d).UpdateCommandLayout();
+    public static readonly DependencyProperty IsOverflowOpenProperty = IsOverflowOpenPropertyKey.DependencyProperty;
+
+    /// <summary>溢出菜单当前是否展开。</summary>
+    public bool IsOverflowOpen => (bool)GetValue(IsOverflowOpenProperty);
 
     // ── 模板应用 ──────────────────────────────────────────────────────
+    private static readonly DependencyPropertyDescriptor MenuIsOpenDescriptor =
+        DependencyPropertyDescriptor.FromProperty(MenuFlyout.IsOpenProperty, typeof(MenuFlyout));
+
     public override void OnApplyTemplate()
     {
+        if (_overflowButton is not null)
+            _overflowButton.Click -= OnOverflowButtonClick;
+        if (_overflowMenu is not null)
+            MenuIsOpenDescriptor.RemoveValueChanged(_overflowMenu, OnOverflowMenuIsOpenChanged);
+
         base.OnApplyTemplate();
 
-        if (_moreButton != null)
-            _moreButton.Click -= OnMoreButtonClick;
-
         _primaryPanel = GetTemplateChild(PartPrimaryPanel) as Panel;
-        _secondaryPanel = GetTemplateChild(PartSecondaryPanel) as Panel;
-        _moreButton = GetTemplateChild(PartMoreButton) as ButtonBase;
+        _overflowButton = GetTemplateChild(PartOverflowButton) as ButtonBase;
+        _overflowMenu = GetTemplateChild(PartOverflowMenu) as MenuFlyout;
 
-        if (_moreButton != null)
-            _moreButton.Click += OnMoreButtonClick;
+        if (_overflowButton is not null)
+            _overflowButton.Click += OnOverflowButtonClick;
+        if (_overflowMenu is not null)
+            MenuIsOpenDescriptor.AddValueChanged(_overflowMenu, OnOverflowMenuIsOpenChanged);
 
-        // 将 MenuFlyout 添加到次要面板（确保在视觉树中）
-        if (_secondaryPanel != null && _secondaryMenuFlyout == null)
-        {
-            _secondaryMenuFlyout = new MenuFlyout
-            {
-                PlacementTarget = _moreButton,
-                Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom
-            };
-            _secondaryPanel.Children.Add(_secondaryMenuFlyout);
-        }
-
-        UpdatePrimaryCommands();
-        UpdateSecondaryCommands();
-        UpdateCommandLayout();
+        PopulatePrimaryCommands();
+        SyncOverflowMenuItems();
+        UpdateOverflowButtonVisibility();
     }
 
-    // ── 内部方法 ──────────────────────────────────────────────────────
-    private void UpdatePrimaryCommands()
+    private void OnOverflowButtonClick(object sender, RoutedEventArgs e)
     {
-        if (_primaryPanel == null) return;
+        if (_overflowMenu is null || _overflowButton is null)
+            return;
+        _overflowMenu.PlacementTarget = _overflowButton;
+        _overflowMenu.IsOpen = true;
+    }
+
+    private void OnOverflowMenuIsOpenChanged(object? sender, EventArgs e)
+        => SetValue(IsOverflowOpenPropertyKey, _overflowMenu?.IsOpen ?? false);
+
+    private void PopulatePrimaryCommands()
+    {
+        if (_primaryPanel is null)
+            return;
         _primaryPanel.Children.Clear();
-
-        if (PrimaryCommands == null) return;
-
-        foreach (var item in PrimaryCommands)
-        {
-            if (item is UIElement element)
-                _primaryPanel.Children.Add(element);
-        }
+        foreach (var element in PrimaryCommands)
+            _primaryPanel.Children.Add(element);
     }
 
-    private void UpdateSecondaryCommands()
+    private void SyncOverflowMenuItems()
     {
-        if (_moreButton == null) return;
-
-        if (SecondaryCommands?.Count > 0)
-        {
-            _moreButton.Visibility = Visibility.Visible;
-
-            // 创建或更新 MenuFlyout
-            if (_secondaryMenuFlyout == null)
-            {
-                _secondaryMenuFlyout = new MenuFlyout
-                {
-                    PlacementTarget = _moreButton,
-                    Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom
-                };
-            }
-
-            _secondaryMenuFlyout.Items.Clear();
-            foreach (var item in SecondaryCommands)
-            {
-                if (item is MenuFlyoutItemBase menuItem)
-                    _secondaryMenuFlyout.Items.Add(menuItem);
-            }
-        }
-        else
-        {
-            _moreButton.Visibility = Visibility.Collapsed;
-        }
+        if (_overflowMenu is null)
+            return;
+        _overflowMenu.Items.Clear();
+        foreach (var item in SecondaryCommands)
+            _overflowMenu.Items.Add(item);
     }
 
-    private void UpdateCommandLayout()
+    private void UpdateOverflowButtonVisibility()
     {
-        // 可以在这里实现响应式布局逻辑
-        // 例如根据可用宽度自动将部分主要命令移到次要菜单
-    }
-
-    private void OnMoreButtonClick(object sender, RoutedEventArgs e)
-    {
-        if (_secondaryMenuFlyout != null)
+        if (_overflowButton is null)
+            return;
+        _overflowButton.Visibility = OverflowButtonVisibility switch
         {
-            _secondaryMenuFlyout.IsOpen = true;
-        }
+            CommandBarOverflowButtonVisibility.Collapsed => Visibility.Collapsed,
+            CommandBarOverflowButtonVisibility.Visible => Visibility.Visible,
+            _ => SecondaryCommands.Count > 0 ? Visibility.Visible : Visibility.Collapsed,
+        };
     }
 }
 
-/// <summary>命令栏标签位置枚举。</summary>
-public enum CommandBarLabelPosition
+/// <summary>溢出按钮可见性策略。</summary>
+public enum CommandBarOverflowButtonVisibility
 {
-    /// <summary>标签在图标下方。</summary>
-    Bottom,
-    /// <summary>标签在图标右侧。</summary>
-    Right,
-    /// <summary>不显示标签（仅图标）。</summary>
-    Collapsed
+    /// <summary>存在次要命令时自动显示。</summary>
+    Auto,
+    Visible,
+    Collapsed,
+}
+
+/// <summary>
+/// 命令栏中的图标命令按钮（图标 + 标签竖排）。
+/// </summary>
+public class AppBarButton : ButtonBase
+{
+    static AppBarButton()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(AppBarButton),
+            new FrameworkPropertyMetadata(typeof(AppBarButton)));
+    }
+
+    // ── Icon ─────────────────────────────────────────────────────────
+    public static readonly DependencyProperty IconProperty =
+        DependencyProperty.Register(nameof(Icon), typeof(object), typeof(AppBarButton),
+            new PropertyMetadata(null));
+
+    /// <summary>按钮图标，支持任意 UIElement，例如 MaterialIcon。</summary>
+    public object? Icon
+    {
+        get => GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
+
+    // ── Label ────────────────────────────────────────────────────────
+    public static readonly DependencyProperty LabelProperty =
+        DependencyProperty.Register(nameof(Label), typeof(string), typeof(AppBarButton),
+            new PropertyMetadata(null));
+
+    /// <summary>按钮下方的文本标签。</summary>
+    public string? Label
+    {
+        get => (string?)GetValue(LabelProperty);
+        set => SetValue(LabelProperty, value);
+    }
+
+    // ── IsCompact（隐藏 Label，仅显示图标） ─────────────────────────────
+    public static readonly DependencyProperty IsCompactProperty =
+        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(AppBarButton),
+            new PropertyMetadata(false));
+
+    /// <summary>是否为紧凑模式（仅显示图标，不显示标签）。</summary>
+    public bool IsCompact
+    {
+        get => (bool)GetValue(IsCompactProperty);
+        set => SetValue(IsCompactProperty, value);
+    }
+}
+
+/// <summary>
+/// 命令栏中的图标切换命令按钮（图标 + 标签竖排，支持选中状态）。
+/// </summary>
+public class AppBarToggleButton : System.Windows.Controls.Primitives.ToggleButton
+{
+    static AppBarToggleButton()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(AppBarToggleButton),
+            new FrameworkPropertyMetadata(typeof(AppBarToggleButton)));
+    }
+
+    public static readonly DependencyProperty IconProperty =
+        DependencyProperty.Register(nameof(Icon), typeof(object), typeof(AppBarToggleButton),
+            new PropertyMetadata(null));
+
+    /// <summary>按钮图标，支持任意 UIElement，例如 MaterialIcon。</summary>
+    public object? Icon
+    {
+        get => GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
+
+    public static readonly DependencyProperty LabelProperty =
+        DependencyProperty.Register(nameof(Label), typeof(string), typeof(AppBarToggleButton),
+            new PropertyMetadata(null));
+
+    /// <summary>按钮下方的文本标签。</summary>
+    public string? Label
+    {
+        get => (string?)GetValue(LabelProperty);
+        set => SetValue(LabelProperty, value);
+    }
+
+    public static readonly DependencyProperty IsCompactProperty =
+        DependencyProperty.Register(nameof(IsCompact), typeof(bool), typeof(AppBarToggleButton),
+            new PropertyMetadata(false));
+
+    /// <summary>是否为紧凑模式（仅显示图标，不显示标签）。</summary>
+    public bool IsCompact
+    {
+        get => (bool)GetValue(IsCompactProperty);
+        set => SetValue(IsCompactProperty, value);
+    }
+}
+
+/// <summary>
+/// 命令栏中的分隔符（竖线）。
+/// </summary>
+public class AppBarSeparator : Control
+{
+    static AppBarSeparator()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(AppBarSeparator),
+            new FrameworkPropertyMetadata(typeof(AppBarSeparator)));
+    }
 }
