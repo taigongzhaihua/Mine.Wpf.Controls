@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -44,6 +46,8 @@ public class ColorPicker : Control
         DefaultStyleKeyProperty.OverrideMetadata(
             typeof(ColorPicker), new FrameworkPropertyMetadata(typeof(ColorPicker)));
     }
+
+    protected override AutomationPeer OnCreateAutomationPeer() => new ColorPickerAutomationPeer(this);
 
     // ── SelectedColor ─────────────────────────────────────────────────
     public static readonly DependencyProperty SelectedColorProperty =
@@ -306,6 +310,39 @@ public class ColorPicker : Control
             brush.GradientStops.Add(new GradientStop(HsvToColor(h, 1, 1, 255), i / 6.0));
         }
         return brush;
+    }
+}
+
+/// <summary>暴露 <see cref="ColorPicker"/> 的十六进制颜色值给屏幕阅读器 / UI 自动化。</summary>
+public class ColorPickerAutomationPeer : FrameworkElementAutomationPeer, IValueProvider
+{
+    public ColorPickerAutomationPeer(ColorPicker owner) : base(owner) { }
+
+    private ColorPicker Control => (ColorPicker)Owner;
+
+    public override object GetPattern(PatternInterface patternInterface)
+        => patternInterface == PatternInterface.Value ? this : base.GetPattern(patternInterface);
+
+    protected override string GetClassNameCore() => nameof(ColorPicker);
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Custom;
+
+    public bool IsReadOnly => !Control.IsEnabled;
+
+    public string Value
+    {
+        get
+        {
+            var c = Control.SelectedColor;
+            return Control.ShowAlpha
+                ? $"#{c.A:X2}{c.R:X2}{c.G:X2}{c.B:X2}"
+                : $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+        }
+    }
+
+    public void SetValue(string value)
+    {
+        var text = value.StartsWith('#') ? value : "#" + value;
+        Control.SelectedColor = (Color)ColorConverter.ConvertFromString(text);
     }
 }
 

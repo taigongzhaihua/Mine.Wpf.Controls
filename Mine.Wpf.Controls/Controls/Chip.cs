@@ -1,4 +1,7 @@
 ﻿using System.Windows;
+using System.Windows.Automation;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -32,6 +35,8 @@ public class Chip : Control
         DefaultStyleKeyProperty.OverrideMetadata(
             typeof(Chip), new FrameworkPropertyMetadata(typeof(Chip)));
     }
+
+    protected override AutomationPeer OnCreateAutomationPeer() => new ChipAutomationPeer(this);
 
     // ── Variant ───────────────────────────────────────────────────
     public static readonly DependencyProperty VariantProperty =
@@ -200,4 +205,47 @@ public class Chip : Control
         else
             VisualStateManager.GoToState(this, "Normal", animate);
     }
+}
+
+/// <summary>暴露 <see cref="Chip"/> 的点击 / 选中状态给屏幕阅读器 / UI 自动化。</summary>
+public class ChipAutomationPeer : FrameworkElementAutomationPeer, IInvokeProvider, IToggleProvider
+{
+    public ChipAutomationPeer(Chip owner) : base(owner) { }
+
+    private Chip Control => (Chip)Owner;
+
+    public override object GetPattern(PatternInterface patternInterface)
+    {
+        if (Control.Variant == ChipVariant.Filter)
+        {
+            if (patternInterface == PatternInterface.Toggle) return this;
+        }
+        else if (patternInterface == PatternInterface.Invoke)
+        {
+            return this;
+        }
+
+        return base.GetPattern(patternInterface);
+    }
+
+    protected override string GetClassNameCore() => nameof(Chip);
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Button;
+
+    protected override string GetNameCore()
+    {
+        var name = base.GetNameCore();
+        if (!string.IsNullOrEmpty(name)) return name;
+        return Control.Content switch
+        {
+            string s => s,
+            null => string.Empty,
+            var o => o.ToString() ?? string.Empty,
+        };
+    }
+
+    void IInvokeProvider.Invoke() => Control.RaiseEvent(new RoutedEventArgs(Chip.ClickEvent, Control));
+
+    ToggleState IToggleProvider.ToggleState => Control.IsChecked ? ToggleState.On : ToggleState.Off;
+
+    void IToggleProvider.Toggle() => Control.IsChecked = !Control.IsChecked;
 }

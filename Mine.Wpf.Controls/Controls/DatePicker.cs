@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Automation;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -83,6 +86,8 @@ public class DatePicker : Control
         DefaultStyleKeyProperty.OverrideMetadata(typeof(DatePicker), new FrameworkPropertyMetadata(typeof(DatePicker)));
         FocusableProperty.OverrideMetadata(typeof(DatePicker), new FrameworkPropertyMetadata(true));
     }
+
+    protected override AutomationPeer OnCreateAutomationPeer() => new DatePickerAutomationPeer(this);
 
     // ── Variant ────────────────────────────────────────────────────
     public static readonly DependencyProperty VariantProperty =
@@ -941,6 +946,30 @@ public class DatePicker : Control
     }
 
     private static DateTime FirstOfMonth(DateTime date) => new(date.Year, date.Month, 1);
+}
+
+/// <summary>暴露 <see cref="DatePicker"/> 的展开状态与显示文本给屏幕阅读器 / UI 自动化。</summary>
+public class DatePickerAutomationPeer : FrameworkElementAutomationPeer, IExpandCollapseProvider, IValueProvider
+{
+    public DatePickerAutomationPeer(DatePicker owner) : base(owner) { }
+
+    private DatePicker Control => (DatePicker)Owner;
+
+    public override object GetPattern(PatternInterface patternInterface)
+        => patternInterface is PatternInterface.ExpandCollapse or PatternInterface.Value
+            ? this
+            : base.GetPattern(patternInterface);
+
+    protected override string GetClassNameCore() => nameof(DatePicker);
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.ComboBox;
+
+    public ExpandCollapseState ExpandCollapseState => Control.IsOpen ? ExpandCollapseState.Expanded : ExpandCollapseState.Collapsed;
+    public void Expand() => Control.IsOpen = true;
+    public void Collapse() => Control.IsOpen = false;
+
+    public bool IsReadOnly => true;
+    public string Value => Control.DisplayText;
+    public void SetValue(string value) => throw new InvalidOperationException("DatePicker 仅支持通过日历或输入框设置日期。");
 }
 
 /// <summary>DatePicker 选择模式。</summary>

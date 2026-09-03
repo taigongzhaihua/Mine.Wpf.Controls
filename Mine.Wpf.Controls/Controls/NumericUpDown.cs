@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -269,5 +271,30 @@ public class NumericUpDown : Control
         _notchedBorder.NotchStart = _hintBlock.Margin.Left - gap;
         _notchedBorder.NotchWidth = Math.Max(0, _hintBlock.ActualWidth * 0.75 + gap * 2);
     }
+
+    protected override AutomationPeer OnCreateAutomationPeer() => new NumericUpDownAutomationPeer(this);
+}
+
+/// <summary>暴露 <see cref="NumericUpDown"/> 的数值范围给屏幕阅读器 / UI 自动化。</summary>
+public class NumericUpDownAutomationPeer : FrameworkElementAutomationPeer, IRangeValueProvider
+{
+    public NumericUpDownAutomationPeer(NumericUpDown owner) : base(owner) { }
+
+    private NumericUpDown Control => (NumericUpDown)Owner;
+
+    public override object GetPattern(PatternInterface patternInterface)
+        => patternInterface == PatternInterface.RangeValue ? this : base.GetPattern(patternInterface);
+
+    protected override string GetClassNameCore() => nameof(NumericUpDown);
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Spinner;
+
+    public bool IsReadOnly => !Control.IsEnabled;
+    public double Maximum => Control.Maximum;
+    public double Minimum => Control.Minimum;
+    public double LargeChange => Control.SmallChange;
+    public double SmallChange => Control.SmallChange;
+    public double Value => Control.Value;
+
+    public void SetValue(double value) => Control.Value = Math.Clamp(value, Control.Minimum, Control.Maximum);
 }
 

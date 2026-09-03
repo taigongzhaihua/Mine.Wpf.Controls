@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -64,6 +66,8 @@ public class RangeSlider : Control
         DefaultStyleKeyProperty.OverrideMetadata(
             typeof(RangeSlider), new FrameworkPropertyMetadata(typeof(RangeSlider)));
     }
+
+    protected override AutomationPeer OnCreateAutomationPeer() => new RangeSliderAutomationPeer(this);
     public static readonly DependencyProperty MinimumProperty =
         DependencyProperty.Register(nameof(Minimum), typeof(double), typeof(RangeSlider),
             new PropertyMetadata(0.0, OnRangeChanged));
@@ -589,4 +593,38 @@ public class RangeSlider : Control
         return null;
     }
     private static bool AreClose(double a, double b) => Math.Abs(a - b) < 0.0001;
+}
+
+/// <summary>
+/// 暴露 <see cref="RangeSlider"/> 的区间给屏幕阅读器 / UI 自动化。
+/// UIA 无原生双滑块模式，Value 映射到 RangeStart，Name 中附带完整区间描述。
+/// </summary>
+public class RangeSliderAutomationPeer : FrameworkElementAutomationPeer, IRangeValueProvider
+{
+    public RangeSliderAutomationPeer(RangeSlider owner) : base(owner) { }
+
+    private RangeSlider Control => (RangeSlider)Owner;
+
+    public override object GetPattern(PatternInterface patternInterface)
+        => patternInterface == PatternInterface.RangeValue ? this : base.GetPattern(patternInterface);
+
+    protected override string GetClassNameCore() => nameof(RangeSlider);
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Slider;
+
+    protected override string GetNameCore()
+    {
+        var name = base.GetNameCore();
+        return string.IsNullOrEmpty(name)
+            ? $"{Control.RangeStart:G} - {Control.RangeEnd:G}"
+            : $"{name}: {Control.RangeStart:G} - {Control.RangeEnd:G}";
+    }
+
+    public bool IsReadOnly => !Control.IsEnabled;
+    public double Maximum => Control.RangeEnd;
+    public double Minimum => Control.Minimum;
+    public double LargeChange => Control.SmallChange * 10;
+    public double SmallChange => Control.SmallChange;
+    public double Value => Control.RangeStart;
+
+    public void SetValue(double value) => Control.RangeStart = Math.Clamp(value, Control.Minimum, Control.RangeEnd);
 }

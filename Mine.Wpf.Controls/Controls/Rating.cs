@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -12,6 +14,8 @@ public class Rating : Control
         DefaultStyleKeyProperty.OverrideMetadata(
             typeof(Rating), new FrameworkPropertyMetadata(typeof(Rating)));
     }
+
+    protected override AutomationPeer OnCreateAutomationPeer() => new RatingAutomationPeer(this);
 
     // ── Value ────────────────────────────────────────────────────────
     public static readonly DependencyProperty ValueProperty =
@@ -158,5 +162,28 @@ public class Rating : Control
                 isFilled ? "Mine.Brush.Primary" : "Mine.Brush.OnSurfaceVariant");
         }
     }
+}
+
+/// <summary>暴露 <see cref="Rating"/> 的星级数值给屏幕阅读器 / UI 自动化。</summary>
+public class RatingAutomationPeer : FrameworkElementAutomationPeer, IRangeValueProvider
+{
+    public RatingAutomationPeer(Rating owner) : base(owner) { }
+
+    private Rating Control => (Rating)Owner;
+
+    public override object GetPattern(PatternInterface patternInterface)
+        => patternInterface == PatternInterface.RangeValue ? this : base.GetPattern(patternInterface);
+
+    protected override string GetClassNameCore() => nameof(Rating);
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Slider;
+
+    public bool IsReadOnly => Control.IsReadOnly || !Control.IsEnabled;
+    public double Maximum => Control.Maximum;
+    public double Minimum => 0;
+    public double LargeChange => 1;
+    public double SmallChange => Control.AllowHalfStar ? 0.5 : 1;
+    public double Value => Control.Value;
+
+    public void SetValue(double value) => Control.Value = value;
 }
 

@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Automation;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -1077,5 +1080,29 @@ public class TimePicker : Control
         var baseHour = twelveHour % 12;
         return isPm ? baseHour + 12 : baseHour;
     }
+}
+
+/// <summary>暴露 <see cref="TimePicker"/> 的展开状态与显示文本给屏幕阅读器 / UI 自动化。</summary>
+public class TimePickerAutomationPeer : FrameworkElementAutomationPeer, IExpandCollapseProvider, IValueProvider
+{
+    public TimePickerAutomationPeer(TimePicker owner) : base(owner) { }
+
+    private TimePicker Control => (TimePicker)Owner;
+
+    public override object GetPattern(PatternInterface patternInterface)
+        => patternInterface is PatternInterface.ExpandCollapse or PatternInterface.Value
+            ? this
+            : base.GetPattern(patternInterface);
+
+    protected override string GetClassNameCore() => nameof(TimePicker);
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.ComboBox;
+
+    public ExpandCollapseState ExpandCollapseState => Control.IsOpen ? ExpandCollapseState.Expanded : ExpandCollapseState.Collapsed;
+    public void Expand() => Control.IsOpen = true;
+    public void Collapse() => Control.IsOpen = false;
+
+    public bool IsReadOnly => true;
+    public string Value => Control.DisplayText;
+    public void SetValue(string value) => throw new InvalidOperationException("TimePicker 仅支持通过时钟盘或输入框设置时间。");
 }
 

@@ -1,4 +1,6 @@
 using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -33,6 +35,8 @@ public class PaginationControl : Control
             typeof(PaginationControl),
             new FrameworkPropertyMetadata(typeof(PaginationControl)));
     }
+
+    protected override AutomationPeer OnCreateAutomationPeer() => new PaginationControlAutomationPeer(this);
 
     // ── 当前页码 ─────────────────────────────────────────────────────
     public static readonly DependencyProperty CurrentPageProperty =
@@ -386,6 +390,29 @@ public class PaginationControl : Control
         if (_lastButton != null)
             _lastButton.IsEnabled = CurrentPage < TotalPages;
     }
+}
+
+/// <summary>暴露 <see cref="PaginationControl"/> 的当前页码给屏幕阅读器 / UI 自动化。</summary>
+public class PaginationControlAutomationPeer : FrameworkElementAutomationPeer, IRangeValueProvider
+{
+    public PaginationControlAutomationPeer(PaginationControl owner) : base(owner) { }
+
+    private PaginationControl Control => (PaginationControl)Owner;
+
+    public override object GetPattern(PatternInterface patternInterface)
+        => patternInterface == PatternInterface.RangeValue ? this : base.GetPattern(patternInterface);
+
+    protected override string GetClassNameCore() => nameof(PaginationControl);
+    protected override AutomationControlType GetAutomationControlTypeCore() => AutomationControlType.Pane;
+
+    public bool IsReadOnly => !Control.IsEnabled;
+    public double Maximum => Control.TotalPages;
+    public double Minimum => 1;
+    public double LargeChange => 1;
+    public double SmallChange => 1;
+    public double Value => Control.CurrentPage;
+
+    public void SetValue(double value) => Control.CurrentPage = (int)Math.Clamp(value, 1, Control.TotalPages);
 }
 
 /// <summary>简单的命令实现</summary>
