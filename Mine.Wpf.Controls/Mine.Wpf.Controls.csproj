@@ -11,9 +11,22 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <PackageId>Mine.Wpf.Controls</PackageId>
-        <Version>0.1.0</Version>
+        <Version>0.1.1</Version>
         <Description>A Material Design 3 WPF control library with theming, animations and glass effects.</Description>
+        <Authors>taigongzhaihua</Authors>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <PackageProjectUrl>https://github.com/taigongzhaihua/Mine.Wpf.Controls</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/taigongzhaihua/Mine.Wpf.Controls</RepositoryUrl>
+        <PackageTags>wpf;material-design;md3;controls;ui</PackageTags>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <UserSecretsId>9c48ac5e-70a1-4b65-8d5d-ed759ba676f7</UserSecretsId>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+        <None Include="..\README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
 
     <ItemGroup>
         <!-- Material Symbols 字体，嵌入为程序集资源 -->
@@ -26,6 +39,10 @@
 
     <ItemGroup>
       <Folder Include="Composition\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     </ItemGroup>
 
 </Project>
