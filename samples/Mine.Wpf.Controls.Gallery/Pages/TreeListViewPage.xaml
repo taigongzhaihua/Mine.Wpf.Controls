@@ -71,8 +71,36 @@
                     <TextBlock Text="• 流畅的展开/折叠动画" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
                     <TextBlock Text="• 自动计算层级缩进" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
                     <TextBlock Text="• 符合 Material Design 3 规范" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
-                    <TextBlock Text="• 支持虚拟化提升性能" Style="{DynamicResource Mine.TextBlock.BodyLarge}"/>
+                    <TextBlock Text="• 支持虚拟化提升性能" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
+                    <TextBlock Text="• Columns 附加数据列：拖拽调宽（表头与行自动同步）、点击表头排序" Style="{DynamicResource Mine.TextBlock.BodyLarge}" Margin="0,0,0,12"/>
+                    <TextBlock Text="• SelectionMode=Multiple 时支持 Ctrl/Shift 多选" Style="{DynamicResource Mine.TextBlock.BodyLarge}"/>
                 </StackPanel>
+            </mine:Card>
+
+            <!-- 多列 / 排序 / 多选示例 -->
+            <TextBlock Text="多列、排序与多选"
+                       Style="{DynamicResource Mine.TextBlock.TitleLarge}"
+                       Margin="0,0,0,16"/>
+
+            <TextBlock Text="设置 Columns 后会显示可拖拽调宽、可点击排序的附加数据列；SelectionMode=&quot;Multiple&quot; 时支持 Ctrl/Shift 多选"
+                       Style="{DynamicResource Mine.TextBlock.BodyLarge}"
+                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                       Margin="0,0,0,16"/>
+
+            <mine:Card Padding="16" Margin="0,0,0,32">
+                <mine:TreeListView Height="300"
+                                   SelectionMode="Multiple"
+                                   ItemsSource="{Binding FileTree}">
+                    <mine:TreeListView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Name}"/>
+                        </HierarchicalDataTemplate>
+                    </mine:TreeListView.ItemTemplate>
+                    <mine:TreeListView.Columns>
+                        <GridViewColumn Header="大小" Width="90" DisplayMemberBinding="{Binding Size}"/>
+                        <GridViewColumn Header="修改日期" Width="120" DisplayMemberBinding="{Binding Modified}"/>
+                    </mine:TreeListView.Columns>
+                </mine:TreeListView>
             </mine:Card>
 
             <!-- XAML 示例 -->
@@ -88,6 +116,19 @@
             <mine:TreeListViewItem Header="文件2.docx"/>
         </mine:TreeListViewItem>
     </mine:TreeListViewItem>
+</mine:TreeListView>
+
+<!-- 多列 / 排序 / 多选 -->
+<mine:TreeListView ItemsSource="{Binding FileTree}" SelectionMode="Multiple">
+    <mine:TreeListView.ItemTemplate>
+        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+            <TextBlock Text="{Binding Name}"/>
+        </HierarchicalDataTemplate>
+    </mine:TreeListView.ItemTemplate>
+    <mine:TreeListView.Columns>
+        <GridViewColumn Header="大小" Width="90" DisplayMemberBinding="{Binding Size}"/>
+        <GridViewColumn Header="修改日期" Width="120" DisplayMemberBinding="{Binding Modified}"/>
+    </mine:TreeListView.Columns>
 </mine:TreeListView>]]></TextBlock>
                     </mine:Card>
 

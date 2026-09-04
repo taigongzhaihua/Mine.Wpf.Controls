@@ -2,15 +2,17 @@
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Mine.Wpf.Controls.Helpers;
 
 namespace Mine.Wpf.Controls.Controls;
 
 /// <summary>
 /// Material 3 颜色选择器。
-/// 包含色相滑块、饱和度/亮度面板和透明度滑块，支持 Hex 输入。
+/// 包含色相滑块、饱和度/亮度面板、透明度滑块、预设色板和屏幕取色器，支持 Hex 输入。
 /// </summary>
 [TemplatePart(Name = PartSbCanvas,     Type = typeof(Canvas))]
 [TemplatePart(Name = PartSbThumb,      Type = typeof(Ellipse))]
@@ -18,6 +20,8 @@ namespace Mine.Wpf.Controls.Controls;
 [TemplatePart(Name = PartAlphaSlider,  Type = typeof(System.Windows.Controls.Slider))]
 [TemplatePart(Name = PartHexBox,       Type = typeof(System.Windows.Controls.TextBox))]
 [TemplatePart(Name = PartPreview,      Type = typeof(Border))]
+[TemplatePart(Name = PartPresetItems,  Type = typeof(ItemsControl))]
+[TemplatePart(Name = PartEyedropper,   Type = typeof(ButtonBase))]
 public class ColorPicker : Control
 {
     private const string PartSbCanvas    = "PART_SbCanvas";
@@ -26,6 +30,8 @@ public class ColorPicker : Control
     private const string PartAlphaSlider = "PART_AlphaSlider";
     private const string PartHexBox      = "PART_HexBox";
     private const string PartPreview     = "PART_Preview";
+    private const string PartPresetItems = "PART_PresetItems";
+    private const string PartEyedropper  = "PART_Eyedropper";
 
     private Canvas?  _sbCanvas;
     private Ellipse? _sbThumb;
@@ -33,6 +39,8 @@ public class ColorPicker : Control
     private System.Windows.Controls.Slider? _alphaSlider;
     private System.Windows.Controls.TextBox? _hexBox;
     private Border? _preview;
+    private ItemsControl? _presetItems;
+    private ButtonBase? _eyedropper;
 
     // HSV 内部状态
     private double _hue;            // [0,360)
@@ -86,6 +94,29 @@ public class ColorPicker : Control
         set => SetValue(ShowAlphaProperty, value);
     }
 
+    // ── PresetColors ──────────────────────────────────────────────────
+    public static readonly DependencyProperty PresetColorsProperty =
+        DependencyProperty.Register(nameof(PresetColors), typeof(IEnumerable<Color>), typeof(ColorPicker),
+            new PropertyMetadata(DefaultPresetColors));
+
+    public IEnumerable<Color> PresetColors
+    {
+        get => (IEnumerable<Color>)GetValue(PresetColorsProperty);
+        set => SetValue(PresetColorsProperty, value);
+    }
+
+    /// <summary>Material 3 参考色板默认预设色。</summary>
+    private static readonly Color[] DefaultPresetColors =
+    [
+        Color.FromRgb(0xF4, 0x43, 0x36), Color.FromRgb(0xE9, 0x1E, 0x63), Color.FromRgb(0x9C, 0x27, 0xB0),
+        Color.FromRgb(0x67, 0x3A, 0xB7), Color.FromRgb(0x3F, 0x51, 0xB5), Color.FromRgb(0x21, 0x96, 0xF3),
+        Color.FromRgb(0x03, 0xA9, 0xF4), Color.FromRgb(0x00, 0xBC, 0xD4), Color.FromRgb(0x00, 0x96, 0x88),
+        Color.FromRgb(0x4C, 0xAF, 0x50), Color.FromRgb(0x8B, 0xC3, 0x4A), Color.FromRgb(0xCD, 0xDC, 0x39),
+        Color.FromRgb(0xFF, 0xEB, 0x3B), Color.FromRgb(0xFF, 0xC1, 0x07), Color.FromRgb(0xFF, 0x98, 0x00),
+        Color.FromRgb(0xFF, 0x57, 0x22), Color.FromRgb(0x79, 0x55, 0x48), Color.FromRgb(0x9E, 0x9E, 0x9E),
+        Color.FromRgb(0x60, 0x7D, 0x8B), Color.FromRgb(0x00, 0x00, 0x00), Color.FromRgb(0xFF, 0xFF, 0xFF),
+    ];
+
     // ── HueGradient（只读，供色相滑块背景用） ─────────────────────────
     private static readonly DependencyPropertyKey HueGradientKey =
         DependencyProperty.RegisterReadOnly(nameof(HueGradient), typeof(LinearGradientBrush), typeof(ColorPicker),
@@ -115,6 +146,8 @@ public class ColorPicker : Control
         _alphaSlider = GetTemplateChild(PartAlphaSlider) as System.Windows.Controls.Slider;
         _hexBox      = GetTemplateChild(PartHexBox)      as System.Windows.Controls.TextBox;
         _preview     = GetTemplateChild(PartPreview)     as Border;
+        _presetItems = GetTemplateChild(PartPresetItems) as ItemsControl;
+        _eyedropper  = GetTemplateChild(PartEyedropper)  as ButtonBase;
 
         if (_sbCanvas != null)
         {
@@ -141,6 +174,12 @@ public class ColorPicker : Control
             _hexBox.LostFocus += (_, _) => TryParseHex(_hexBox.Text);
             _hexBox.KeyDown   += (_, e) => { if (e.Key == Key.Enter) TryParseHex(_hexBox.Text); };
         }
+
+        if (_presetItems != null)
+            _presetItems.PreviewMouseLeftButtonDown += OnPresetItemMouseDown;
+
+        if (_eyedropper != null)
+            _eyedropper.Click += (_, _) => PickColorFromScreen();
 
         // 初始化
         ColorToHsv(SelectedColor, out _hue, out _saturation, out _brightness);
@@ -259,6 +298,22 @@ public class ColorPicker : Control
             SelectedColor = c;
         }
         catch { UpdateHexBox(); }
+    }
+
+    // ── 预设色板 ──────────────────────────────────────────────────────
+    private void OnPresetItemMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (_presetItems == null) return;
+        var container = ItemsControl.ContainerFromElement(_presetItems, (DependencyObject)e.OriginalSource) as FrameworkElement;
+        if (container?.DataContext is Color color)
+            SelectedColor = color;
+    }
+
+    // ── 屏幕取色器 ────────────────────────────────────────────────────
+    private void PickColorFromScreen()
+    {
+        if (ScreenColorPicker.TryPickColor(out var color))
+            SelectedColor = color;
     }
 
     // ── HSV 转换 ──────────────────────────────────────────────────────

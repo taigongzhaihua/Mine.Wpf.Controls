@@ -4,6 +4,7 @@
                     xmlns:conv="clr-namespace:Mine.Wpf.Controls.Converters">
     <!-- 本文件内部使用的转换器（StaticResource 无法跨 MergedDictionary） -->
     <conv:BoolToVisibilityConverter x:Key="Local.BoolToVisConv"/>
+    <conv:ColorToBrushConverter x:Key="Local.ColorToBrushConv"/>
     <Style TargetType="{x:Type controls:ColorPicker}">
         <Setter Property="Width"            Value="280"/>
         <Setter Property="Focusable"        Value="False"/>
@@ -97,12 +98,39 @@
                                         FocusVisualStyle="{x:Null}"/>
                             </StackPanel>
 
-                            <!-- 预览 + HEX 输入 -->
+                            <!-- 预设色板 -->
+                            <TextBlock Text="预设色板 Presets"
+                                       FontSize="{DynamicResource Mine.FontSize.LabelSmall}"
+                                       Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"
+                                       Margin="0,0,0,4"/>
+                            <ItemsControl x:Name="PART_PresetItems"
+                                          Margin="0,0,0,12"
+                                          ItemsSource="{Binding PresetColors, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="20" Height="20" Margin="0,0,6,6"
+                                                CornerRadius="4"
+                                                Background="{Binding Converter={StaticResource Local.ColorToBrushConv}}"
+                                                BorderBrush="{DynamicResource Mine.Brush.OutlineVariant}"
+                                                BorderThickness="1"
+                                                Cursor="Hand"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- 预览 + HEX 输入 + 取色器 -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="48"/>
                                     <ColumnDefinition Width="8"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="8"/>
+                                    <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
                                 <Border x:Name="PART_Preview"
                                         Grid.Column="0"
@@ -122,6 +150,23 @@
                                              FocusVisualStyle="{x:Null}"
                                              MaxLength="9"/>
                                 </Border>
+                                <Button x:Name="PART_Eyedropper"
+                                        Grid.Column="4"
+                                        Width="40" Height="40"
+                                        Background="{DynamicResource Mine.Brush.SurfaceContainerHighest}"
+                                        BorderThickness="0"
+                                        Cursor="Hand"
+                                        ToolTip="从屏幕取色"
+                                        FocusVisualStyle="{x:Null}">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                <controls:MaterialIcon Kind="Colorize" Size="20"
+                                                                        Foreground="{DynamicResource Mine.Brush.OnSurfaceVariant}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -130,5 +175,3 @@
         </Setter>
     </Style>
 </ResourceDictionary>
-
-

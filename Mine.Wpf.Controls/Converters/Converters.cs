@@ -1,3 +1,5 @@
+using System.Collections;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -213,4 +215,34 @@ public class CornerRadiusFilterConverter : IMultiValueConverter
     }
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         => throw new NotImplementedException();
+}
+/// <summary>
+/// TreeListView 表头排序箭头可见性。
+/// MultiBinding 输入顺序：[0] GridViewColumnHeader.Column，[1] TreeListView.SortMemberPath，[2] TreeListView.SortDirection。
+/// ConverterParameter 为 "Ascending" 或 "Descending"，与当前排序状态匹配时返回 Visible，否则 Collapsed。
+/// </summary>
+public sealed class GridViewSortIndicatorConverter : IMultiValueConverter
+{
+    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (values is not [GridViewColumn column, ..]) return Visibility.Collapsed;
+        var sortPath = values.Length > 1 ? values[1] as string : null;
+        var direction = values.Length > 2 ? values[2] as ListSortDirection? : null;
+
+        var columnPath = (column.DisplayMemberBinding as Binding)?.Path?.Path;
+        if (string.IsNullOrEmpty(columnPath) || columnPath != sortPath || direction is null)
+            return Visibility.Collapsed;
+
+        return direction.Value.ToString() == parameter as string ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
+/// <summary>当集合元素个数大于 0 时返回 Visible，否则 Collapsed。用于 Columns.Count 驱动的表头行显隐。</summary>
+public sealed class CollectionCountToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type t, object p, CultureInfo c)
+        => value is ICollection { Count: > 0 } ? Visibility.Visible : Visibility.Collapsed;
+    public object ConvertBack(object value, Type t, object p, CultureInfo c) => Binding.DoNothing;
 }
