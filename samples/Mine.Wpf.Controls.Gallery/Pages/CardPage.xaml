@@ -74,6 +74,25 @@
             </StackPanel>
         </mine:Card>
 
+        <!-- ── ShadowAssist 附加属性示例 ──────────────────────────── -->
+        <TextBlock Text="ShadowAssist 附加属性示例"
+                   Style="{DynamicResource Mine.Typography.TitleMedium}"
+                   Margin="0,12,0,12"/>
+        <WrapPanel Margin="0,0,0,24">
+            <Border Width="220" Height="80" Background="{DynamicResource Mine.Brush.Surface}" mine:ShadowAssist.Elevation="3" Margin="0,0,16,16" CornerRadius="8">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Border Elevation=3"/>
+            </Border>
+            <Button Width="160" Height="36" Margin="0,0,16,16" mine:ShadowAssist.Elevation="2">Button Elevation=2</Button>
+            <TextBox Width="260" Height="36" Margin="0,0,16,16" mine:ShadowAssist.Elevation="1" Text="TextBox Elevation=1"/>
+            <ComboBox Width="220" Height="36" Margin="0,0,16,16" mine:ShadowAssist.Elevation="4">
+                <ComboBoxItem>选项 A</ComboBoxItem>
+                <ComboBoxItem>选项 B</ComboBoxItem>
+            </ComboBox>
+            <mine:Card Width="260" Margin="0,0,16,16" Padding="12" mine:ShadowAssist.Elevation="5">
+                <TextBlock Text="Card Elevation=5" Style="{DynamicResource Mine.Typography.BodyMedium}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </mine:Card>
+        </WrapPanel>
+
     </StackPanel>
 </mine:Page>
 
