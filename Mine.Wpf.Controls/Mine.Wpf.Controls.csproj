@@ -11,8 +11,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <PackageId>Mine.Wpf.Controls</PackageId>
-        <Version>0.1.1</Version>
-        <Description>A Material Design 3 WPF control library with theming, animations and glass effects.</Description>
+        <Version>0.1.2</Version>
+        <Description>A Material Design 3 WPF control library with theming, animations and glass effects.</Description>  <!-- bumped patch for ShadowAssist fix -->
         <Authors>taigongzhaihua</Authors>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageProjectUrl>https://github.com/taigongzhaihua/Mine.Wpf.Controls</PackageProjectUrl>
